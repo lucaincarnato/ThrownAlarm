@@ -1,0 +1,65 @@
+//
+//  Profile.swift
+//  AmericanoChallenge
+//
+//  Created by Luca Maria Incarnato on 06/12/24.
+//
+
+import Foundation
+import SwiftUI
+
+class Profile{
+    var alarm: Alarm = Alarm()
+    var streak: Int = 0
+    var backtrack: [Night] = []
+    var restedDays: Int = 0 // Number of days the user preferred to rest and to not wake up at a specific hour
+    var snoozedDays: Int = 0 // Number of days the user snoozed
+    var totalSleepDuration: TimeInterval = 0
+    var averageSleepDuration: TimeInterval = 0
+    var totalAchievements: [Achievement] = []
+    
+    // Update all the profile
+    func update(){
+        updateStreak()
+        updateRestedDays()
+        updateSnoozedDays()
+        updateSleepInfo()
+    }
+    
+    // Update streak
+    private func updateStreak(){
+        // If last night was successful, increase streak
+        if(self.backtrack.last!.wakeUpSuccess) {
+            self.streak += 1
+            return
+        }
+        // If last night was not successful, the streak is lost
+        self.streak = 0
+        return
+    }
+    
+    // Update restedDays
+    private func updateRestedDays(){
+        // Counts all the days the user could have used the app
+        let timeSpan = Int(self.backtrack.first!.date.timeIntervalSince(self.backtrack.last!.date) / 86400)
+        // Rested days are the one not backtracked, so points out the number of days the user didn't use the app (total - used)
+        self.restedDays = timeSpan - self.backtrack.count
+    }
+    
+    // Update snoozedDays
+    private func updateSnoozedDays(){
+        for night in self.backtrack{
+            if (night.snoozed) {self.snoozedDays += 1}
+        }
+    }
+    
+    // Update totalSleepDuration and averageSleepDuration
+    private func updateSleepInfo(){
+        // Adds, for each night, its duration
+        for night in backtrack{
+            self.totalSleepDuration += night.duration
+        }
+        // Arithmetic average
+        self.averageSleepDuration = self.totalSleepDuration / Double(self.backtrack.count)
+    }
+}
