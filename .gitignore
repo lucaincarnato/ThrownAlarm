@@ -1,0 +1,51 @@
+# macOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# Xcode files and user data
+xcuserdata/
+*.xcscmblueprint
+*.xcodeproj/project.xcworkspace/xcuserdata
+*.xcodeproj/project.xcworkspace/xcshareddata
+timeline.xctimeline
+playground.xcworkspace
+
+# Derived data, archives, and cache
+DerivedData/
+*.hmap
+*.xcarchive
+*.dSYM
+*.log
+*.ipa
+*.app
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcodeproj/.pbxuser
+*.xcworkspace/xcshareddata/
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Swift Package Manager
+/.build/
+.swiftpm/
+Package.resolved
+
+# Xcode-generated files and build state
+*.xccheckout
+*.xcuserstate
+xcdebugger/
+
+# Environment or simulator-specific settings
+*.xcconfig
