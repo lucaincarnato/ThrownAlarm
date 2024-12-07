@@ -50,7 +50,7 @@ struct TimerView: View {
     
     private func stopTimer(){
         isAlarmOn.toggle()
-        scheduleLocalNotification()
+        scheduleLocalNotifications()
         timer?.invalidate()
         timeRemaining = 0
     }
@@ -74,25 +74,28 @@ struct TimerView: View {
         return formatter.string(from: timeRemaining)!
     }
     
-    func scheduleLocalNotification() {
-        let content = UNMutableNotificationContent()
-        content.title = "Ehi! Apri l'app!"
-        content.body = "Abbiamo qualcosa di interessante per te."
-        content.sound = .default
-        content.badge = NSNumber(value: 1) // Mostra il badge sull'icona dell'app
+    func scheduleLocalNotifications() {
+        for i in 0..<20 {
+            let content = UNMutableNotificationContent()
+            content.title = "Ehi! Apri l'app!"
+            content.body = "Notifica \(i + 1) su 10. Abbiamo qualcosa di interessante per te."
+            content.sound = .criticalSoundNamed(UNNotificationSoundName("alarm.wav"))
+            content.badge = NSNumber(value: i + 1) // Mostra il badge progressivo sull'icona dell'app
 
-        // Configura un intervallo di ripetizione
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            // Configura il trigger per ogni notifica con un intervallo crescente
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(i * 2 + 1), repeats: false)
 
-        let request = UNNotificationRequest(identifier: "repeatingNotification", content: content, trigger: trigger)
+            let request = UNNotificationRequest(identifier: "notification\(i)", content: content, trigger: trigger)
 
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Errore nella programmazione della notifica: \(error)")
-            } else {
-                print("Notifica programmata con successo.")
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print("Errore nella programmazione della notifica \(i + 1): \(error)")
+                } else {
+                    print("Notifica \(i + 1) programmata con successo.")
+                }
             }
         }
     }
+
 
 }
