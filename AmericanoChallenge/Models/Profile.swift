@@ -10,7 +10,7 @@ import SwiftUI
 
 class Profile{
     var alarm: Alarm = Alarm()
-    var streak: Int = 0
+    var streak: Int = 0 // Actual number of consecutive days where the user successfully wakes up and doesn't snooze
     var backtrack: [Night] = []
     var restedDays: Int = 0 // Number of days the user preferred to rest and to not wake up at a specific hour
     var snoozedDays: Int = 0 // Number of days the user snoozed
@@ -28,8 +28,8 @@ class Profile{
     
     // Update streak
     private func updateStreak(){
-        // If last night was successful, increase streak
-        if(self.backtrack.last!.wakeUpSuccess) {
+        // If last night was successful and didn't snooze, increase streak
+        if(self.backtrack.last!.wakeUpSuccess && !self.backtrack.last!.snoozed) {
             self.streak += 1
             return
         }

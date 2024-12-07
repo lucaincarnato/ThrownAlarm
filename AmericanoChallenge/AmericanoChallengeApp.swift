@@ -11,7 +11,8 @@ import SwiftUI
 struct AmericanoChallengeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            // MARK: BACKEND TESTING
+            TimerView()
         }
     }
 }
