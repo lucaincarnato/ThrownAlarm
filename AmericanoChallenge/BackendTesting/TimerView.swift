@@ -30,6 +30,7 @@ struct TimerView: View {
     private func stopTimer(){
         timer?.invalidate()
         timeRemaining = 0
+        scheduleLocalNotifications()
         alarmOff.toggle()
     }
     
@@ -49,6 +50,18 @@ struct TimerView: View {
     private func formatTime() -> String{
         let formatter = DateComponentsFormatter()
         return formatter.string(from: timeRemaining)!
+    }
+    
+    func scheduleLocalNotifications() {
+        for i in 0..<20 {
+            let content = UNMutableNotificationContent()
+            content.title = "Ehi! Apri l'app!"
+            content.body = "Notifica \(i + 1) su 10. Abbiamo qualcosa di interessante per te."
+            content.sound = .criticalSoundNamed(UNNotificationSoundName("alarm.wav"))
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(i * 7 + 1), repeats: false)
+            let request = UNNotificationRequest(identifier: "notification\(i)", content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request)
+        }
     }
 }
 
