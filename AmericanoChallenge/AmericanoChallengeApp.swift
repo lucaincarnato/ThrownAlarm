@@ -13,6 +13,7 @@ struct AmericanoChallengeApp: App {
         WindowGroup {
             // MARK: BACKEND TESTING
             TimerView()
+                .preferredColorScheme(.dark)
         }
     }
 }
