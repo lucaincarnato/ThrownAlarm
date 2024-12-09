@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 // Shows the Gamification dashboard, it is the entry point of the application
 struct DashboardView: View {
@@ -127,7 +128,16 @@ struct AlarmView: View{
 // Card to show basic info about the streak
 struct StreakView: View {
     @Binding var user: Profile // Binding value for the user profile
-    var weekDays = ["M", "T", "W", "T", "F", "S", "S"] // Week days to be displayed in the week streak view
+    // Returns the seven date of the previous week
+    let lastSevenDays = (1...7).compactMap { dayOffset in
+        Calendar.current.date(byAdding: .day, value: -dayOffset, to: Date())
+    }
+    // Returns a formatter in order to get the weekday name (to then show in the DayView
+    var formatter: DateFormatter {
+        let buffer = DateFormatter()
+        buffer.dateFormat = "EEE"
+        return buffer
+    }
     
     var body: some View {
         ZStack {
@@ -163,23 +173,70 @@ struct StreakView: View {
                     .foregroundStyle(Color.accentColor)
                     .padding(.bottom, 10)
                     .padding(.horizontal, 40)
-                // Shows seven circles with the weekdays, filled or coloured based on that day's info TODO: DIFFERENTIATE CIRCLE'S FILLING AND START FROM 7 DAYS AGO
+                // Shows seven circles with the weekdays, filled or coloured based on that day's info
                 HStack{
-                    ForEach(weekDays, id:\.self){ day in
-                        ZStack{
-                            Circle()
-                                .frame(width: 30, height: 30)
-                                .foregroundStyle(Color.accentColor)
-                            Text(day)
-                                .foregroundStyle(Color.black)
-                        }
-                        .padding(.trailing, 8)
+                    ForEach(lastSevenDays.reversed(), id:\.self){ day in
+                        let weekdayString = formatter.string(from: day)
+                        DayView(user: $user, day: day)
                     }
+                    
                 }
                 .padding(.horizontal, 40)
             }
         }
         .frame(height: 245)
+    }
+}
+
+// Shows a circle for each day of the previous week, with a color associated to the info about that
+struct DayView: View {
+    @Binding var user: Profile
+    var day: Date
+    var formatter: DateFormatter {
+        let buffer = DateFormatter()
+        buffer.dateFormat = "EEE"
+        return buffer
+    }
+    
+    var body: some View {
+        let weekdayString = formatter.string(from: day)
+        ZStack{
+            Circle()
+                .frame(width: 30, height: 30)
+                .foregroundStyle(determineBackground())
+            Text(String(weekdayString.prefix(1)))
+                .foregroundStyle(Color.white)
+        }
+        .padding(.trailing, 8)
+    }
+    
+    // Return a color based on the tracking and snoozing information of the actual day
+    func determineBackground() -> Color{
+        if (!checkTracking()){
+            return Color.clear
+        } else if (checkSnoozed()){
+            return Color.red
+        } else {
+            return Color.green
+        }
+    }
+    
+    // See if the actual day is in the backtrack array, meaning that the user used the app
+    func checkTracking() -> Bool{
+        let current = Calendar.current
+        for night in user.backtrack {
+            if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day))){return true}
+        }
+        return false
+    }
+    
+    // Checks if the actual date is in the backtrack array and, if yes, also if that night the user snoozed
+    func checkSnoozed() -> Bool{
+        let current = Calendar.current
+        for night in user.backtrack{
+            if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day)) && night.snoozed){return true}
+        }
+        return false
     }
 }
 

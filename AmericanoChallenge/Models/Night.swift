@@ -7,7 +7,8 @@
 
 import Foundation
 
-class Night{
+class Night: Identifiable{
+    var id: UUID = UUID()
     var date: Date = Date.now
     var duration: TimeInterval = 0
     var wakeUpSuccess: Bool = true // I believe in people

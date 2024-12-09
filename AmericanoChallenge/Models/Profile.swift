@@ -11,7 +11,12 @@ import SwiftUI
 class Profile{
     var alarm: Alarm = Alarm()
     var streak: Int = 0 // Actual number of consecutive days where the user successfully wakes up and doesn't snooze
-    var backtrack: [Night] = []
+    // Placeholder Nights
+    var backtrack: [Night] = [
+        Night(date: Date.now.addingTimeInterval(-604800), duration: 60, wakeUpSuccess: true, snoozed: true),
+        Night(date: Date.now.addingTimeInterval(-172800), duration: 60, wakeUpSuccess: true, snoozed: false),
+        Night(date: Date.now.addingTimeInterval(-345600), duration: 60, wakeUpSuccess: true, snoozed: true)
+    ]
     var restedDays: Int = 0 // Number of days the user preferred to rest and to not wake up at a specific hour
     var snoozedDays: Int = 0 // Number of days the user snoozed
     var totalSleepDuration: TimeInterval = 0

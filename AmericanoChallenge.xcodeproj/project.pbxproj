@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		42A7DB7D2D061D3900227926 /* WrappingHStack in Frameworks */ = {isa = PBXBuildFile; productRef = 42A7DB7C2D061D3900227926 /* WrappingHStack */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		423571B92D039F6B00979A4F /* AmericanoChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmericanoChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -40,7 +36,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42A7DB7D2D061D3900227926 /* WrappingHStack in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +78,6 @@
 			);
 			name = AmericanoChallenge;
 			packageProductDependencies = (
-				42A7DB7C2D061D3900227926 /* WrappingHStack */,
 			);
 			productName = AmericanoChallenge;
 			productReference = 423571B92D039F6B00979A4F /* AmericanoChallenge.app */;
@@ -114,7 +108,6 @@
 			mainGroup = 423571B02D039F6B00979A4F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				42A7DB7B2D061D3900227926 /* XCRemoteSwiftPackageReference "WrappingHStack" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 423571BA2D039F6B00979A4F /* Products */;
@@ -348,25 +341,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		42A7DB7B2D061D3900227926 /* XCRemoteSwiftPackageReference "WrappingHStack" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ksemianov/WrappingHStack";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		42A7DB7C2D061D3900227926 /* WrappingHStack */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 42A7DB7B2D061D3900227926 /* XCRemoteSwiftPackageReference "WrappingHStack" */;
-			productName = WrappingHStack;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 423571B12D039F6B00979A4F /* Project object */;
 }
