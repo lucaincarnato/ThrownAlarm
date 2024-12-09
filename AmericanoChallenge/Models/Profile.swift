@@ -16,7 +16,27 @@ class Profile{
     var snoozedDays: Int = 0 // Number of days the user snoozed
     var totalSleepDuration: TimeInterval = 0
     var averageSleepDuration: TimeInterval = 0
-    var totalAchievements: [Achievement] = []
+    // Placeholder achievements
+    var totalAchievements: [Achievement] = [
+        Achievement(
+            "Snooze conqueeror",
+            "alarm.waves.left.and.right.fill",
+            "A month without snoozing",
+            true
+        ),
+        Achievement(
+            "Master of throws",
+            "basketball.fill",
+            "100 throws completed",
+            true
+        ),
+        Achievement(
+            "Master of throws",
+            "basketball.fill",
+            "100 throws completed",
+            false
+        ),
+    ]
     
     // Update all the profile
     func update(){
@@ -61,5 +81,12 @@ class Profile{
         }
         // Arithmetic average
         self.averageSleepDuration = self.totalSleepDuration / Double(self.backtrack.count)
+    }
+    
+    // Returns a date as HH:mm string
+    func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        return dateFormatter.string(from: date)
     }
 }

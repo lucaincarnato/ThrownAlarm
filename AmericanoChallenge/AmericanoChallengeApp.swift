@@ -11,9 +11,8 @@ import SwiftUI
 struct AmericanoChallengeApp: App {
     var body: some Scene {
         WindowGroup {
-            // MARK: BACKEND TESTING
-            TimerView()
-                .preferredColorScheme(.dark)
+            DashboardView()
+                .preferredColorScheme(.dark) // Forces the app to run in dark mode
         }
     }
 }

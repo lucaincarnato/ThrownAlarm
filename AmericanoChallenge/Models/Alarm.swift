@@ -13,7 +13,7 @@ class Alarm{
     var sleepDuration: TimeInterval
     var sound: URL = URL(string: "https://www.youtube.com/watch?v=1111111111")! // TODO: FIGURE OUT HOW SOUND AND HAPTICS WORKS
     var haptics: URL = URL(string: "https://www.youtube.com/watch?v=1111111111")! // TODO: FIGURE OUT HOW SOUND AND HAPTICS WORKS
-    var volume: Double = 0.5 // TODO: FIGURE OUT HOW VOLUME WORKS
+    var volume: Double = 0.5
     var snooze: Bool = true
     
     // Initializer for
