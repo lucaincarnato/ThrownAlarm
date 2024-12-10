@@ -116,7 +116,8 @@ private struct AlarmView: View{
                 }
                 // Info about the duration of the sleep
                 let intDuration = Int(user.alarm.sleepDuration / 3600)
-                let stringDuration = intDuration > 1 ? "Rings in \(intDuration) hours" : "Rings in \(intDuration) hour"
+                let intMinutes = Int(Int(user.alarm.sleepDuration) % 3600 / 60)
+                let stringDuration = intDuration > 1 ? "Rings in \(intDuration)h:\(intMinutes)m" : "Rings in \(intDuration)h:\(intMinutes)m"
                 Text(stringDuration)
                     .foregroundStyle(Color.accentColor)
             }

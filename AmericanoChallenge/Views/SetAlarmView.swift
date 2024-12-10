@@ -71,14 +71,14 @@ private struct PickerView: View {
             // Live information
             HStack{
                 let alarm = user.alarm
-                Text(user.formatDate(alarm.sleepTime))
+                Text(user.alarm.sleepTime.formatted(date: .omitted, time: .shortened))
                     .font(.largeTitle)
                     .bold()
                     .foregroundStyle(Color.white)
                 Image(systemName: "arrow.forward")
                     .foregroundStyle(Color.accentColor)
                     .padding(.horizontal)
-                Text(user.formatDate(alarm.wakeTime))
+                Text(user.alarm.wakeTime.formatted(date: .omitted, time: .shortened))
                     .font(.largeTitle)
                     .bold()
                     .foregroundStyle(Color.white)
@@ -123,12 +123,11 @@ private struct PickerView: View {
                         DragGesture()
                             .onChanged({ value in
                                 onDrag(value: value, fromSlider: true)
+                                user.alarm.sleepTime = getTime(angle: startAngle) // Update user's info
                             })
                     )
-                    .sensoryFeedback(.increase, trigger: startAngle) // Haptic feedback when wheel change TODO: TRIGGER ON DATE, NOT ANGLE (TOO MANY ANGLES)
-                
-                
-                // Immagine a destra (fine del trim)
+                    .sensoryFeedback(.increase, trigger: getTime(angle: startAngle)) // Haptic feedback when wheel change
+                // Wake up handle
                 Image(systemName: "alarm.fill")
                     .foregroundStyle(Color.black)
                     .frame(width: 35, height: 35)
@@ -140,17 +139,26 @@ private struct PickerView: View {
                         DragGesture()
                             .onChanged({ value in
                                 onDrag(value: value)
+                                user.alarm.wakeTime = getTime(angle: endAngle) // Update user's info
+                                user.alarm.sleepDuration = TimeInterval(getTimeDifference().0 * 3600 + getTimeDifference().1 * 60)
                             })
                     )
-                    .sensoryFeedback(.increase, trigger: endAngle) // Haptic feedback when wheel change TODO: TRIGGER ON DATE, NOT ANGLE (TOO MANY ANGLES)
+                    .sensoryFeedback(.increase, trigger: getTime(angle: endAngle)) // Haptic feedback when wheel change
             }
             .rotationEffect(Angle(degrees: -90)) // Rotate all the circle in order to show the zero not in the right part of the screen but on the top
             // Info related to the duration of the sleep
             let intDuration = Int(user.alarm.sleepDuration / 3600)
             let stringDuration = intDuration > 1 ? "\(intDuration) hours" : "\(intDuration) hour"
-            Text(stringDuration)
+            Text("\(getTimeDifference().0)h:\(getTimeDifference().1)min")
                 .foregroundStyle(Color.accentColor)
                 .padding(.bottom, 15)
+        }
+        // When the view appears it changes the handles to match user previous info
+        .onAppear(){
+            startAngle = getAngle(from: user.alarm.sleepTime)
+            startSector = startAngle.degrees / 360
+            endAngle = getAngle(from: user.alarm.wakeTime)
+            endSector = endAngle.degrees / 360
         }
     }
     
@@ -169,6 +177,51 @@ private struct PickerView: View {
             self.endAngle = Angle(degrees: angle)
             self.endSector = progress
         }
+    }
+    
+    // Return the corresponding date to the angle user selected
+    func getTime(angle: Angle) -> Date{
+        let progress = angle.degrees / 15 // 15 is the angle for an hour
+        let hours = Int(progress)
+        let remainder = (progress.truncatingRemainder(dividingBy: 1) * 12).rounded() // Creates a minute step with five as base
+        var minutes = remainder * 5
+        minutes = (minutes > 55 ? 55 : minutes) // Don't allow approximation over 55
+        // Format int info into date
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        if let date = formatter.date(from: "\(hours):\(Int(minutes)):00"){
+            return date
+        }
+        return .init()
+    }
+    
+    // Returns angle from date for initialization
+    func getAngle(from date: Date) -> Angle {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        let second = calendar.component(.second, from: date)
+        // date in hours
+        let totalHours = Double(hour) + (Double(minute) / 60) + (Double(second) / 3600)
+        // Degrees conversion
+        let degrees = totalHours * 15 // 15 degrees per hour
+        return Angle(degrees: degrees)
+    }
+
+    // Returns the actual difference between wake up and sleep time
+    func getTimeDifference() -> (Int, Int){
+        let calendar = Calendar.current
+        var results = calendar.dateComponents([.hour, .minute], from: getTime(angle: startAngle), to: getTime(angle: endAngle)) // Get actual difference in integers
+        // Avoid negative hours
+        if (results.hour! < 0) {
+            results.hour = (results.hour!) + 24
+        }
+        // Avoid negative minutes
+        if (results.minute! < 0){
+            if (results.hour! != 0) {results.hour! -= 1}
+            results.minute = (results.minute!) + 60
+        }
+        return (results.hour ?? 0, results.minute ?? 0)
     }
 }
 
