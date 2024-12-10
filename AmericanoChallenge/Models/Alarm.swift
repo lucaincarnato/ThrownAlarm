@@ -9,7 +9,7 @@ import Foundation
 
 class Alarm{
     var sleepTime: Date = Date.now
-    var wakeTime: Date = Date.now.addingTimeInterval(86400) // Sets the wake time 24h from the sleeps as default
+    var wakeTime: Date = Date.now.addingTimeInterval(28800) // Sets the wake time 8h from the sleeps as default
     var sleepDuration: TimeInterval
     var sound: URL = URL(string: "https://www.youtube.com/watch?v=1111111111")! // TODO: FIGURE OUT HOW SOUND AND HAPTICS WORKS
     var haptics: URL = URL(string: "https://www.youtube.com/watch?v=1111111111")! // TODO: FIGURE OUT HOW SOUND AND HAPTICS WORKS

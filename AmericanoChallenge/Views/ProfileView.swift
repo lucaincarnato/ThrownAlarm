@@ -30,6 +30,7 @@ struct ProfileView: View {
                     DatePicker(
                         "Start Date",
                         selection: $selectedDate,
+                        in: ...Date(),
                         displayedComponents: [.date]
                     )
                     .datePickerStyle(.graphical)
@@ -60,7 +61,7 @@ struct ProfileView: View {
 }
 
 // Shows the little cards with marginal information
-struct InfoView: View{
+private struct InfoView: View{
     var title: String // Title related to the information
     var imageName: String // SF symbol related to the information
     var content: String // Complementary information to the title

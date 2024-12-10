@@ -67,7 +67,7 @@ struct DashboardView: View {
 }
 
 // Card to show the info about the alarm
-struct AlarmView: View{
+private struct AlarmView: View{
     @Binding var user: Profile // Binding value for the user profile
     @Binding var alarmActive: Bool // Binding value for the activityness of the alarm
     @Binding var setAlarm: Bool // Binding value for the modality
@@ -126,7 +126,7 @@ struct AlarmView: View{
 }
 
 // Card to show basic info about the streak
-struct StreakView: View {
+private struct StreakView: View {
     @Binding var user: Profile // Binding value for the user profile
     // Returns the seven date of the previous week
     let lastSevenDays = (1...7).compactMap { dayOffset in
@@ -189,7 +189,7 @@ struct StreakView: View {
 }
 
 // Shows a circle for each day of the previous week, with a color associated to the info about that
-struct DayView: View {
+private struct DayView: View {
     @Binding var user: Profile
     var day: Date
     var formatter: DateFormatter {
@@ -205,13 +205,14 @@ struct DayView: View {
                 .frame(width: 30, height: 30)
                 .foregroundStyle(determineBackground())
             Text(String(weekdayString.prefix(1)))
-                .foregroundStyle(Color.white)
+                .foregroundStyle(checkTracking() ? Color.black : Color.white)
         }
         .padding(.trailing, 8)
     }
     
     // Return a color based on the tracking and snoozing information of the actual day
     func determineBackground() -> Color{
+        // MARK: POOR CONTRAST RATIO, ASK DOMENICO FOR HELP
         if (!checkTracking()){
             return Color.clear
         } else if (checkSnoozed()){
@@ -240,7 +241,7 @@ struct DayView: View {
     }
 }
 
-// Card to show the achievement and its info
+// Card to show the achievement and its info (Not private because referenced in AchievementsView
 struct AchievementCardView: View{
     var achievement: Achievement // Achievement's model
     @State var isShowing: Bool = false // Boolean value for the modality of achievement's info
@@ -296,3 +297,8 @@ struct AchievementCardView: View{
 #Preview {
     DashboardView()
 }
+
+
+/*
+ Ho un DatePicker grafico nel mio progetto SwiftUI e vorrei usarlo per mostrare delle informazioni; in particolare vorrei cambiare lo sfondo di ogni giorno del picker sulla base di una variabile booleana: senza sfondo se è falsa e con uno sfondo verde se è vera. Come posso ottenere questo comportamento? 
+ */
