@@ -71,17 +71,35 @@ private struct PickerView: View {
             // Live information
             HStack{
                 let alarm = user.alarm
-                Text(user.alarm.sleepTime.formatted(date: .omitted, time: .shortened))
-                    .font(.largeTitle)
-                    .bold()
-                    .foregroundStyle(Color.white)
+                VStack{
+                    HStack{
+                        Image(systemName: "bed.double.fill")
+                            .foregroundStyle(Color.accentColor)
+                        Text("BEDTIME")
+                            .font(.subheadline)
+                            .bold()
+                    }
+                    Text(user.alarm.sleepTime.formatted(date: .omitted, time: .shortened))
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundStyle(Color.white)
+                }
                 Image(systemName: "arrow.forward")
                     .foregroundStyle(Color.accentColor)
                     .padding(.horizontal)
-                Text(user.alarm.wakeTime.formatted(date: .omitted, time: .shortened))
-                    .font(.largeTitle)
-                    .bold()
-                    .foregroundStyle(Color.white)
+                VStack{
+                    HStack{
+                        Image(systemName: "alarm.fill")
+                            .foregroundStyle(Color.accentColor)
+                        Text("WAKE UP")
+                            .font(.subheadline)
+                            .bold()
+                    }
+                    Text(user.alarm.wakeTime.formatted(date: .omitted, time: .shortened))
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundStyle(Color.white)
+                }
             }
             // Custom picker for the hour that mimics the one in the Clock app (in the Sleep section)
             .padding(.top, 15)
