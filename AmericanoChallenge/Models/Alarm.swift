@@ -5,8 +5,10 @@
 //  Created by Luca Maria Incarnato on 06/12/24.
 //
 
+import SwiftData
 import Foundation
 
+@Model
 class Alarm{
     var sleepTime: Date = Date.now
     var wakeTime: Date = Date.now.addingTimeInterval(28800) // Sets the wake time 8h from the sleeps as default

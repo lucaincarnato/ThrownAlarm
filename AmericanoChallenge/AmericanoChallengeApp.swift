@@ -14,5 +14,6 @@ struct AmericanoChallengeApp: App {
             DashboardView()
                 .preferredColorScheme(.dark) // Forces the app to run in dark mode
         }
+        .modelContainer(for: Profile.self)
     }
 }

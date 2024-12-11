@@ -5,8 +5,10 @@
 //  Created by Luca Maria Incarnato on 06/12/24.
 //
 
+import SwiftData
 import Foundation
 
+@Model
 class Night: Identifiable{
     var id: UUID = UUID()
     var date: Date = Date.now

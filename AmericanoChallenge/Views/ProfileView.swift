@@ -6,19 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 // Shows the info about the user's streak
 struct ProfileView: View {
-    @Binding var user: Profile // Binding value for the user profile
-    @State var selectedDate: Date // Date for the picker TODO: NEED TO SEE IF IT IS NECESSARY WITH CUSTOM COMPONENT
+    @State var user: Profile // Binding value for the user profile
     
     var body: some View {
         NavigationStack{
             ScrollView{
-                VStack{
+                VStack (alignment: .leading){
                     // Shows the streak
                     Image(systemName: "flame.fill")
-                        .foregroundStyle(Color.accentColor)
+                        .foregroundStyle(Color.green)
                         .font(.largeTitle)
                         .padding(.vertical, 10)
                     Text("You successfully woke up for")
@@ -26,33 +26,19 @@ struct ProfileView: View {
                     Text("\(user.streak) days")
                         .font(.largeTitle)
                         .bold()
-                    // Month view where the user can see its backlog TODO: CUSTOM COMPONENT
-                    DatePicker(
-                        "Start Date",
-                        selection: $selectedDate,
-                        in: ...Date(),
-                        displayedComponents: [.date]
-                    )
-                    .datePickerStyle(.graphical)
-                    .background(content: {
-                        RoundedRectangle(cornerRadius: 15)
-                            .foregroundStyle(Color.gray.opacity(0.3))
-                    })
-                    .padding(10)
-                    // Secondary information
-                    HStack{
-                        InfoView(title: "You rested", imageName: "battery.100percent.bolt", content: "\(user.restedDays) days", color: Color.green)
-                        InfoView(title: "You snoozed", imageName: "battery.25percent", content: "\(user.snoozedDays) days", color: Color.red)
-                    }
-                    .frame(height: 200)
-                    /* MARK: IS IT REALLY NEEDED
-                    HStack{
-                        InfoView(title: "You slept", imageName: "bed.double.fill", content: "\(Int(user.totalSleepDuration/3600)) hours", color: Color.accentColor)
-                        InfoView(title: "On average", imageName: "powersleep", content: "\(Int(user.averageSleepDuration/3600)) hours", color: Color.accentColor)
-                    }
-                    .frame(height: 200)
-                     */
+                    Image(systemName: "battery.25percent")
+                        .foregroundStyle(Color.red)
+                        .font(.largeTitle)
+                        .padding(.vertical, 10)
+                    Text("You snoozed for a total of")
+                        .font(.title3)
+                    Text("\(user.snoozedDays) days")
+                        .font(.largeTitle)
+                        .bold()
                 }
+                .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
+                .padding(.horizontal, 20)
+                MonthlyCalendarView(user: user)
             }
             .navigationTitle("Your streak")
             .navigationBarTitleDisplayMode(.inline) // Forces the title to be in the toolbar
@@ -60,33 +46,79 @@ struct ProfileView: View {
     }
 }
 
-// Shows the little cards with marginal information
-private struct InfoView: View{
-    var title: String // Title related to the information
-    var imageName: String // SF symbol related to the information
-    var content: String // Complementary information to the title
-    var color: Color // Symbol's color
-        
-    var body: some View{
+private struct MonthlyCalendarView: View {
+    @State var user: Profile
+    let calendar = Calendar.current
+    @State private var selectedMonth: Date = Date()
+    
+    var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 15)
+                .padding()
                 .foregroundStyle(Color.gray.opacity(0.3))
-            // Shows the actual informations
-            VStack{
-                Text(title)
-                    .font(.title2)
-                    .bold()
-                    .multilineTextAlignment(.center)
-                Image(systemName: imageName)
-                    .foregroundStyle(color)
-                    .font(.largeTitle)
-                    .padding(.vertical, 3)
-                Text(content)
-                    .font(.largeTitle)
-                    .bold()
-                    .multilineTextAlignment(.center)
+            VStack {
+                // Month selector
+                HStack {
+                    // Previous month
+                    Button{
+                        selectedMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) ?? selectedMonth
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.title2)
+                    }
+                    Text(selectedMonth, format: .dateTime.year().month(.wide))
+                        .font(.title2)
+                        .bold()
+                    // Next month
+                    Button{
+                        selectedMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) ?? selectedMonth
+                    } label:{
+                        Image(systemName: "chevron.right")
+                            .font(.title2)
+                    }
+                }
+                .padding()
+                // Weekdays
+                HStack {
+                    ForEach(calendar.shortWeekdaySymbols, id: \.self) { weekday in
+                        Text(weekday)
+                            .frame(maxWidth: .infinity)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                // Daily grid per month
+                let days = daysInMonth(for: selectedMonth)
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
+                    ForEach(days, id: \.self) { day in
+                        if let day = day {
+                            DayView(user: user, day: day, isExtendedView: true, text: String(calendar.component(.day, from: day)))
+                        } else {
+                            Text("") // Empty cells to complete the grid
+                        }
+                    }
+                }
+                .frame(minHeight: 250)
+            }
+            .padding(20)
+        }
+    }
+    
+    // Generate month's day as Date optional array
+    private func daysInMonth(for date: Date) -> [Date?] {
+        // Local variable setup
+        var days: [Date?] = []
+        let range = calendar.range(of: .day, in: .month, for: date)!
+        let components = calendar.dateComponents([.year, .month], from: date)
+        let firstDayOfMonth = calendar.date(from: components)!
+        let weekdayOffset = calendar.component(.weekday, from: firstDayOfMonth) - 1
+        // Empty cells before first day of the month
+        days.append(contentsOf: Array(repeating: nil, count: weekdayOffset))
+        // Month's day generation
+        for day in range {
+            if let dayDate = calendar.date(byAdding: .day, value: day - 1, to: firstDayOfMonth) {
+                days.append(dayDate)
             }
         }
-        .padding(10)
+        return days
     }
 }

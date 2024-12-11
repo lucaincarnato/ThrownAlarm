@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import WrappingHStack
 
 // Shows all the achievement, obtained or not, in a larger view
 struct AchievementsView: View {
-    @Binding var user: Profile // Returns the info about the user profile
+    @State var user: Profile // Returns the info about the user profile
     // Columns for the LazyVGrid
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 10),

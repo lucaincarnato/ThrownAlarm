@@ -9,7 +9,7 @@ import SwiftUI
 
 // Allows the user to change the alarm and its settings
 struct SetAlarmView: View {
-    @Binding var user: Profile // Returns the info about the user profile
+    @State var user: Profile // Returns the info about the user profile
     @Binding var setAlarm: Bool // Binding value for the modality
     
     var body: some View {
@@ -70,12 +70,12 @@ private struct PickerView: View {
         VStack{
             // Live information
             HStack{
-                let alarm = user.alarm
                 VStack{
                     HStack{
                         Image(systemName: "bed.double.fill")
                             .foregroundStyle(Color.accentColor)
                         Text("BEDTIME")
+                            .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
                             .bold()
                     }
@@ -92,6 +92,7 @@ private struct PickerView: View {
                         Image(systemName: "alarm.fill")
                             .foregroundStyle(Color.accentColor)
                         Text("WAKE UP")
+                            .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
                             .bold()
                     }
@@ -165,8 +166,6 @@ private struct PickerView: View {
             }
             .rotationEffect(Angle(degrees: -90)) // Rotate all the circle in order to show the zero not in the right part of the screen but on the top
             // Info related to the duration of the sleep
-            let intDuration = Int(user.alarm.sleepDuration / 3600)
-            let stringDuration = intDuration > 1 ? "\(intDuration) hours" : "\(intDuration) hour"
             Text("\(getTimeDifference().0)h:\(getTimeDifference().1)min")
                 .foregroundStyle(Color.accentColor)
                 .padding(.bottom, 15)
@@ -282,8 +281,4 @@ private struct ClockView: View {
         }
         .rotationEffect(Angle(degrees: 90)) // Necessary because the parent will be -90 degrees rotated
     }
-}
-
-#Preview {
-    SetAlarmView(user: .constant(Profile()), setAlarm: .constant(true))
 }

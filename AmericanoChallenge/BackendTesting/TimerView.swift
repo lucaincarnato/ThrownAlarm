@@ -51,7 +51,3 @@ struct TimerView: View {
         return formatter.string(from: timeRemaining)!
     }
 }
-
-#Preview {
-    TimerView()
-}

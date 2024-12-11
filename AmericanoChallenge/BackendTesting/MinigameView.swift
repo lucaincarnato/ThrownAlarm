@@ -49,7 +49,3 @@ struct MinigameView: View {
         }
     }
 }
-
-#Preview {
-    MinigameView(alarmOff: .constant(true))
-}

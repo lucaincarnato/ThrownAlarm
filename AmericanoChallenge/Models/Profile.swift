@@ -7,9 +7,11 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 
+@Model
 class Profile{
-    var alarm: Alarm = Alarm()
+    @Attribute(.unique) var alarm: Alarm = Alarm()
     var streak: Int = 0 // Actual number of consecutive days where the user successfully wakes up and doesn't snooze
     // Placeholder Nights
     var backtrack: [Night] = [
@@ -20,7 +22,7 @@ class Profile{
     var restedDays: Int = 0 // Number of days the user preferred to rest and to not wake up at a specific hour
     var snoozedDays: Int = 0 // Number of days the user snoozed
     var totalSleepDuration: TimeInterval = 0
-    var averageSleepDuration: TimeInterval = 0
+    var averageSleepDuration: TimeInterval = 0 // MARK: IS IT REALLY NEEDED ANYMORE?
     // Placeholder achievements
     var totalAchievements: [Achievement] = [
         Achievement(
@@ -42,6 +44,11 @@ class Profile{
             false
         ),
     ]
+    
+    // General initializer to allow model 
+    init(){
+        update()
+    }
     
     // Update all the profile
     func update(){
