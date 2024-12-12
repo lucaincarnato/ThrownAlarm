@@ -16,7 +16,7 @@ struct OnceClockApp: App {
                 .preferredColorScheme(.dark) // Forces the app to run in dark mode
         }
         .modelContainer(for: Profile.self)
-         */
+        */
         WindowGroup {
             FreefallCirclesView()
         }
