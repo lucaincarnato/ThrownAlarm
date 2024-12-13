@@ -12,6 +12,8 @@ import SwiftData
 struct ProfileView: View {
     @State var user: Profile // Binding value for the user profile
     
+    @State private var showingSheet: Bool = false
+    
     var body: some View {
         NavigationStack{
             ScrollView{
@@ -39,6 +41,12 @@ struct ProfileView: View {
                 .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
                 .padding(.horizontal, 20)
                 MonthlyCalendarView(user: user)
+                Button("Freefall"){
+                    showingSheet = true
+                }
+                .fullScreenCover(isPresented: $showingSheet) {
+                    AlarmGameView(showSheet: $showingSheet)
+                }
             }
             .navigationTitle("Your streak")
             .navigationBarTitleDisplayMode(.inline) // Forces the title to be in the toolbar

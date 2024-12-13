@@ -22,10 +22,12 @@ struct DayView: View {
     var body: some View {
         let weekdayString = formatter.string(from: day)
         ZStack{
-            Circle()
+            RoundedRectangle(cornerRadius: 100)
                 .frame(width: 30, height: 30)
                 .foregroundStyle(determineBackground())
             Text(isExtendedView ? text : String(weekdayString.prefix(1)))
+                .bold()
+                //.foregroundStyle( Color.white.opacity(checkTracking() ? 0.5 : 0.3))
                 .foregroundStyle(checkTracking() ? Color.black : Color.white.opacity(0.3))
         }
         .padding(.trailing, 8)
@@ -33,7 +35,6 @@ struct DayView: View {
     
     // Return a color based on the tracking and snoozing information of the actual day
     func determineBackground() -> Color{
-        // MARK: POOR CONTRAST RATIO, ASK DOMENICO FOR HELP
         if (!checkTracking()){
             return Color.clear
         } else if (checkSnoozed()){
