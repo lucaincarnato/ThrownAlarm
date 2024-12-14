@@ -12,7 +12,7 @@ import SwiftData
 struct ProfileView: View {
     @State var user: Profile // Binding value for the user profile
     @State private var showSheet: Bool = false
-    var contextUpdate: () throws -> Void
+    var save: () throws -> Void
     
     var body: some View {
         NavigationStack{
@@ -45,7 +45,7 @@ struct ProfileView: View {
                     showSheet = true
                 }
                 .fullScreenCover(isPresented: $showSheet) {
-                    AlarmGameView(user: $user, showSheet: $showSheet, contextUpdate: contextUpdate, rounds: user.alarm.rounds)
+                    AlarmGameView(user: $user, showSheet: $showSheet, save: save, rounds: user.alarm.rounds)
                 }
             }
             .navigationTitle("Your streak")

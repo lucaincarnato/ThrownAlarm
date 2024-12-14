@@ -19,7 +19,7 @@ struct AlarmGameView: View {
     @Binding var user: Profile // Binding value for the user profile
     @Binding var showSheet: Bool // Boolean value to allow modality
     
-    var contextUpdate: () throws -> Void // Function for the context update
+    var save: () throws -> Void // Context update
     
     @State var circles: [CircleModel] = [] // Array of logical circles
     @State var timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect() // Timer to update the scene at 60 FPS
@@ -34,6 +34,9 @@ struct AlarmGameView: View {
     // Scrren size to dynamically place elements
     let screenHeight = UIScreen.main.bounds.height
     let screenWidth = UIScreen.main.bounds.width
+    
+    @State private var holdingCircle: Bool = false
+    @State var hapticAllowed: Bool = true // MARK: FUTURE IMPLEMENTATION, ALLOW USER TO DECIDE FEEDBACK
     
     var body: some View {
         // Geometric plane where game objects will be rendered
@@ -66,7 +69,8 @@ struct AlarmGameView: View {
                             if (rounds == 0) {
                                 recordNight() // Updates night
                                 user.updateStreak() // Updates streak
-                                try? contextUpdate() // Saves
+                                user.updateSnooze() // Updates snooze
+                                try? save() // Saves
                                 showSheet.toggle()
                             } else {
                                 remainingCirclesCount = initialCircleCount
@@ -106,27 +110,30 @@ struct AlarmGameView: View {
                                 // Drag modifier
                                 .onChanged { value in
                                     moveCircle(withID: circle.id, to: value.location)
+                                    if hapticAllowed {holdingCircle.toggle()}
                                 }
                                 // Throw modifier
                                 .onEnded { value in
                                     // Determine velocity and scales through reduction factor
                                     let velocity = CGSize(
-                                        width: value.translation.width / (0.016 * launchSpeedReductionFactor),
-                                        height: value.translation.height / (0.016 * launchSpeedReductionFactor)
+                                        width: 1.5 * value.translation.width / (0.016 * launchSpeedReductionFactor),
+                                        height: 1.5 * value.translation.height / (0.016 * launchSpeedReductionFactor)
                                     )
                                     // Apply velocity to the circle
                                     releaseCircle(withID: circle.id, withVelocity: velocity)
                                 }
                         )
                 }
+                .sensoryFeedback(.impact(weight: .heavy, intensity: 1.0), trigger: holdingCircle)
+                .sensoryFeedback(.success, trigger: remainingCirclesCount)
             }
             .background(Color.black.ignoresSafeArea())
             // Determine and render circles once the view is loaded
             .onAppear {
                 // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
                 user.backtrack.append(Night(date: Date.now, duration: user.alarm.sleepDuration, wakeUpSuccess: false, snoozed: true))
-                user.updateStreak()
-                try? contextUpdate()
+                user.updateSnooze() // Updates snooze
+                try? save()
                 generateInitialCircles(in: geometry.size)
             }
             // Each frame updates circles' position and velocity

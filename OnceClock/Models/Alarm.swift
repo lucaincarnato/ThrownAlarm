@@ -13,6 +13,7 @@ class Alarm{
     var sleepTime: Date = Date.now
     var wakeTime: Date = Date.now.addingTimeInterval(28800) // Sets the wake time 8h from the sleeps as default
     var sleepDuration: TimeInterval
+    var ringsIn: TimeInterval = 28800 // Let the user know when the alarm will ring
     var sound: URL = URL(string: "https://www.youtube.com/watch?v=1111111111")! // TODO: FIGURE OUT HOW SOUND AND HAPTICS WORKS
     var haptics: URL = URL(string: "https://www.youtube.com/watch?v=1111111111")! // TODO: FIGURE OUT HOW SOUND AND HAPTICS WORKS
     var volume: Double = 0.5
@@ -29,6 +30,7 @@ class Alarm{
     func setDuration(){
         // If default values are kept, it should set sleepDuration to 86400
         self.sleepDuration = self.wakeTime.timeIntervalSinceReferenceDate - self.sleepTime.timeIntervalSinceReferenceDate
+        self.ringsIn = Date.now.distance(to: self.wakeTime) // Determine the difference between the wakeTime and now
     }
     
     // Allow the user to change the time of go to sleep and wake up, updating the duration

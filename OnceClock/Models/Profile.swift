@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import CloudKit
 
 @Model
 class Profile{
@@ -55,6 +56,9 @@ class Profile{
             // If last night was not successful, the streak is lost
             self.streak = 0
         }
+    }
+    
+    func updateSnooze() -> Void{
         // Update snoozed days
         self.snoozedDays = 0
         for night in self.backtrack{

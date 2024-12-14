@@ -50,6 +50,7 @@ struct SetAlarmView: View {
                 // Toolbar button for saving and updating the alarm TODO: LINK TO THE UPDATE FUNCTION
                 ToolbarItem(placement: .confirmationAction){
                     Button("Done"){
+                        user.alarm.setDuration()
                         try? save()
                         user.isActive = true
                         setAlarm.toggle()
@@ -122,7 +123,7 @@ private struct PickerView: View {
                     .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 40, lineCap: .round, lineJoin: .round)) // Creates a ring from the circle
                     .rotationEffect(Angle(degrees: reverse)) // Doesn't allow negative angles, it just shifts the zero to give the illusion
                     .padding(40)
-                    // Returns circle's radius
+                // Returns circle's radius
                     .background(
                         GeometryReader { geometry in
                             Color.clear
@@ -141,7 +142,7 @@ private struct PickerView: View {
                     .rotationEffect(Angle(degrees: 90)) // Rotate in order to appear straight from user's perspective
                     .background(Color.accentColor, in: Circle())
                     .offset(x: (radius - 40) * cos(startAngle.radians), y: (radius - 40) * sin(startAngle.radians)) // Allow the alignment to Circle and the shift once moved
-                    // Handle movement logic
+                // Handle movement logic
                     .gesture(
                         DragGesture()
                             .onChanged({ value in
@@ -157,7 +158,7 @@ private struct PickerView: View {
                     .rotationEffect(Angle(degrees: 90)) // Rotate in order to appear straight from user's perspective
                     .background(Color.accentColor, in: Circle())
                     .offset(x: (radius - 40) * cos(endAngle.radians), y: (radius - 40) * sin(endAngle.radians)) // Allow the alignment to Circle and the shift once moved
-                    // Handle movement logic
+                // Handle movement logic
                     .gesture(
                         DragGesture()
                             .onChanged({ value in
@@ -207,13 +208,24 @@ private struct PickerView: View {
         let remainder = (progress.truncatingRemainder(dividingBy: 1) * 12).rounded() // Creates a minute step with five as base
         var minutes = remainder * 5
         minutes = (minutes > 55 ? 55 : minutes) // Don't allow approximation over 55
-        // Format int info into date
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        if let date = formatter.date(from: "\(hours):\(Int(minutes)):00"){
-            return date
+        let now = Date()
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
+        
+        // Costruisci la data con l'ora e i minuti desiderati per oggi
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: now)
+        components.hour = hours
+        components.minute = Int(minutes)
+        components.second = 0
+        
+        // Recupera la data costruita
+        let targetDate = calendar.date(from: components) ?? now
+        
+        // Se la data costruita è nel passato, aggiungi un giorno
+        if targetDate <= now {
+            return calendar.date(byAdding: .day, value: 1, to: targetDate) ?? now
         }
-        return .init()
+        return targetDate
     }
     
     // Returns angle from date for initialization
@@ -228,7 +240,7 @@ private struct PickerView: View {
         let degrees = totalHours * 15 // 15 degrees per hour
         return Angle(degrees: degrees)
     }
-
+    
     // Returns the actual difference between wake up and sleep time
     func getTimeDifference() -> (Int, Int){
         let calendar = Calendar.current

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import CloudKit
 import Foundation
 
 // Shows the Gamification dashboard, it is the entry point of the application
@@ -26,10 +27,10 @@ struct DashboardView: View {
             ScrollView{
                 VStack( alignment: .leading, spacing: 0){
                     // Card for the info about the alarm
-                    AlarmView(user: user!, setAlarm: $setAlarm)
+                    AlarmView(user: user!, setAlarm: $setAlarm, save: modelContext.save)
                     // Card for the basic streak info that links to the related page
                     NavigationLink{
-                        ProfileView(user: user!, contextUpdate: modelContext.save)
+                        ProfileView(user: user!, save: modelContext.save)
                     } label: {
                         StreakView(user: user!)
                     }
@@ -82,6 +83,9 @@ struct DashboardView: View {
 private struct AlarmView: View{
     @State var user: Profile // Binding value for the user profile
     @Binding var setAlarm: Bool // Binding value for the modality
+    @State var sleepDuration: TimeInterval = 0
+
+    var save: () throws -> Void // Context update
     
     var body: some View{
         ZStack{
@@ -142,9 +146,8 @@ private struct AlarmView: View{
                             }
                         }
                         // Info about the duration of the sleep
-                        let sleepDuration = (user.alarm.wakeTime.timeIntervalSinceReferenceDate - Date.now.timeIntervalSinceReferenceDate)
-                        let intDuration = Int(sleepDuration / 3600)
-                        let intMinutes = Int(Int(sleepDuration) % 3600 / 60)
+                        let intDuration = Int(user.alarm.ringsIn / 3600)
+                        let intMinutes = Int(Int(user.alarm.ringsIn) % 3600 / 60)
                         let stringDuration = intDuration > 1 ? "Rings in \(intDuration)h:\(intMinutes)m" : "Rings in \(intDuration)h:\(intMinutes)m"
                         // MARK: THIS IS THE DURATION, NOT THE TIME REMAINING
                         Text(stringDuration)
@@ -164,7 +167,7 @@ private struct AlarmView: View{
 private struct StreakView: View {
     @State var user: Profile // Binding value for the user profile
     // Returns the seven date of the previous week
-    let lastSevenDays = (1...7).compactMap { dayOffset in
+    let lastSevenDays = (0...6).compactMap { dayOffset in
         Calendar.current.date(byAdding: .day, value: -dayOffset, to: Date())
     }
     // Returns a formatter in order to get the weekday name (to then show in the DayView
