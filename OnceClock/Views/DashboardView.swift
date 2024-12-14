@@ -26,10 +26,10 @@ struct DashboardView: View {
             ScrollView{
                 VStack( alignment: .leading, spacing: 0){
                     // Card for the info about the alarm
-                    AlarmView(user: user!, alarmActive: $alarmActive, setAlarm: $setAlarm)
+                    AlarmView(user: user!, setAlarm: $setAlarm)
                     // Card for the basic streak info that links to the related page
                     NavigationLink{
-                        ProfileView(user: user!)
+                        ProfileView(user: user!, contextUpdate: modelContext.save)
                     } label: {
                         StreakView(user: user!)
                     }
@@ -65,10 +65,15 @@ struct DashboardView: View {
                 }
                 // Modality for the alarm settings
                 .sheet(isPresented: $setAlarm){
-                    SetAlarmView(user: user!, setAlarm: $setAlarm)
+                    SetAlarmView(user: user!, setAlarm: $setAlarm, save: modelContext.save)
                 }
             }
             .navigationTitle("Dashboard")
+            .onAppear{
+                if users.first == nil{
+                    modelContext.insert(user!)
+                }
+            }
         }
     }
 }
@@ -76,7 +81,6 @@ struct DashboardView: View {
 // Card to show the info about the alarm
 private struct AlarmView: View{
     @State var user: Profile // Binding value for the user profile
-    @Binding var alarmActive: Bool // Binding value for the activityness of the alarm
     @Binding var setAlarm: Bool // Binding value for the modality
     
     var body: some View{
@@ -96,7 +100,7 @@ private struct AlarmView: View{
                             .bold()
                             .foregroundStyle(Color.white)
                     }
-                    Toggle("", isOn:$alarmActive).toggleStyle(SwitchToggleStyle())
+                    Toggle("", isOn:$user.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
                 }
                 .padding(.horizontal, 40)
                 // Alarm info showed as button that enables modal

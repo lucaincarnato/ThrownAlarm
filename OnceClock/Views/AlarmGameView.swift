@@ -16,18 +16,21 @@ struct CircleModel: Identifiable {
 
 // Shows the game space where the user can throw balls into the basket
 struct AlarmGameView: View {
+    @Binding var user: Profile // Binding value for the user profile
     @Binding var showSheet: Bool // Boolean value to allow modality
+    
+    var contextUpdate: () throws -> Void // Function for the context update
     
     @State var circles: [CircleModel] = [] // Array of logical circles
     @State var timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect() // Timer to update the scene at 60 FPS
     @State var remainingCirclesCount: Int = 0 // Remaining circles counter
 
-    @State var initialCircleCount = 2 // Initial number of circles
-    @State var round = 1 // Number of round done
+    @State var initialCircleCount = 1 // Initial number of circles
+    @State var rounds = 1 // Number of round done
     let launchSpeedReductionFactor: CGFloat = 20.0 // Speed reduction factor for difficulty balance
     let colliderSize = CGSize(width: 30, height: 30) // Basket's collider size
     var circleRadius: CGFloat = 30.0 // Radius for each circle rendered
-    
+        
     // Scrren size to dynamically place elements
     let screenHeight = UIScreen.main.bounds.height
     let screenWidth = UIScreen.main.bounds.width
@@ -39,7 +42,7 @@ struct AlarmGameView: View {
                 // Information about rounds, actual hour and remaining balls
                 VStack{
                     // Round
-                    Text("Round \(round)")
+                    Text("\(rounds) remaining")
                         .font(.title)
                         .bold()
                         .foregroundStyle(Color.gray.opacity(0.3))
@@ -57,14 +60,17 @@ struct AlarmGameView: View {
                         .multilineTextAlignment(.center)
                     // Button to go to the next round when remaining balls are zero
                     if remainingCirclesCount == 0 {
-                        Button(initialCircleCount > 1 ? "Next" : "Done") {
-                            round += 1
-                            initialCircleCount -= 1
-                            if (initialCircleCount != 0) {
+                        Button(rounds == 0 ? "Done" : "Next") {
+                            rounds -= 1
+                            initialCircleCount += 1
+                            if (rounds == 0) {
+                                recordNight() // Updates night
+                                user.updateStreak() // Updates streak
+                                try? contextUpdate() // Saves
+                                showSheet.toggle()
+                            } else {
                                 remainingCirclesCount = initialCircleCount
                                 generateInitialCircles(in: geometry.size)
-                            } else {
-                                showSheet.toggle()
                             }
                         }
                         .buttonStyle(.bordered)
@@ -117,6 +123,10 @@ struct AlarmGameView: View {
             .background(Color.black.ignoresSafeArea())
             // Determine and render circles once the view is loaded
             .onAppear {
+                // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
+                user.backtrack.append(Night(date: Date.now, duration: user.alarm.sleepDuration, wakeUpSuccess: false, snoozed: true))
+                user.updateStreak()
+                try? contextUpdate()
                 generateInitialCircles(in: geometry.size)
             }
             // Each frame updates circles' position and velocity
@@ -194,5 +204,19 @@ struct AlarmGameView: View {
             }
             return newCircle
         }
+    }
+    
+    // Checks if there's been records for the same day and, in case not, changes in positive the stats
+    func recordNight() {
+        for tracked in user.backtrack {
+            // Checks previous records for that same day
+            if Calendar.current.isDate(tracked.date, inSameDayAs: user.backtrack.last!.date) && tracked.id != user.backtrack.last!.id {
+                user.backtrack.removeLast()
+                return
+            }
+        }
+        // Night correctly recorded
+        user.backtrack.last!.snoozed = false
+        user.backtrack.last!.wakeUpSuccess = true
     }
 }

@@ -9,10 +9,11 @@ import SwiftUI
 
 // Shows a circle for each day of the previous week, with a color associated to the info about that
 struct DayView: View {
-    @State var user: Profile
-    var day: Date
-    var isExtendedView: Bool = false
-    var text = ""
+    @State var user: Profile // Binding value for the user profile
+    var day: Date // Actual date of the card
+    var isExtendedView: Bool = false // Checks if it is needed the number of the day (true) or just the letter (false)
+    var text = "" // Text for the number of the day
+    // Date formatter to return the letter of the day
     var formatter: DateFormatter {
         let buffer = DateFormatter()
         buffer.dateFormat = "EEE"
@@ -46,6 +47,7 @@ struct DayView: View {
     
     // See if the actual day is in the backtrack array, meaning that the user used the app
     func checkTracking() -> Bool{
+        if user.backtrack.isEmpty{return false} // Avoid crashing when dataset is empty
         let current = Calendar.current
         for night in user.backtrack {
             if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day))){return true}
@@ -55,6 +57,7 @@ struct DayView: View {
     
     // Checks if the actual date is in the backtrack array and, if yes, also if that night the user snoozed
     func checkSnoozed() -> Bool{
+        if user.backtrack.isEmpty{return false} // Avoid crashing when dataset is empty
         let current = Calendar.current
         for night in user.backtrack{
             if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day)) && night.snoozed){return true}

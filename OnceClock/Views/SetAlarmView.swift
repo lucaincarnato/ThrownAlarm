@@ -11,6 +11,7 @@ import SwiftUI
 struct SetAlarmView: View {
     @State var user: Profile // Returns the info about the user profile
     @Binding var setAlarm: Bool // Binding value for the modality
+    var save: () throws -> Void // Funciton to update data
     
     var body: some View {
         NavigationStack{
@@ -23,6 +24,9 @@ struct SetAlarmView: View {
                     }
                     // Section related to secondary options
                     Section (header: Text("Alarm options")){
+                        Stepper(value: $user.alarm.rounds, in: 0...10) {
+                            Text("\(user.alarm.rounds) rounds to wake up")
+                        }
                         // Sound and haptics link TODO: RESEARCH ABOUT HOW SOUND & HAPTICS WORKS AND ACTUAL VIEW
                         NavigationLink("Sound & Haptics", destination: TimerView())
                         // Volume slider
@@ -31,8 +35,6 @@ struct SetAlarmView: View {
                             Slider(value: $user.alarm.volume, in: 0...1)
                             Image(systemName: "speaker.wave.3.fill")
                         }
-                        // Snooze toggle
-                        Toggle("Snooze", isOn: $user.alarm.snooze)
                     }
                 }
             }
@@ -48,6 +50,8 @@ struct SetAlarmView: View {
                 // Toolbar button for saving and updating the alarm TODO: LINK TO THE UPDATE FUNCTION
                 ToolbarItem(placement: .confirmationAction){
                     Button("Done"){
+                        try? save()
+                        user.isActive = true
                         setAlarm.toggle()
                     }
                 }

@@ -16,7 +16,7 @@ class Alarm{
     var sound: URL = URL(string: "https://www.youtube.com/watch?v=1111111111")! // TODO: FIGURE OUT HOW SOUND AND HAPTICS WORKS
     var haptics: URL = URL(string: "https://www.youtube.com/watch?v=1111111111")! // TODO: FIGURE OUT HOW SOUND AND HAPTICS WORKS
     var volume: Double = 0.5
-    var snooze: Bool = true
+    var rounds: Int = 3
     
     // Initializer for
     init () {
@@ -33,7 +33,10 @@ class Alarm{
     
     // Allow the user to change the time of go to sleep and wake up, updating the duration
     func setAlarm(_ sleepTime: Date, _ wakeTime: Date){
-        if(sleepTime > wakeTime) {return} // Doesn't allow the user to set the alarm for a date before the go to sleep one
+        // Doesn't allow the user to set the alarm for a date before the go to sleep one
+        if(sleepTime > wakeTime) {
+            self.wakeTime = wakeTime.addingTimeInterval(86400)
+        }
         self.sleepTime = sleepTime
         self.wakeTime = wakeTime
         setDuration() // Automatically determine the sleep duration

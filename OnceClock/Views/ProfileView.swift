@@ -11,8 +11,8 @@ import SwiftData
 // Shows the info about the user's streak
 struct ProfileView: View {
     @State var user: Profile // Binding value for the user profile
-    
-    @State private var showingSheet: Bool = false
+    @State private var showSheet: Bool = false
+    var contextUpdate: () throws -> Void
     
     var body: some View {
         NavigationStack{
@@ -42,10 +42,10 @@ struct ProfileView: View {
                 .padding(.horizontal, 20)
                 MonthlyCalendarView(user: user)
                 Button("Freefall"){
-                    showingSheet = true
+                    showSheet = true
                 }
-                .fullScreenCover(isPresented: $showingSheet) {
-                    AlarmGameView(showSheet: $showingSheet)
+                .fullScreenCover(isPresented: $showSheet) {
+                    AlarmGameView(user: $user, showSheet: $showSheet, contextUpdate: contextUpdate, rounds: user.alarm.rounds)
                 }
             }
             .navigationTitle("Your streak")
@@ -55,7 +55,7 @@ struct ProfileView: View {
 }
 
 private struct MonthlyCalendarView: View {
-    @State var user: Profile
+    @State var user: Profile // Binding value for the user profile
     let calendar = Calendar.current
     @State private var selectedMonth: Date = Date()
     
