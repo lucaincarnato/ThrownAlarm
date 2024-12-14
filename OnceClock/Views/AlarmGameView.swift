@@ -24,13 +24,13 @@ struct AlarmGameView: View {
     @State var circles: [CircleModel] = [] // Array of logical circles
     @State var timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect() // Timer to update the scene at 60 FPS
     @State var remainingCirclesCount: Int = 0 // Remaining circles counter
-
+    
     @State var initialCircleCount = 1 // Initial number of circles
     @State var rounds = 1 // Number of round done
     let launchSpeedReductionFactor: CGFloat = 20.0 // Speed reduction factor for difficulty balance
     let colliderSize = CGSize(width: 30, height: 30) // Basket's collider size
     var circleRadius: CGFloat = 30.0 // Radius for each circle rendered
-        
+    
     // Scrren size to dynamically place elements
     let screenHeight = UIScreen.main.bounds.height
     let screenWidth = UIScreen.main.bounds.width
@@ -63,14 +63,11 @@ struct AlarmGameView: View {
                         .multilineTextAlignment(.center)
                     // Button to go to the next round when remaining balls are zero
                     if remainingCirclesCount == 0 {
-                        Button(rounds == 0 ? "Done" : "Next") {
+                        Button(rounds == 1 ? "Done" : "Next") {
                             rounds -= 1
                             initialCircleCount += 1
                             if (rounds == 0) {
                                 recordNight() // Updates night
-                                user.updateStreak() // Updates streak
-                                user.updateSnooze() // Updates snooze
-                                try? save() // Saves
                                 showSheet.toggle()
                             } else {
                                 remainingCirclesCount = initialCircleCount
@@ -132,8 +129,11 @@ struct AlarmGameView: View {
             .onAppear {
                 // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
                 user.backtrack.append(Night(date: Date.now, duration: user.alarm.sleepDuration, wakeUpSuccess: false, snoozed: true))
-                user.updateSnooze() // Updates snooze
-                try? save()
+                // Before updating the snooze, it checks if there is other tracks of that night
+                if !alreadyTracked() {
+                    user.updateSnooze() // Updates snooze
+                    try? save()
+                }
                 generateInitialCircles(in: geometry.size)
             }
             // Each frame updates circles' position and velocity
@@ -142,7 +142,7 @@ struct AlarmGameView: View {
             }
         }
     }
-
+    
     // Renders the initial number of circles
     private func generateInitialCircles(in size: CGSize) {
         for _ in 0..<initialCircleCount {
@@ -156,7 +156,7 @@ struct AlarmGameView: View {
         }
         remainingCirclesCount = circles.count // Updates counter
     }
-
+    
     // Updates circle's position while dragging
     private func moveCircle(withID id: UUID, to position: CGPoint) {
         if let index = circles.firstIndex(where: { $0.id == id }) {
@@ -164,14 +164,14 @@ struct AlarmGameView: View {
             circles[index].velocity = .zero // While dragging velocity needs to be zero, otherwise the user will lose the control
         }
     }
-
+    
     // Reinsert velocity once the user stops dragging
     private func releaseCircle(withID id: UUID, withVelocity velocity: CGSize) {
         if let index = circles.firstIndex(where: { $0.id == id }) {
             circles[index].velocity = velocity
         }
     }
-
+    
     // Physics "engine"
     private func updateCircles(in size: CGSize) {
         // Computes for all circles
@@ -215,15 +215,26 @@ struct AlarmGameView: View {
     
     // Checks if there's been records for the same day and, in case not, changes in positive the stats
     func recordNight() {
+        if !alreadyTracked() {
+            // Night correctly recorded
+            user.backtrack.last!.snoozed = false
+            user.backtrack.last!.wakeUpSuccess = true
+            user.updateStreak() // Updates streak
+            user.updateSnooze() // Updates snooze
+            try? save() // Saves
+        } else {
+            user.backtrack.removeLast()
+        }
+    }
+    
+    func alreadyTracked() -> Bool {
+        if user.backtrack.isEmpty {return false} // If none night wase recorded how can one be already tracked...
         for tracked in user.backtrack {
             // Checks previous records for that same day
             if Calendar.current.isDate(tracked.date, inSameDayAs: user.backtrack.last!.date) && tracked.id != user.backtrack.last!.id {
-                user.backtrack.removeLast()
-                return
+                return true
             }
         }
-        // Night correctly recorded
-        user.backtrack.last!.snoozed = false
-        user.backtrack.last!.wakeUpSuccess = true
+        return false
     }
 }
