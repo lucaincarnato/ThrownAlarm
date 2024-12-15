@@ -23,20 +23,25 @@ struct ProfileView: View {
                         .foregroundStyle(Color.green)
                         .font(.largeTitle)
                         .padding(.vertical, 10)
+                        .accessibilityHidden(true)
                     Text("You successfully woke up for")
                         .font(.title3)
-                    Text("\(user.streak) days")
+                        .accessibilityLabel("You successfully woke up for \(user.streak > 1 ? "\(user.streak) day" : "\(user.streak) days")")
+                    Text(user.streak == 1 ? "\(user.streak) day" : "\(user.streak) days")
                         .font(.largeTitle)
                         .bold()
+                        .accessibilityHidden(true)
                     Image(systemName: "battery.25percent")
                         .foregroundStyle(Color.red)
                         .font(.largeTitle)
                         .padding(.vertical, 10)
-                    Text("You snoozed for a total of")
+                        .accessibilityHidden(true)
+                    Text("You snoozed for a total of \(user.snoozedDays == 1 ? "\(user.snoozedDays) day" : "\(user.snoozedDays) days")")
                         .font(.title3)
-                    Text("\(user.snoozedDays) days")
+                    Text(user.snoozedDays == 1 ? "\(user.snoozedDays) day" : "\(user.snoozedDays) days")
                         .font(.largeTitle)
                         .bold()
+                        .accessibilityHidden(true)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
                 .padding(.horizontal, 20)
@@ -73,6 +78,7 @@ private struct MonthlyCalendarView: View {
                     } label: {
                         Image(systemName: "chevron.left")
                             .font(.title2)
+                            .accessibilityLabel("Previous month")
                     }
                     Text(selectedMonth, format: .dateTime.year().month(.wide))
                         .font(.title2)
@@ -83,6 +89,7 @@ private struct MonthlyCalendarView: View {
                     } label:{
                         Image(systemName: "chevron.right")
                             .font(.title2)
+                            .accessibilityLabel("Next month")
                     }
                 }
                 .padding()
@@ -92,6 +99,7 @@ private struct MonthlyCalendarView: View {
                         Text(weekday)
                             .frame(maxWidth: .infinity)
                             .foregroundStyle(.secondary)
+                            .accessibilityHidden(true)
                     }
                 }
                 // Daily grid per month

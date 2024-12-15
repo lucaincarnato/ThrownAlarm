@@ -45,7 +45,7 @@ struct AlarmGameView: View {
                 // Information about rounds, actual hour and remaining balls
                 VStack{
                     // Round
-                    Text("\(rounds) remaining")
+                    Text("\(rounds) rounds remaining")
                         .font(.title)
                         .bold()
                         .foregroundStyle(Color.gray.opacity(0.3))
@@ -128,9 +128,10 @@ struct AlarmGameView: View {
             // Determine and render circles once the view is loaded
             .onAppear {
                 // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
-                user.backtrack.append(Night(date: Date.now, duration: user.alarm.sleepDuration, wakeUpSuccess: false, snoozed: true))
+                user.backtrack.append(Night(date: Date.now, duration: user.alarm.sleepDuration, wakeUpSuccess: false, snoozed: false))
                 // Before updating the snooze, it checks if there is other tracks of that night
                 if !alreadyTracked() {
+                    user.backtrack.last!.snoozed = true
                     user.updateSnooze() // Updates snooze
                     try? save()
                 }

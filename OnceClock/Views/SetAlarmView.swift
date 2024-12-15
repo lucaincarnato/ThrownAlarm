@@ -32,8 +32,11 @@ struct SetAlarmView: View {
                         // Volume slider
                         HStack{
                             Image(systemName: "speaker.fill")
+                                .accessibilityHidden(true)
                             Slider(value: $user.alarm.volume, in: 0...1)
+                                .accessibilityLabel("Volume")
                             Image(systemName: "speaker.wave.3.fill")
+                                .accessibilityHidden(true)
                         }
                     }
                 }
@@ -51,8 +54,8 @@ struct SetAlarmView: View {
                 ToolbarItem(placement: .confirmationAction){
                     Button("Done"){
                         user.alarm.setDuration()
-                        try? save()
                         user.isActive = true
+                        try? save()
                         setAlarm.toggle()
                     }
                 }
@@ -79,6 +82,7 @@ private struct PickerView: View {
                     HStack{
                         Image(systemName: "bed.double.fill")
                             .foregroundStyle(Color.accentColor)
+                            .accessibilityHidden(true)
                         Text("BEDTIME")
                             .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
@@ -96,6 +100,7 @@ private struct PickerView: View {
                     HStack{
                         Image(systemName: "alarm.fill")
                             .foregroundStyle(Color.accentColor)
+                            .accessibilityHidden(true)
                         Text("WAKE UP")
                             .foregroundStyle(Color.accentColor)
                             .font(.subheadline)
@@ -107,22 +112,26 @@ private struct PickerView: View {
                         .foregroundStyle(Color.white)
                 }
             }
+            .accessibilityElement(children: .combine)
             // Custom picker for the hour that mimics the one in the Clock app (in the Sleep section)
             .padding(.top, 15)
             ZStack {
                 // Shows the 24 hours clock
                 ClockView(radius: radius)
+                    .accessibilityHidden(true)
                 let reverse = (startSector > endSector) ? -Double((1 - startSector) * 360) : 0 // Used to allow "negative" angles
                 // Background circle
                 Circle()
                     .stroke(Color.black, lineWidth: 60) // Creates a ring from the circle
                     .padding(40)
+                    .accessibilityHidden(true)
                 // Actual picker body
                 Circle()
                     .trim(from: (startSector > endSector) ? 0 : startSector, to: endSector + (-reverse / 360)) // Shows only the part between start and stop handles
                     .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 40, lineCap: .round, lineJoin: .round)) // Creates a ring from the circle
                     .rotationEffect(Angle(degrees: reverse)) // Doesn't allow negative angles, it just shifts the zero to give the illusion
                     .padding(40)
+                    .accessibilityHidden(true)
                 // Returns circle's radius
                     .background(
                         GeometryReader { geometry in
@@ -150,6 +159,26 @@ private struct PickerView: View {
                                 user.alarm.sleepTime = getTime(angle: startAngle) // Update user's info
                             })
                     )
+                    .accessibilityLabel("Bedtime")
+                    .accessibilityValue("\(getTime(angle: startAngle).formatted(date: .omitted, time: .shortened))")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityRemoveTraits(.isImage)
+                    .accessibilityAdjustableAction { direction in // Swipe up increments, swipe down decrements
+                                switch direction {
+                                case .increment:
+                                    self.startAngle.degrees += 1.25
+                                    self.startSector += 1.25 / 360
+                                    user.alarm.sleepTime = getTime(angle: startAngle)
+                                    break
+                                case .decrement:
+                                    self.startAngle.degrees -= 1.25
+                                    self.startSector -= 1.25 / 360
+                                    user.alarm.sleepTime = getTime(angle: startAngle)
+                                    break
+                                @unknown default:
+                                    break
+                                }
+                            }
                     .sensoryFeedback(.increase, trigger: getTime(angle: startAngle)) // Haptic feedback when wheel change
                 // Wake up handle
                 Image(systemName: "alarm.fill")
@@ -167,6 +196,26 @@ private struct PickerView: View {
                                 user.alarm.sleepDuration = TimeInterval(getTimeDifference().0 * 3600 + getTimeDifference().1 * 60)
                             })
                     )
+                    .accessibilityLabel("Wake up")
+                    .accessibilityValue("\(getTime(angle: endAngle).formatted(date: .omitted, time: .shortened))")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityRemoveTraits(.isImage)
+                    .accessibilityAdjustableAction { direction in // Swipe up increments, swipe down decrements
+                                switch direction {
+                                case .increment:
+                                    self.endAngle.degrees += 1.25
+                                    self.endSector += 1.25 / 360
+                                    user.alarm.wakeTime = getTime(angle: endAngle)
+                                    break
+                                case .decrement:
+                                    self.endAngle.degrees -= 1.25
+                                    self.endSector -= 1.25 / 360
+                                    user.alarm.wakeTime = getTime(angle: endAngle)
+                                    break
+                                @unknown default:
+                                    break
+                                }
+                            }
                     .sensoryFeedback(.increase, trigger: getTime(angle: endAngle)) // Haptic feedback when wheel change
             }
             .rotationEffect(Angle(degrees: -90)) // Rotate all the circle in order to show the zero not in the right part of the screen but on the top
@@ -174,6 +223,7 @@ private struct PickerView: View {
             Text("\(getTimeDifference().0)h:\(getTimeDifference().1)min")
                 .foregroundStyle(Color.accentColor)
                 .padding(.bottom, 15)
+                .accessibilityLabel("Duration: \(getTimeDifference().0) hours and \(getTimeDifference().1) minutes")
         }
         // When the view appears it changes the handles to match user previous info
         .onAppear(){

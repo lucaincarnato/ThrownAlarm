@@ -31,6 +31,7 @@ struct AchievementCardView: View{
                         .font(.largeTitle)
                         .foregroundStyle(Color.accentColor)
                         .padding(.vertical, 10)
+                        .accessibilityHidden(true)
                 }
             }
             .frame(width: 150, height: 225)
@@ -50,6 +51,7 @@ struct AchievementCardView: View{
                     .font(.custom("Achievement", fixedSize: 100))
                     .foregroundStyle(Color.accentColor)
                     .padding(.vertical, 10)
+                    .accessibilityHidden(true)
                 Text(achievement.achievementDescription)
                     .multilineTextAlignment(.center)
                     .font(.title2)

@@ -16,7 +16,7 @@ struct DayView: View {
     // Date formatter to return the letter of the day
     var formatter: DateFormatter {
         let buffer = DateFormatter()
-        buffer.dateFormat = "EEE"
+        buffer.dateFormat = "EEEE"
         return buffer
     }
     
@@ -28,8 +28,8 @@ struct DayView: View {
                 .foregroundStyle(determineBackground())
             Text(isExtendedView ? text : String(weekdayString.prefix(1)))
                 .bold()
-                //.foregroundStyle( Color.white.opacity(checkTracking() ? 0.5 : 0.3))
                 .foregroundStyle(checkTracking() ? Color.black : Color.white.opacity(0.3))
+                .accessibilityLabel("\(isExtendedView ? text : weekdayString) \(checkTracking() ? (checkSnoozed() ? "Snoozed the alarm" : "Woke up") : "Didn't use the alarm")")
         }
         .padding(.trailing, 8)
     }

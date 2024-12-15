@@ -45,6 +45,7 @@ struct DashboardView: View {
                                     .font(.title2)
                                     .foregroundStyle(Color.white)
                                     .bold()
+                                    .accessibilityAddTraits(.isHeader)
                                 Image(systemName: "chevron.forward")
                                     .font(.title2)
                                     .foregroundStyle(Color.white)
@@ -103,8 +104,12 @@ private struct AlarmView: View{
                             .font(.title2)
                             .bold()
                             .foregroundStyle(Color.white)
+                            .accessibilityAddTraits(.isHeader)
                     }
+                    .accessibilityAddTraits(.isButton)
                     Toggle("", isOn:$user.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
+                        .accessibilityAddTraits(.isToggle)
+                        .accessibilityLabel("Activate alarm")
                 }
                 .padding(.horizontal, 40)
                 // Alarm info showed as button that enables modal
@@ -153,10 +158,12 @@ private struct AlarmView: View{
                         Text(stringDuration)
                             .foregroundStyle(Color.accentColor)
                             .padding(.bottom, 10)
+                            .accessibilityLabel("Rings in \(intDuration) hours and \(intMinutes) minutes")
                     }
                     .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
                     .padding(.horizontal, 40)
                 }
+                .accessibilityAddTraits(.isButton)
             }
         }
         .frame(height: 200)
@@ -191,6 +198,7 @@ private struct StreakView: View {
                         .foregroundStyle(Color.white)
                         .frame(alignment: .leading)
                         .padding(.bottom, 5)
+                        .accessibilityAddTraits(.isHeader)
                     Spacer()
                 }
                 .padding(.horizontal, 40)
@@ -199,7 +207,7 @@ private struct StreakView: View {
                     Image(systemName: "flame.fill")
                         .foregroundStyle(Color.accentColor)
                         .font(.largeTitle)
-                    Text("\(user.streak) days")
+                    Text(user.streak == 1 ? "\(user.streak) day" : "\(user.streak) days")
                         .font(.largeTitle)
                         .bold()
                         .foregroundStyle(Color.white)
