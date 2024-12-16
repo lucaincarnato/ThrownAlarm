@@ -21,6 +21,7 @@ struct AlarmGameView: View {
     
     var save: () throws -> Void // Context update
     
+    @State var bouncing: Bool = false
     @State var circles: [CircleModel] = [] // Array of logical circles
     @State var timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect() // Timer to update the scene at 60 FPS
     @State var remainingCirclesCount: Int = 0 // Remaining circles counter
@@ -87,6 +88,7 @@ struct AlarmGameView: View {
                     .scaledToFit()
                     .position(x: geometry.size.width / 2, y: geometry.size.height / 8.5)
                     .ignoresSafeArea()
+                    .accessibilityHidden(true)
                 // It shows as much circles as the round needs
                 ForEach(circles) { circle in
                     Circle()
@@ -120,10 +122,18 @@ struct AlarmGameView: View {
                                     releaseCircle(withID: circle.id, withVelocity: velocity)
                                 }
                         )
+                        .accessibilityLabel("Ball")
+                        .accessibilityRemoveTraits(.isImage)
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityAdjustableAction { direction in // Swipe up remove the circle
+                            if (direction == .increment) {accessibleRemove(circle, geometry.size)}
+                        }
+
                 }
-                .sensoryFeedback(.impact(weight: .heavy, intensity: 1.0), trigger: holdingCircle)
+                .sensoryFeedback(.impact(weight: .medium, intensity: 0.6), trigger: holdingCircle)
                 .sensoryFeedback(.success, trigger: remainingCirclesCount)
             }
+            .sensoryFeedback(.warning, trigger: bouncing)
             .background(Color.black.ignoresSafeArea())
             // Determine and render circles once the view is loaded
             .onAppear {
@@ -187,6 +197,7 @@ struct AlarmGameView: View {
             if newCircle.position.x <= circleRadius || newCircle.position.x >= size.width - circleRadius {
                 newCircle.velocity.width *= -0.8
                 newCircle.position.x = min(max(newCircle.position.x, circleRadius), size.width - circleRadius)
+                bouncing.toggle()
             }
             if newCircle.position.y <= circleRadius || newCircle.position.y >= size.height - circleRadius {
                 newCircle.velocity.height *= -0.8
@@ -237,5 +248,10 @@ struct AlarmGameView: View {
             }
         }
         return false
+    }
+    
+    // Removes the circle when the VoiceOver is active
+    func accessibleRemove(_ circle: CircleModel, _ size: CGSize){
+        moveCircle(withID: circle.id, to: CGPoint(x: (size.width - colliderSize.width) / 2, y: (size.height - colliderSize.height) / 10))
     }
 }

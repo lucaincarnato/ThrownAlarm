@@ -40,24 +40,34 @@ struct AchievementCardView: View{
         .disabled(!achievement.achieved) // If the achievement is not achieved, the user can't see its info
         // Modal view for the achievement's info
         .sheet(isPresented: $isShowing) {
-            // Shows achievement's name, image and description
-            VStack{
-                Text(achievement.name)
-                    .font(.largeTitle)
-                    .bold()
-                    .multilineTextAlignment(.center)
-                    .padding(.top)
-                Image(systemName: achievement.imageName)
-                    .font(.custom("Achievement", fixedSize: 100))
-                    .foregroundStyle(Color.accentColor)
-                    .padding(.vertical, 10)
-                    .accessibilityHidden(true)
-                Text(achievement.achievementDescription)
-                    .multilineTextAlignment(.center)
-                    .font(.title2)
-                    .foregroundStyle(Color.accentColor)
+            NavigationStack{
+                // Shows achievement's name, image and description
+                VStack{
+                    Text(achievement.name)
+                        .font(.largeTitle)
+                        .bold()
+                        .multilineTextAlignment(.center)
+                    Image(systemName: achievement.imageName)
+                        .font(.custom("Achievement", fixedSize: 100))
+                        .foregroundStyle(Color.accentColor)
+                        .padding(.vertical, 10)
+                        .accessibilityHidden(true)
+                    Text(achievement.achievementDescription)
+                        .multilineTextAlignment(.center)
+                        .font(.title2)
+                        .foregroundStyle(Color.accentColor)
+                }
+                .presentationDetents([.height(300)]) // Force the modality to be small
+                .toolbar{
+                    ToolbarItem(placement: .cancellationAction){
+                        Button(){
+                            isShowing.toggle()
+                        } label: {
+                            Text("Close")
+                        }
+                    }
+                }
             }
-            .presentationDetents([.height(280)]) // Force the modality to be small
         }
     }
 }
