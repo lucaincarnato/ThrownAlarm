@@ -20,6 +20,7 @@ struct AlarmGameView: View {
     @Binding var showSheet: Bool // Boolean value to allow modality
     
     var save: () throws -> Void // Context update
+    var player: AudioPlayer = AudioPlayer()
     
     @State var bouncing: Bool = false
     @State var circles: [CircleModel] = [] // Array of logical circles
@@ -68,6 +69,7 @@ struct AlarmGameView: View {
                             rounds -= 1
                             initialCircleCount += 1
                             if (rounds == 0) {
+                                player.stopSound() // Stops the sound when the game is completed
                                 recordNight() // Updates night
                                 showSheet.toggle()
                             } else {
@@ -137,6 +139,7 @@ struct AlarmGameView: View {
             .background(Color.black.ignoresSafeArea())
             // Determine and render circles once the view is loaded
             .onAppear {
+                player.playSound(user.alarm.sound) // Plays the sound to wake the user up
                 // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
                 user.backtrack.append(Night(date: Date.now, duration: user.alarm.sleepDuration, wakeUpSuccess: false, snoozed: false))
                 // Before updating the snooze, it checks if there is other tracks of that night

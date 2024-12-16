@@ -12,6 +12,8 @@ struct SetAlarmView: View {
     @State var user: Profile // Returns the info about the user profile
     @Binding var setAlarm: Bool // Binding value for the modality
     var save: () throws -> Void // Funciton to update data
+    var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"] // Available sound's names
+    let player: AudioPlayer = AudioPlayer() // Audio player object to preview sounds
     
     var body: some View {
         NavigationStack{
@@ -27,16 +29,18 @@ struct SetAlarmView: View {
                         Stepper(value: $user.alarm.rounds, in: 0...10) {
                             Text("\(user.alarm.rounds) rounds to wake up")
                         }
-                        // Sound and haptics link TODO: RESEARCH ABOUT HOW SOUND & HAPTICS WORKS AND ACTUAL VIEW
-                        NavigationLink("Sound & Haptics", destination: TimerView())
-                        // Volume slider
-                        HStack{
-                            Image(systemName: "speaker.fill")
-                                .accessibilityHidden(true)
-                            Slider(value: $user.alarm.volume, in: 0...1)
-                                .accessibilityLabel("Volume")
-                            Image(systemName: "speaker.wave.3.fill")
-                                .accessibilityHidden(true)
+                        // Sound picker
+                        Picker("Alarm sound", selection: $user.alarm.sound) {
+                            ForEach(sounds, id:\.self) {
+                                Text($0.description)
+                                    .tag($0)
+                            }
+                        }
+                        .pickerStyle(.navigationLink)
+                        // Previews the sound when the user selects it
+                        .onChange(of: user.alarm.sound) { oldSound, newSound in
+                            player.stopSound()
+                            player.playSound(user.alarm.sound)
                         }
                     }
                 }
@@ -47,15 +51,18 @@ struct SetAlarmView: View {
                 // Toolbar button for cancellation
                 ToolbarItem(placement: .cancellationAction){
                     Button("Cancel"){
+                        player.stopSound() // Stops all the sound when the user exits from modal
                         setAlarm.toggle()
                     }
                 }
-                // Toolbar button for saving and updating the alarm TODO: LINK TO THE UPDATE FUNCTION
+                // Toolbar button for saving and updating the alarm
                 ToolbarItem(placement: .confirmationAction){
                     Button("Done"){
+                        player.stopSound() // Stops all the sound when the user exits from modal
                         user.alarm.setDuration()
                         user.isActive = true
                         try? save()
+                        user.alarm.sendNotification() // Schedule the notifications when the user changes the alarm
                         setAlarm.toggle()
                     }
                 }
@@ -164,21 +171,21 @@ private struct PickerView: View {
                     .accessibilityAddTraits(.isButton)
                     .accessibilityRemoveTraits(.isImage)
                     .accessibilityAdjustableAction { direction in // Swipe up increments, swipe down decrements
-                                switch direction {
-                                case .increment:
-                                    self.startAngle.degrees += 1.25
-                                    self.startSector += 1.25 / 360
-                                    user.alarm.sleepTime = getTime(angle: startAngle)
-                                    break
-                                case .decrement:
-                                    self.startAngle.degrees -= 1.25
-                                    self.startSector -= 1.25 / 360
-                                    user.alarm.sleepTime = getTime(angle: startAngle)
-                                    break
-                                @unknown default:
-                                    break
-                                }
-                            }
+                        switch direction {
+                        case .increment:
+                            self.startAngle.degrees += 1.25
+                            self.startSector += 1.25 / 360
+                            user.alarm.sleepTime = getTime(angle: startAngle)
+                            break
+                        case .decrement:
+                            self.startAngle.degrees -= 1.25
+                            self.startSector -= 1.25 / 360
+                            user.alarm.sleepTime = getTime(angle: startAngle)
+                            break
+                        @unknown default:
+                            break
+                        }
+                    }
                     .sensoryFeedback(.increase, trigger: getTime(angle: startAngle)) // Haptic feedback when wheel change
                 // Wake up handle
                 Image(systemName: "alarm.fill")
@@ -201,21 +208,21 @@ private struct PickerView: View {
                     .accessibilityAddTraits(.isButton)
                     .accessibilityRemoveTraits(.isImage)
                     .accessibilityAdjustableAction { direction in // Swipe up increments, swipe down decrements
-                                switch direction {
-                                case .increment:
-                                    self.endAngle.degrees += 1.25
-                                    self.endSector += 1.25 / 360
-                                    user.alarm.wakeTime = getTime(angle: endAngle)
-                                    break
-                                case .decrement:
-                                    self.endAngle.degrees -= 1.25
-                                    self.endSector -= 1.25 / 360
-                                    user.alarm.wakeTime = getTime(angle: endAngle)
-                                    break
-                                @unknown default:
-                                    break
-                                }
-                            }
+                        switch direction {
+                        case .increment:
+                            self.endAngle.degrees += 1.25
+                            self.endSector += 1.25 / 360
+                            user.alarm.wakeTime = getTime(angle: endAngle)
+                            break
+                        case .decrement:
+                            self.endAngle.degrees -= 1.25
+                            self.endSector -= 1.25 / 360
+                            user.alarm.wakeTime = getTime(angle: endAngle)
+                            break
+                        @unknown default:
+                            break
+                        }
+                    }
                     .sensoryFeedback(.increase, trigger: getTime(angle: endAngle)) // Haptic feedback when wheel change
             }
             .rotationEffect(Angle(degrees: -90)) // Rotate all the circle in order to show the zero not in the right part of the screen but on the top

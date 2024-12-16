@@ -29,7 +29,8 @@ struct DayView: View {
             Text(isExtendedView ? text : String(weekdayString.prefix(1)))
                 .bold()
                 .foregroundStyle(checkTracking() ? Color.black : Color.white.opacity(0.3))
-                .accessibilityLabel("\(isExtendedView ? text : weekdayString) \(checkTracking() ? (checkSnoozed() ? "Snoozed the alarm" : "Woke up") : "Didn't use the alarm")")
+                .accessibilityHidden(!checkTracking())
+                .accessibilityLabel(checkTracking() ? "\(isExtendedView ? text : weekdayString) \(checkTracking() ? (checkSnoozed() ? "Snoozed the alarm" : "Woke up") : "Didn't use the alarm")" : "")
         }
         .padding(.trailing, 8)
     }
