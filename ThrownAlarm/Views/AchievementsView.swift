@@ -34,7 +34,7 @@ struct AchievementsView: View {
                     .padding()
                 }
             }
-            .navigationTitle("Achievements")
+            .navigationTitle("Achievements (not available yet)")
             .navigationBarTitleDisplayMode(.inline) // Forces the title to be in the toolbar
         }
     }

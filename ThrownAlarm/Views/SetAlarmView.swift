@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 // Allows the user to change the alarm and its settings
 struct SetAlarmView: View {
@@ -13,8 +14,8 @@ struct SetAlarmView: View {
     @Binding var setAlarm: Bool // Binding value for the modality
     var save: () throws -> Void // Funciton to update data
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"] // Available sound's names
-    let player: AudioPlayer = AudioPlayer() // Audio player object to preview sounds
-    
+    @State private var audioPlayer: AVAudioPlayer?
+
     var body: some View {
         NavigationStack{
             VStack (alignment: .leading){
@@ -39,8 +40,7 @@ struct SetAlarmView: View {
                         .pickerStyle(.navigationLink)
                         // Previews the sound when the user selects it
                         .onChange(of: user.alarm.sound) { oldSound, newSound in
-                            player.stopSound()
-                            player.playSound(user.alarm.sound)
+                            playAudio(for: newSound)
                         }
                     }
                 }
@@ -51,14 +51,14 @@ struct SetAlarmView: View {
                 // Toolbar button for cancellation
                 ToolbarItem(placement: .cancellationAction){
                     Button("Cancel"){
-                        player.stopSound() // Stops all the sound when the user exits from modal
+                        stopAudio() // Stops all the sound when the user exits from modal
                         setAlarm.toggle()
                     }
                 }
                 // Toolbar button for saving and updating the alarm
                 ToolbarItem(placement: .confirmationAction){
                     Button("Done"){
-                        player.stopSound() // Stops all the sound when the user exits from modal
+                        stopAudio() // Stops all the sound when the user exits from modal
                         user.alarm.setDuration()
                         user.isActive = true
                         try? save()
@@ -68,6 +68,28 @@ struct SetAlarmView: View {
                 }
             }
         }
+    }
+    
+    // Allows playing music inside the app, used to preview notification sound and in minigame
+    func playAudio(for track: String?) {
+        guard let track = track else { return }
+        stopAudio() // Stops any audio before
+        // Get url from track
+        let trackURL = Bundle.main.url(forResource: track, withExtension: "wav")
+        do {
+            // Create audio player and play
+            if let url = trackURL {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.play()
+            }
+        } catch {
+            print("Errore nella riproduzione audio: \(error)")
+        }
+    }
+    
+    // Stops any previous audio
+    func stopAudio(){
+        audioPlayer?.stop()
     }
 }
 
