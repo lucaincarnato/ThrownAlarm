@@ -48,9 +48,10 @@ class Alarm{
         requestNotificationPermission() // Request permission to send notification
         clearAllNotifications() // Clear notification center
         // configureNotificationCategories() // Configure the type of notification as critical
+        scheduleNotification(self.sleepTime, "It's bedtime!", "Don't lose your \(self.sleepDuration / 3600) hours of sleep.")
         // Send the 10 notifications
         for i in 0..<10{
-            scheduleNotification(for: self.wakeTime.addingTimeInterval(Double(30 * i)))
+            scheduleNotification(self.wakeTime.addingTimeInterval(Double(30 * i)), "It's time to wake up", "Wake up or you will lose the streak.")
         }
     }
     
@@ -65,11 +66,11 @@ class Alarm{
     }
     
     // Schedule the notification for a specific date and with a custom sound
-    private func scheduleNotification(for date: Date) {
+    private func scheduleNotification(_ date: Date, _ title: String, _ body: String) {
         let content = UNMutableNotificationContent()
         // Sets up notification information
-        content.title = "It's time to wake up"
-        content.body = "Wake up or you will lose the streak."
+        content.title = title
+        content.body = body
         content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(self.sound).wav"))
         // Get component from Date in order to schedule for a specific time
         let calendar = Calendar.current

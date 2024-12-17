@@ -37,7 +37,6 @@ struct SetAlarmView: View {
                                     .tag($0)
                             }
                         }
-                        .pickerStyle(.navigationLink)
                         // Previews the sound when the user selects it
                         .onChange(of: user.alarm.sound) { oldSound, newSound in
                             playAudio(for: newSound)

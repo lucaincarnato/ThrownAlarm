@@ -167,11 +167,10 @@ private struct AlarmView: View{
                         let intDuration = Int(user.alarm.ringsIn / 3600)
                         let intMinutes = Int(Int(user.alarm.ringsIn) % 3600 / 60)
                         let stringDuration = intDuration > 1 ? "Rings in \(intDuration)h:\(intMinutes)m" : "Rings in \(intDuration)h:\(intMinutes)m"
-                        // MARK: THIS IS THE DURATION, NOT THE TIME REMAINING
-                        Text(stringDuration)
+                        Text(user.isActive ? stringDuration : "Alarm disabled")
                             .foregroundStyle(Color.accentColor)
                             .padding(.bottom, 10)
-                            .accessibilityLabel("Rings in \(intDuration) hours and \(intMinutes) minutes")
+                            .accessibilityLabel(user.isActive ? "Rings in \(intDuration) hours and \(intMinutes) minutes" : "Alarm disabled")
                     }
                     .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
                     .padding(.horizontal, 40)
