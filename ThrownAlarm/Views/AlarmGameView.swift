@@ -139,6 +139,7 @@ struct AlarmGameView: View {
             .background(Color.black.ignoresSafeArea())
             // Determine and render circles once the view is loaded
             .onAppear {
+                self.rounds = user.alarm.rounds // Get rounds from the user once the game is loaded
                 user.alarm.clearAllNotifications() // Avoids sending other notification to the user
                 player.playSound(user.alarm.sound) // Plays the sound to wake the user up
                 // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
