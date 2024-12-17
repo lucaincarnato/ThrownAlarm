@@ -16,6 +16,8 @@ struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var users: [Profile]
     
+    @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
+    
     var user: Profile? { // Returns the info about the first(and only) user profile of the database
         users.first ?? Profile()
     }
@@ -59,9 +61,10 @@ struct DashboardView: View {
                                     Text("Not available yet")
                                         .font(.subheadline)
                                         .padding()
-                                } else {                                ForEach(user!.totalAchievements){ achievement in
-                                    AchievementCardView(achievement: achievement)
-                                        .padding(.trailing)
+                                } else {
+                                    ForEach(user!.totalAchievements){ achievement in
+                                        AchievementCardView(achievement: achievement)
+                                            .padding(.trailing)
                                     }
                                 }
                             }
@@ -81,6 +84,12 @@ struct DashboardView: View {
                     modelContext.insert(user!)
                 }
             }
+            // Opens the minigame if the deep link is correct
+            .fullScreenCover(isPresented: $deepLinkManager.showModal) {
+                if deepLinkManager.targetView == .alarmView {
+                    AlarmGameView(user: user!, showSheet: $deepLinkManager.showModal, save: modelContext.save)
+                }
+            }
         }
     }
 }
@@ -90,7 +99,7 @@ private struct AlarmView: View{
     @State var user: Profile // Binding value for the user profile
     @Binding var setAlarm: Bool // Binding value for the modality
     @State var sleepDuration: TimeInterval = 0
-
+    
     var save: () throws -> Void // Context update
     
     var body: some View{
@@ -115,7 +124,7 @@ private struct AlarmView: View{
                     Toggle("", isOn:$user.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
                         .accessibilityAddTraits(.isToggle)
                         .accessibilityLabel("Activate alarm")
-                        // Delete the alarm if the user turns it off 
+                        // Delete the alarm if the user turns it off
                         .onChange(of: user.isActive){ oldValue, newValue in
                             if !newValue{
                                 user.alarm.clearAllNotifications()

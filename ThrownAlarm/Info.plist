@@ -11,7 +11,7 @@
 			<string>MiniGame</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>thrownalarm://alarmgame</string>
+				<string>throwalarm</string>
 			</array>
 		</dict>
 	</array>

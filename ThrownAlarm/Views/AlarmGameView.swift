@@ -16,7 +16,7 @@ struct CircleModel: Identifiable {
 
 // Shows the game space where the user can throw balls into the basket
 struct AlarmGameView: View {
-    @Binding var user: Profile // Binding value for the user profile
+    @State var user: Profile // Binding value for the user profile
     @Binding var showSheet: Bool // Boolean value to allow modality
     
     var save: () throws -> Void // Context update
@@ -139,6 +139,7 @@ struct AlarmGameView: View {
             .background(Color.black.ignoresSafeArea())
             // Determine and render circles once the view is loaded
             .onAppear {
+                user.alarm.clearAllNotifications() // Avoids sending other notification to the user
                 player.playSound(user.alarm.sound) // Plays the sound to wake the user up
                 // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
                 user.backtrack.append(Night(date: Date.now, duration: user.alarm.sleepDuration, wakeUpSuccess: false, snoozed: false))

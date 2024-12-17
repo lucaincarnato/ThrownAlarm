@@ -72,6 +72,7 @@ class Alarm{
         content.title = title
         content.body = body
         content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(self.sound).wav"))
+        content.userInfo = ["deepLink": "throwalarm://alarm"] // Deep link for the minigame
         // Get component from Date in order to schedule for a specific time
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
