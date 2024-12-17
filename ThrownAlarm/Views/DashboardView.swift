@@ -55,9 +55,14 @@ struct DashboardView: View {
                         // Smaller and quicker view of all the achievement
                         ScrollView (.horizontal){
                             HStack{
-                                ForEach(user!.totalAchievements){ achievement in
+                                if user!.totalAchievements.isEmpty {
+                                    Text("Not available yet")
+                                        .font(.subheadline)
+                                        .padding()
+                                } else {                                ForEach(user!.totalAchievements){ achievement in
                                     AchievementCardView(achievement: achievement)
                                         .padding(.trailing)
+                                    }
                                 }
                             }
                         }
@@ -110,6 +115,14 @@ private struct AlarmView: View{
                     Toggle("", isOn:$user.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
                         .accessibilityAddTraits(.isToggle)
                         .accessibilityLabel("Activate alarm")
+                        // Delete the alarm if the user turns it off 
+                        .onChange(of: user.isActive){ oldValue, newValue in
+                            if !newValue{
+                                user.alarm.clearAllNotifications()
+                            } else {
+                                user.alarm.sendNotification()
+                            }
+                        }
                 }
                 .padding(.horizontal, 40)
                 // Alarm info showed as button that enables modal

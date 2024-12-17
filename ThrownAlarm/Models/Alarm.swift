@@ -89,13 +89,12 @@ class Alarm{
     }
 
     // Clear the notification center from all the notification
-    private func clearAllNotifications() {
+    func clearAllNotifications() {
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllPendingNotificationRequests() // Clear not yet sent ones
         notificationCenter.removeAllDeliveredNotifications() // Clear delivered ones
     }
     
-    /* TODO: IMPLEMENT CRITICAL NOTIFICATIONS
     // Configure notification's category, in order to send them as critical
     private func configureNotificationCategories() {
         let category = UNNotificationCategory(
@@ -106,5 +105,4 @@ class Alarm{
         )
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }
-     */
 }

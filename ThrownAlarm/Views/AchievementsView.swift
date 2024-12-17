@@ -19,14 +19,20 @@ struct AchievementsView: View {
     var body: some View {
         NavigationStack{
             ScrollView {
-                // Places all the achievement card in a 2 columned grid
-                LazyVGrid(columns: columns, spacing: 40) {
-                    ForEach(user.totalAchievements){ achievement in
-                        AchievementCardView(achievement: achievement)
-                            .padding(.trailing)
+                if user.totalAchievements.isEmpty {
+                    Text("Not available yet")
+                        .font(.subheadline)
+                        .padding()
+                } else {
+                    // Places all the achievement card in a 2 columned grid
+                    LazyVGrid(columns: columns, spacing: 40) {
+                        ForEach(user.totalAchievements){ achievement in
+                            AchievementCardView(achievement: achievement)
+                                .padding(.trailing)
+                        }
                     }
+                    .padding()
                 }
-                .padding()
             }
             .navigationTitle("Achievements")
             .navigationBarTitleDisplayMode(.inline) // Forces the title to be in the toolbar

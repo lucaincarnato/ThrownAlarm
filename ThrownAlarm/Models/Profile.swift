@@ -24,13 +24,13 @@ class Profile{
             "Snooze conqueeror",
             "alarm.waves.left.and.right.fill",
             "A month without snoozing",
-            true
+            false
         ),
         Achievement(
             "Master of throws",
             "basketball.fill",
             "100 throws completed",
-            true
+            false
         ),
         Achievement(
             "Master of throws",
@@ -56,6 +56,7 @@ class Profile{
             // If last night was not successful, the streak is lost
             self.streak = 0
         }
+        self.snoozedDays -= 1 // It is the contribute firstly added when the user enters the app
     }
     
     func updateSnooze() -> Void{
