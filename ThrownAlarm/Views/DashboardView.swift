@@ -75,7 +75,7 @@ struct DashboardView: View {
                 }
                 // Modality for the alarm settings
                 .sheet(isPresented: $setAlarm){
-                    SetAlarmView(user: user!, setAlarm: $setAlarm, save: modelContext.save)
+                    SetAlarmView(user: user!, placeholder: Profile(), setAlarm: $setAlarm, save: modelContext.save)
                 }
             }
             .navigationTitle("Dashboard")

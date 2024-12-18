@@ -25,6 +25,25 @@ class Alarm{
         self.setDuration()
     }
     
+    // Copy in this object the value from another object
+    func copy(alarm: Alarm){
+        self.sleepTime = alarm.sleepTime
+        self.wakeTime = alarm.wakeTime
+        self.sleepDuration = alarm.sleepDuration
+        self.ringsIn = alarm.ringsIn
+        self.sound = alarm.sound
+        self.rounds = alarm.rounds
+    }
+    
+    // Copy in another object what's inside this
+    func export(alarm: Alarm){
+        alarm.sleepTime = self.sleepTime
+        alarm.wakeTime = self.wakeTime
+        alarm.sleepDuration = self.sleepDuration
+        alarm.ringsIn = self.ringsIn
+        alarm.rounds = self.rounds
+    }
+    
     // Sets the time interval as the difference between the time the user wakes up and the one when it goes to sleep
     func setDuration(){
         // If default values are kept, it should set sleepDuration to 86400

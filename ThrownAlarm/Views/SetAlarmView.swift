@@ -11,6 +11,7 @@ import AVFoundation
 // Allows the user to change the alarm and its settings
 struct SetAlarmView: View {
     @State var user: Profile // Returns the info about the user profile
+    @State var placeholder: Profile // Placeholder to not save date on cancel
     @Binding var setAlarm: Bool // Binding value for the modality
     var save: () throws -> Void // Funciton to update data
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"] // Available sound's names
@@ -23,7 +24,7 @@ struct SetAlarmView: View {
                 Form{
                     // Section related to the start and stop hour for the alarm
                     Section {
-                        PickerView(user: $user)
+                        PickerView(user: $placeholder)
                     }
                     // Section related to secondary options
                     Section (header: Text("Alarm options")){
@@ -57,6 +58,7 @@ struct SetAlarmView: View {
                 // Toolbar button for saving and updating the alarm
                 ToolbarItem(placement: .confirmationAction){
                     Button("Done"){
+                        user.alarm.copy(alarm: placeholder.alarm) // Saves the data only when user is done, not when cancels
                         stopAudio() // Stops all the sound when the user exits from modal
                         user.alarm.setDuration()
                         user.isActive = true
@@ -65,6 +67,10 @@ struct SetAlarmView: View {
                         setAlarm.toggle()
                     }
                 }
+            }
+            .onAppear(){
+                // Initialize the placeholder with real values
+                user.alarm.export(alarm: placeholder.alarm)
             }
         }
     }
@@ -96,6 +102,7 @@ struct SetAlarmView: View {
 // Shows a wheel with draggable edges that allows the user to select go to sleep and wake up hours, with irl duration update
 private struct PickerView: View {
     @Binding var user: Profile// Returns the info about the user profile
+
     @State var startAngle: Angle = Angle(degrees: 0) // Angles relative to the sleep handle
     @State var endAngle: Angle = Angle(degrees: 180) // Angles relative to the wake up handle
     @State var startSector: CGFloat = 0 // Indexes for the start of Circle's trimming
