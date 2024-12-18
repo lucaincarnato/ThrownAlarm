@@ -13,7 +13,7 @@ class AudioPlayer: ObservableObject {
     private var player: AVAudioPlayer?
     
     // Play the audio
-    func playSound(_ fileName: String) {
+    func playSound(_ fileName: String, loop: Bool = false) {
         // If audio is already reproducing, do nothing
         if let player = player, player.isPlaying {
             return
@@ -26,6 +26,10 @@ class AudioPlayer: ObservableObject {
         // Play audio
         do {
             self.player = try AVAudioPlayer(contentsOf: url)
+            // Plays the audio in loop if the call allows it
+            if loop {
+                player?.numberOfLoops = -1 // Infinite loop
+            }
             player?.play()
         } catch {
             print("Error while playing audio file: \(error.localizedDescription)")

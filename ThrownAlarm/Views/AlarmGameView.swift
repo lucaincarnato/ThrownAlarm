@@ -141,7 +141,7 @@ struct AlarmGameView: View {
             .onAppear {
                 self.rounds = user.alarm.rounds // Get rounds from the user once the game is loaded
                 user.alarm.clearAllNotifications() // Avoids sending other notification to the user
-                player.playSound(user.alarm.sound) // Plays the sound to wake the user up
+                player.playSound(user.alarm.sound, loop: true) // Plays the sound in loop to wake the user up
                 // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
                 user.backtrack.append(Night(date: Date.now, duration: user.alarm.sleepDuration, wakeUpSuccess: false, snoozed: false))
                 // Before updating the snooze, it checks if there is other tracks of that night
