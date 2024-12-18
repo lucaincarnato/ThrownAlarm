@@ -14,7 +14,7 @@ ThrownAlarm is an app that helps people with high sleep inertia effectively wake
 - Achievements
 
 ## App showcasing
-![Dashboard](https://github.com/lucaincarnato/ThrownAlarm/Showcase/dashboard.jpg?raw=true)
-![Set Alarm](https://github.com/lucaincarnato/ThrownAlarm/Showcase/setalarm.jpg?raw=true)
-![Throw game](https://github.com/lucaincarnato/ThrownAlarm/Showcase/minigame.jpg?raw=true)
-![Throw game](https://github.com/lucaincarnato/ThrownAlarm/Showcase/streak.jpg?raw=true)
+![Dashboard](https://github.com/lucaincarnato/ThrownAlarm/Showcase/dashboard.jpg)
+![Set Alarm](https://github.com/lucaincarnato/ThrownAlarm/Showcase/setalarm.jpg)
+![Throw game](https://github.com/lucaincarnato/ThrownAlarm/Showcase/minigame.jpg)
+![Throw game](https://github.com/lucaincarnato/ThrownAlarm/Showcase/streak.jpg)
