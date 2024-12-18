@@ -6,16 +6,12 @@ The alarm clock you can throw without breaking it
 
 ThrownAlarm is an app that helps people with high sleep inertia effectively wake up through a throwing game as stop button, in order to activate the brain and not feel the necessity of snoozing, and with a gamificaiton dashboard that rewards consistency
 
----
-
 ## Main features
 
 - Alarm settings
 - Throwing minigame as “stop alarm” button
 - Wake up streak and backtracking system
 - Achievements
-
----
 
 ## App showcasing
 ### Dashboard
