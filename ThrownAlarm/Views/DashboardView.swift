@@ -24,6 +24,8 @@ struct DashboardView: View {
     @State var alarmActive: Bool = true // Tells if the alarm is active, enabling the system to track the hour
     @State var setAlarm: Bool = false // Boolean value for the modality
     
+    @State var showAlert: Bool = false // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
+    
     var body: some View {
         NavigationStack{
             ScrollView{
@@ -75,8 +77,10 @@ struct DashboardView: View {
                 }
                 // Modality for the alarm settings
                 .sheet(isPresented: $setAlarm){
-                    SetAlarmView(user: user!, placeholder: Profile(), setAlarm: $setAlarm, save: modelContext.save)
+                    SetAlarmView(user: user!, placeholder: Profile(), setAlarm: $setAlarm, save: modelContext.save, showAlert: $showAlert)
                 }
+                // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
+                .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those active yet")})
             }
             .navigationTitle("Dashboard")
             .onAppear{

@@ -16,6 +16,8 @@ struct SetAlarmView: View {
     var save: () throws -> Void // Funciton to update data
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"] // Available sound's names
     @State private var audioPlayer: AVAudioPlayer?
+    
+    @Binding var showAlert: Bool // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
 
     var body: some View {
         NavigationStack{
@@ -65,6 +67,7 @@ struct SetAlarmView: View {
                         try? save()
                         user.alarm.sendNotification() // Schedule the notifications when the user changes the alarm
                         setAlarm.toggle()
+                        showAlert = true // MARK: TOGGLE FOR THE ALERT, TO BE REMOVED
                     }
                 }
             }
