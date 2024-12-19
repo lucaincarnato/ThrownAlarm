@@ -67,10 +67,10 @@ class Alarm{
         requestNotificationPermission() // Request permission to send notification
         clearAllNotifications() // Clear notification center
         // configureNotificationCategories() // Configure the type of notification as critical
-        scheduleNotification(self.sleepTime, "It's bedtime!", "Don't lose your \(self.sleepDuration / 3600) hours of sleep.")
+        scheduleNotification(self.sleepTime, isAlarm: false)
         // Send the 10 notifications
         for i in 0..<10{
-            scheduleNotification(self.wakeTime.addingTimeInterval(Double(30 * i)), "It's time to wake up", "Wake up or you will lose the streak.")
+            scheduleNotification(self.wakeTime.addingTimeInterval(Double(30 * i)), isAlarm: true)
         }
     }
     
@@ -85,13 +85,21 @@ class Alarm{
     }
     
     // Schedule the notification for a specific date and with a custom sound
-    private func scheduleNotification(_ date: Date, _ title: String, _ body: String) {
+    private func scheduleNotification(_ date: Date, isAlarm: Bool) {
         let content = UNMutableNotificationContent()
-        // Sets up notification information
-        content.title = title
-        content.body = body
-        content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(self.sound).wav"))
-        content.userInfo = ["deepLink": "throwalarm://alarm"] // Deep link for the minigame
+        // Differentiate the notification based on the fact that it is for the wake up or the bedtime reminder
+        if isAlarm {
+            // Sets up notification information for the wake up
+            content.title = "It's time to wake up"
+            content.body = "Wake up or you will lose the streak."
+            content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(self.sound).wav"))
+            content.userInfo = ["deepLink": "throwalarm://alarm"] // Deep link for the minigame only in alarm notification
+        } else {
+            // Sets up notification information for the bedtime
+            content.title = "It's bedtime!"
+            content.body = "Don't lose your \(self.sleepDuration / 3600) hours of sleep."
+            content.sound = .default
+        }
         // Get component from Date in order to schedule for a specific time
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
