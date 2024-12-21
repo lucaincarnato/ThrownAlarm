@@ -148,7 +148,6 @@ struct AlarmGameView: View {
                 // Before updating the snooze, it checks if there is other tracks of that night
                 if !alreadyTracked() {
                     user.backtrack.last!.snoozed = true
-                    user.updateSnooze() // Updates snooze
                     try? save()
                 }
                 generateInitialCircles(in: geometry.size)
@@ -232,20 +231,18 @@ struct AlarmGameView: View {
     }
     
     // Checks if there's been records for the same day and, in case not, changes in positive the stats
-    func recordNight() {
+    private func recordNight() {
         if !alreadyTracked() {
             // Night correctly recorded
             user.backtrack.last!.snoozed = false
             user.backtrack.last!.wakeUpSuccess = true
-            user.updateStreak() // Updates streak
-            user.updateSnooze() // Updates snooze
             try? save() // Saves
         } else {
             user.backtrack.removeLast()
         }
     }
     
-    func alreadyTracked() -> Bool {
+    private func alreadyTracked() -> Bool {
         if user.backtrack.isEmpty {return false} // If none night wase recorded how can one be already tracked...
         for tracked in user.backtrack {
             // Checks previous records for that same day

@@ -86,6 +86,7 @@ class Alarm{
     
     // Schedule the notification for a specific date and with a custom sound
     private func scheduleNotification(_ date: Date, isAlarm: Bool) {
+        if Date.now > date {return} // Don't send notification to the past
         let content = UNMutableNotificationContent()
         // Differentiate the notification based on the fact that it is for the wake up or the bedtime reminder
         if isAlarm {
@@ -97,7 +98,7 @@ class Alarm{
         } else {
             // Sets up notification information for the bedtime
             content.title = "It's bedtime!"
-            content.body = "Don't lose your \(self.sleepDuration / 3600) hours of sleep."
+            content.body = "Don't lose your \(Int(self.sleepDuration / 3600)) hours of sleep."
             content.sound = .default
         }
         // Get component from Date in order to schedule for a specific time

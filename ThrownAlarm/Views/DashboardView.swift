@@ -87,6 +87,8 @@ struct DashboardView: View {
                 if users.first == nil{
                     modelContext.insert(user!)
                 }
+                user!.updateProfile()
+                try? modelContext.save()
             }
             // Opens the minigame if the deep link is correct
             .fullScreenCover(isPresented: $deepLinkManager.showModal) {

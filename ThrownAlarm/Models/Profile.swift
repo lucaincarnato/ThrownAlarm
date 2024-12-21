@@ -48,22 +48,20 @@ class Profile{
     }
     
     // Update streak
-    func updateStreak() -> Void{
-        if(!self.backtrack.isEmpty && self.backtrack.last!.wakeUpSuccess && !self.backtrack.last!.snoozed) {
-            // If last night was successful and didn't snooze, increase streak
-            self.streak += 1
-        } else {
-            // If last night was not successful, the streak is lost
-            self.streak = 0
-        }
-        self.snoozedDays -= 1 // It is the contribute firstly added when the user enters the app
-    }
-    
-    func updateSnooze() -> Void{
+    func updateProfile() -> Void {
         // Update snoozed days
         self.snoozedDays = 0
         for night in self.backtrack{
             if (night.snoozed) {self.snoozedDays += 1}
         }
+        // Update streak days by checking the reversed index of the first day snoozed
+        for (index, element) in self.backtrack.reversed().enumerated(){
+            if !element.wakeUpSuccess && element.snoozed {
+                self.streak = index
+                return
+            }
+        }
+        self.streak = self.backtrack.count // If never snoozed, the index should be last + 1, aka all
+        return
     }
 }
