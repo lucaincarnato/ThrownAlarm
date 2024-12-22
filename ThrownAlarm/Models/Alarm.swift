@@ -14,7 +14,6 @@ class Alarm{
     var sleepTime: Date = Date.now
     var wakeTime: Date = Date.now.addingTimeInterval(28800) // Sets the wake time 8h from the sleeps as default
     var sleepDuration: TimeInterval = 28800
-    var ringsIn: TimeInterval = 28800 // Let the user know when the alarm will ring
     var sound: String = "Princess"
     var rounds: Int = 3
     
@@ -30,7 +29,6 @@ class Alarm{
         self.sleepTime = alarm.sleepTime
         self.wakeTime = alarm.wakeTime
         self.sleepDuration = alarm.sleepDuration
-        self.ringsIn = alarm.ringsIn
         self.sound = alarm.sound
         self.rounds = alarm.rounds
     }
@@ -40,7 +38,6 @@ class Alarm{
         alarm.sleepTime = self.sleepTime
         alarm.wakeTime = self.wakeTime
         alarm.sleepDuration = self.sleepDuration
-        alarm.ringsIn = self.ringsIn
         alarm.rounds = self.rounds
     }
     
@@ -48,7 +45,6 @@ class Alarm{
     func setDuration(){
         // If default values are kept, it should set sleepDuration to 86400
         self.sleepDuration = self.wakeTime.timeIntervalSinceReferenceDate - self.sleepTime.timeIntervalSinceReferenceDate
-        self.ringsIn = Date.now.distance(to: self.wakeTime) // Determine the difference between the wakeTime and now
     }
     
     // Allow the user to change the time of go to sleep and wake up, updating the duration

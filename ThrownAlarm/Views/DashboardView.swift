@@ -105,6 +105,10 @@ private struct AlarmView: View{
     @State var user: Profile // Binding value for the user profile
     @Binding var setAlarm: Bool // Binding value for the modality
     @State var sleepDuration: TimeInterval = 0
+    @State var ringsIn: String = ""
+    
+    @State private var hours: Int = 0
+    @State private var minutes: Int = 0
     
     var save: () throws -> Void // Context update
     
@@ -130,7 +134,7 @@ private struct AlarmView: View{
                     Toggle("", isOn:$user.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
                         .accessibilityAddTraits(.isToggle)
                         .accessibilityLabel("Activate alarm")
-                        // Delete the alarm if the user turns it off
+                    // Delete the alarm if the user turns it off
                         .onChange(of: user.isActive){ oldValue, newValue in
                             if !newValue{
                                 user.alarm.clearAllNotifications()
@@ -178,14 +182,16 @@ private struct AlarmView: View{
                                     .foregroundStyle(Color.white)
                             }
                         }
-                        // Info about the duration of the sleep
-                        let intDuration = Int(user.alarm.ringsIn / 3600)
-                        let intMinutes = Int(Int(user.alarm.ringsIn) % 3600 / 60)
-                        let stringDuration = intDuration > 1 ? "Rings in \(intDuration)h:\(intMinutes)m" : "Rings in \(intDuration)h:\(intMinutes)m"
-                        Text(user.isActive ? stringDuration : "Alarm disabled")
+                        // Live info about the duration of the sleep
+                        Text(!user.isActive ? "Alarm disabled" : "Rings in \(ringsIn)")
                             .foregroundStyle(Color.accentColor)
                             .padding(.bottom, 10)
-                            .accessibilityLabel(user.isActive ? "Rings in \(intDuration) hours and \(intMinutes) minutes" : "Alarm disabled")
+                            .accessibilityLabel(!user.isActive ? "Alarm disabled" : "Rings in \(hours) hours and \(minutes) minutes")
+                            // Everytime the text is rendered a timer from now to wake up time is created and updated
+                            .onAppear {
+                                updateRemainingTime()
+                                startTimer()
+                            }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
                     .padding(.horizontal, 40)
@@ -195,6 +201,30 @@ private struct AlarmView: View{
         }
         .frame(height: 200)
     }
+    
+    // Get the time interval between now and wake up time and convert into string
+    private func updateRemainingTime() {
+        let now = Date()
+        let timeInterval = user.alarm.wakeTime.timeIntervalSince(now)
+        
+        if timeInterval > 0 {
+            hours = Int(timeInterval) / 3600
+            minutes = ((Int(timeInterval) % 3600) / 60) + 1
+            ringsIn = String(format: "%02dh:%02dmin", hours, minutes)
+        } else {
+            ringsIn = "Problem occurred"
+            print(user.alarm.sleepTime)
+            print(user.alarm.wakeTime)
+        }
+    }
+    
+    // Create and schedule a timer, updated every second
+    private func startTimer() {
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            updateRemainingTime()
+        }
+    }
+    
 }
 
 // Card to show basic info about the streak
