@@ -307,17 +307,14 @@ private struct PickerView: View {
         let now = Date()
         var calendar = Calendar.current
         calendar.timeZone = TimeZone.current
-        
-        // Costruisci la data con l'ora e i minuti desiderati per oggi
+        // Build the date with the calendar component of the desired day
         var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: now)
         components.hour = hours
         components.minute = Int(minutes)
         components.second = 0
-        
-        // Recupera la data costruita
+        // Get the built date
         let targetDate = calendar.date(from: components) ?? now
-        
-        // Se la data costruita è nel passato, aggiungi un giorno
+        // If built date is in the past, add a day
         if targetDate <= now {
             return calendar.date(byAdding: .day, value: 1, to: targetDate) ?? now
         }
@@ -330,7 +327,7 @@ private struct PickerView: View {
         let hour = calendar.component(.hour, from: date)
         let minute = calendar.component(.minute, from: date)
         let second = calendar.component(.second, from: date)
-        // date in hours
+        // Date in hours
         let totalHours = Double(hour) + (Double(minute) / 60) + (Double(second) / 3600)
         // Degrees conversion
         let degrees = totalHours * 15 // 15 degrees per hour
@@ -340,7 +337,8 @@ private struct PickerView: View {
     // Returns the actual difference between wake up and sleep time
     func getTimeDifference() -> (Int, Int){
         let calendar = Calendar.current
-        var results = calendar.dateComponents([.hour, .minute], from: getTime(angle: startAngle), to: getTime(angle: endAngle)) // Get actual difference in integers
+        // Get actual difference in integers
+        var results = calendar.dateComponents([.hour, .minute], from: getTime(angle: startAngle), to: getTime(angle: endAngle))
         // Avoid negative hours
         if (results.hour! < 0) {
             results.hour = (results.hour!) + 24

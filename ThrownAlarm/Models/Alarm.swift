@@ -83,8 +83,6 @@ class Alarm{
     
     // Schedule the notification for a specific date and with a custom sound
     private func scheduleNotification(_ date: Date, isAlarm: Bool) {
-        // MARK: ACT HERE TO PREVENT ERROR IN SETTING UP THE ALARM
-        if Date.now > date {return} // Don't send notification to the past
         let content = UNMutableNotificationContent()
         // Differentiate the notification based on the fact that it is for the wake up or the bedtime reminder
         if isAlarm {
@@ -101,7 +99,8 @@ class Alarm{
         }
         // Get component from Date in order to schedule for a specific time
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        // Go to next day if the date is on the past
+        let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date.addingTimeInterval((Date.now > date) ? 86400 : 0))
         // Create the trigger based on date components
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         // Create a unique request
@@ -111,7 +110,7 @@ class Alarm{
             if let error = error {
                 print("Error while scheduling notification: \(error.localizedDescription)")
             } else {
-                print("Notification successfully scheduled for \(date).")
+                print("Notification successfully scheduled for \(date.addingTimeInterval((Date.now > date) ? 86400 : 0)).")
             }
         }
     }

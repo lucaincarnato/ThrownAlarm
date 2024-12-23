@@ -205,16 +205,15 @@ private struct AlarmView: View{
     // Get the time interval between now and wake up time and convert into string
     private func updateRemainingTime() {
         let now = Date()
-        let timeInterval = user.alarm.wakeTime.timeIntervalSince(now)
-        
+        // Determine the time difference between now and the wake time
+        let timeInterval = user.alarm.wakeTime.addingTimeInterval(user.alarm.wakeTime <= Date.now ? 86400 : 0).timeIntervalSince(now)
+        // Creates the component for the string
         if timeInterval > 0 {
             hours = Int(timeInterval) / 3600
             minutes = ((Int(timeInterval) % 3600) / 60) + 1
             ringsIn = String(format: "%02dh:%02dmin", hours, minutes)
         } else {
-            ringsIn = "Problem occurred"
-            print(user.alarm.sleepTime)
-            print(user.alarm.wakeTime)
+            ringsIn = "An error occurred, reschedule"
         }
     }
     
@@ -288,9 +287,4 @@ private struct StreakView: View {
         }
         .frame(height: 245)
     }
-}
-
-#Preview{
-    DashboardView()
-        .modelContainer(try! ModelContainer(for: Profile.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true)))
 }
