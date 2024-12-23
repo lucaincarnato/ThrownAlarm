@@ -38,6 +38,7 @@ class Alarm{
         alarm.sleepTime = self.sleepTime
         alarm.wakeTime = self.wakeTime
         alarm.sleepDuration = self.sleepDuration
+        alarm.sound = self.sound
         alarm.rounds = self.rounds
     }
     
@@ -82,6 +83,7 @@ class Alarm{
     
     // Schedule the notification for a specific date and with a custom sound
     private func scheduleNotification(_ date: Date, isAlarm: Bool) {
+        // MARK: ACT HERE TO PREVENT ERROR IN SETTING UP THE ALARM
         if Date.now > date {return} // Don't send notification to the past
         let content = UNMutableNotificationContent()
         // Differentiate the notification based on the fact that it is for the wake up or the bedtime reminder

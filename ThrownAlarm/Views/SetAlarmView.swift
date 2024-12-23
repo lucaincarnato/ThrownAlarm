@@ -18,6 +18,9 @@ struct SetAlarmView: View {
     @State private var audioPlayer: AVAudioPlayer?
     
     @Binding var showAlert: Bool // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
+    
+    @State private var pickerInitialized: Bool = false // Boolean value to prevent onChange trigger
+
 
     var body: some View {
         NavigationStack{
@@ -30,19 +33,24 @@ struct SetAlarmView: View {
                     }
                     // Section related to secondary options
                     Section (header: Text("Alarm options")){
-                        Stepper(value: $user.alarm.rounds, in: 0...10) {
-                            Text("\(user.alarm.rounds) rounds to wake up")
+                        Stepper(value: $placeholder.alarm.rounds, in: 0...10) {
+                            Text("\(placeholder.alarm.rounds) rounds to wake up")
                         }
                         // Sound picker
-                        Picker("Alarm sound", selection: $user.alarm.sound) {
+                        Picker("Alarm sound", selection: $placeholder.alarm.sound) {
                             ForEach(sounds, id:\.self) {
                                 Text($0.description)
                                     .tag($0)
                             }
                         }
                         // Previews the sound when the user selects it
-                        .onChange(of: user.alarm.sound) { oldSound, newSound in
+                        .onChange(of: placeholder.alarm.sound) { oldSound, newSound in
+                            guard pickerInitialized else { return } // Prevent the picker to be initialized to a different selection and trigger the onChange
                             playAudio(for: newSound)
+                        }
+                        // Toggle a boolean value that prevent the picker to trigger the onChange before the user's value are loaded
+                        .onAppear(){
+                            pickerInitialized = true
                         }
                     }
                 }
