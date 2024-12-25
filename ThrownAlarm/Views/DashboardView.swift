@@ -7,11 +7,12 @@
 
 import SwiftUI
 import SwiftData
-import CloudKit
 import Foundation
 
 // Shows the Gamification dashboard, it is the entry point of the application
 struct DashboardView: View {
+    // Boolean variable for the onboarding
+    @AppStorage("firstLaunch") var firstLaunch: Bool = true
     // Context and query to get info from database
     @Environment(\.modelContext) private var modelContext
     @Query private var users: [Profile]
@@ -96,6 +97,11 @@ struct DashboardView: View {
                     AlarmGameView(user: user!, showSheet: $deepLinkManager.showModal, save: modelContext.save)
                 }
             }
+        }
+        // Modality for the onboarding
+        .sheet(isPresented: $firstLaunch) {
+            OnboardingView(firstLaunch: $firstLaunch)
+                .interactiveDismissDisabled() // Disable closing interaction for modal
         }
     }
 }
