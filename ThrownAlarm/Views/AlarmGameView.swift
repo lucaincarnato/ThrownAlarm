@@ -149,6 +149,8 @@ struct AlarmGameView: View {
                 if !alreadyTracked() {
                     user.backtrack.last!.snoozed = true
                     try? save()
+                } else {
+                    user.backtrack.remove(at: user.backtrack.count - 1) // Remove the appended night if the user already tracked it
                 }
                 generateInitialCircles(in: geometry.size)
             }

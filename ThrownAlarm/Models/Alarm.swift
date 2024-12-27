@@ -94,7 +94,7 @@ class Alarm{
         } else {
             // Sets up notification information for the bedtime
             content.title = "It's bedtime!"
-            content.body = "Don't lose your \(Int(self.sleepDuration / 3600)) hours of sleep."
+            content.body = "Don't lose your \(Int(self.sleepDuration / 3600)) hours and \((Int(self.sleepDuration) % 3600) / 60) minutes of sleep."
             content.sound = .default
         }
         // Get component from Date in order to schedule for a specific time
