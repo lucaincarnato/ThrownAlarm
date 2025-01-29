@@ -88,8 +88,12 @@ struct DashboardView: View {
                 if users.first == nil{
                     modelContext.insert(user!)
                 }
-                user!.updateProfile()
+                user!.updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
                 try? modelContext.save()
+            }
+            // Updates the profile when the user completes the minigame (not checking with snoozed bc if snoozed the user exits the app and onAppear is called)
+            .onChange(of: user!.backtrack.last?.wakeUpSuccess) { oldValue, newValue in
+                user!.updateProfile()
             }
             // Opens the minigame if the deep link is correct
             .fullScreenCover(isPresented: $deepLinkManager.showModal) {
