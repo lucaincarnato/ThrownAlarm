@@ -47,17 +47,7 @@ struct ProfileView: View {
                 .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
                 .padding(.horizontal, 20)
                 MonthlyCalendarView(user: user)
-                /*
-                Button("Freefall"){
-                    showSheet = true
-                }
-                .fullScreenCover(isPresented: $showSheet) {
-                    AlarmGameView(user: $user, showSheet: $showSheet, save: save, rounds: user.alarm.rounds)
-                }
-                */
             }
-            .navigationTitle("Your streak")
-            .navigationBarTitleDisplayMode(.inline) // Forces the title to be in the toolbar
         }
     }
 }
@@ -86,6 +76,7 @@ private struct MonthlyCalendarView: View {
                     Text(selectedMonth, format: .dateTime.year().month(.wide))
                         .font(.title2)
                         .bold()
+                        .frame(maxWidth: .infinity)
                     // Next month
                     Button{
                         selectedMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) ?? selectedMonth

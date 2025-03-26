@@ -127,10 +127,10 @@ private struct PickerView: View {
                 VStack{
                     HStack{
                         Image(systemName: "bed.double.fill")
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(Color.white.opacity(0.5))
                             .accessibilityHidden(true)
                         Text("BEDTIME")
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(Color.white.opacity(0.5))
                             .font(.subheadline)
                             .bold()
                     }
@@ -145,10 +145,10 @@ private struct PickerView: View {
                 VStack{
                     HStack{
                         Image(systemName: "alarm.fill")
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(Color.white.opacity(0.5))
                             .accessibilityHidden(true)
                         Text("WAKE UP")
-                            .foregroundStyle(Color.accentColor)
+                            .foregroundStyle(Color.white.opacity(0.5))
                             .font(.subheadline)
                             .bold()
                     }
@@ -267,7 +267,7 @@ private struct PickerView: View {
             .rotationEffect(Angle(degrees: -90)) // Rotate all the circle in order to show the zero not in the right part of the screen but on the top
             // Info related to the duration of the sleep
             Text("\(getTimeDifference().0)h:\(getTimeDifference().1)min")
-                .foregroundStyle(Color.accentColor)
+                .foregroundStyle(Color.white.opacity(0.7))
                 .padding(.bottom, 15)
                 .accessibilityLabel("Duration: \(getTimeDifference().0) hours and \(getTimeDifference().1) minutes")
         }
@@ -363,7 +363,7 @@ private struct ClockView: View {
                 let d = Double(i)
                 // Arrange them according to a common clock
                 Rectangle()
-                    .fill(Color.accentColor)
+                    .fill(Color.white.opacity(0.5))
                     .frame(width: 2, height: i % 6 == 0 ? 15 : 5) // 0, 6, 12 and 18 will be a little bit bigger for aesthetics
                     .offset(y: (radius - 80)) // Moved to the center
                     .rotationEffect(Angle(degrees: d * 15)) // Rotated to be normal to the circle
@@ -375,7 +375,7 @@ private struct ClockView: View {
                     Text("\(hours[i])")
                         .bold()
                         .font(.subheadline)
-                        .foregroundStyle(Color.accentColor)
+                        .foregroundStyle(Color.white)
                         .rotationEffect(Angle(degrees: d * -45)) // Rotated to be close to the relative mark
                         .offset(y: (radius - 100)) // Moved to the center
                         .rotationEffect(Angle(degrees: d * 45)) // Rotated to be straight from user's perspective
