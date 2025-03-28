@@ -18,27 +18,6 @@ class Profile{
     var backtrack: [Night] = []
     var snoozedDays: Int = 0 // Number of days the user snoozed
     var isActive: Bool = false // Determines if the user needs to be woke up by the alarm
-    // Placeholder achievements
-    var totalAchievements: [Achievement] = [
-        Achievement(
-            "Snooze conqueeror",
-            "alarm.waves.left.and.right.fill",
-            "A month without snoozing",
-            false
-        ),
-        Achievement(
-            "Master of throws",
-            "basketball.fill",
-            "100 throws completed",
-            false
-        ),
-        Achievement(
-            "Master of throws",
-            "basketball.fill",
-            "100 throws completed",
-            false
-        ),
-    ]
     
     // General initializer to allow model 
     init(){
