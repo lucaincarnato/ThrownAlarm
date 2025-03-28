@@ -29,19 +29,18 @@ struct DashboardView: View {
     
     var body: some View {
         NavigationStack{
-            ScrollView{
-                VStack( alignment: .leading, spacing: 0){
-                    // Card for the info about the alarm
-                    AlarmView(user: user!, setAlarm: $setAlarm, save: modelContext.save)
-                    ProfileView(user: user!, save: modelContext.save)
-                }
-                // Modality for the alarm settings
-                .sheet(isPresented: $setAlarm){
-                    SetAlarmView(user: user!, placeholder: Profile(), setAlarm: $setAlarm, save: modelContext.save, showAlert: $showAlert)
-                }
-                // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
-                .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those active yet")})
+            VStack( alignment: .leading, spacing: 0){
+                // Card for the info about the alarm
+                AlarmView(user: user!, setAlarm: $setAlarm, save: modelContext.save)
+                StreakView(user: user!, save: modelContext.save)
+                MonthlyCalendarView(user: user!)
             }
+            // Modality for the alarm settings
+            .sheet(isPresented: $setAlarm){
+                SetAlarmView(user: user!, placeholder: Profile(), setAlarm: $setAlarm, save: modelContext.save, showAlert: $showAlert)
+            }
+            // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
+            .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those active yet")})
             .navigationTitle("Dashboard")
             .onAppear{
                 if users.first == nil{
@@ -154,7 +153,6 @@ private struct AlarmView: View{
                         // Live info about the duration of the sleep
                         Text(!user.isActive ? "Alarm disabled" : "Rings in \(ringsIn)")
                             .foregroundStyle(Color.accentColor)
-                            .padding(.bottom, 10)
                             .accessibilityLabel(!user.isActive ? "Alarm disabled" : "Rings in \(hours) hours and \(minutes) minutes")
                             // Everytime the text is rendered a timer from now to wake up time is created and updated
                             .onAppear {
@@ -193,4 +191,132 @@ private struct AlarmView: View{
         }
     }
     
+}
+
+// Shows the info about the user's streak
+private struct StreakView: View {
+    @State var user: Profile // Binding value for the user profile
+    @State private var showSheet: Bool = false
+    var save: () throws -> Void
+    
+    var body: some View {
+        HStack{
+            VStack (alignment: .leading){
+                // Shows the streak
+                Image(systemName: "flame.fill")
+                    .foregroundStyle(Color.green)
+                    .font(.title)
+                    .padding(.vertical, 2)
+                    .accessibilityHidden(true)
+                Text("You woke up for")
+                    .font(.headline)
+                    .accessibilityLabel("You woke up for \(user.streak > 1 ? "\(user.streak) day" : "\(user.streak) days")")
+                Text(user.streak == 1 ? "\(user.streak) day" : "\(user.streak) days")
+                    .font(.title)
+                    .bold()
+                    .accessibilityHidden(true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
+            .padding(.horizontal, 20)
+            VStack (alignment: .leading){
+                // Shows the streak
+                Image(systemName: "battery.25percent")
+                    .foregroundStyle(Color.red)
+                    .font(.title)
+                    .padding(.vertical, 9)
+                    .accessibilityHidden(true)
+                Text("You snoozed")
+                    .font(.headline)
+                    .accessibilityLabel("You snoozed \(user.snoozedDays == 1 ? "\(user.snoozedDays) day" : "\(user.snoozedDays) days")")
+                Text(user.snoozedDays == 1 ? "\(user.snoozedDays) day" : "\(user.snoozedDays) days")
+                    .font(.title)
+                    .bold()
+                    .accessibilityHidden(true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
+            .padding(.horizontal, 20)
+        }
+    }
+}
+
+// Shows user's backtracking
+private struct MonthlyCalendarView: View {
+    @State var user: Profile // Binding value for the user profile
+    let calendar = Calendar.current
+    @State private var selectedMonth: Date = Date()
+    
+    var body: some View {
+        ZStack{
+            RoundedRectangle(cornerRadius: 15)
+                .padding()
+                .foregroundStyle(Color.gray.opacity(0.3))
+            VStack {
+                // Month selector
+                HStack {
+                    // Previous month
+                    Button{
+                        selectedMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) ?? selectedMonth
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.title2)
+                            .accessibilityLabel("Previous month")
+                    }
+                    Text(selectedMonth, format: .dateTime.year().month(.wide))
+                        .font(.title2)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                    // Next month
+                    Button{
+                        selectedMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) ?? selectedMonth
+                    } label:{
+                        Image(systemName: "chevron.right")
+                            .font(.title2)
+                            .accessibilityLabel("Next month")
+                    }
+                }
+                .padding()
+                // Weekdays
+                HStack {
+                    ForEach(calendar.shortWeekdaySymbols, id: \.self) { weekday in
+                        Text(weekday)
+                            .frame(maxWidth: .infinity)
+                            .foregroundStyle(.secondary)
+                            .accessibilityHidden(true)
+                    }
+                }
+                // Daily grid per month
+                let days = daysInMonth(for: selectedMonth)
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
+                    ForEach(days, id: \.self) { day in
+                        if let day = day {
+                            DayView(user: user, day: day, isExtendedView: true, text: String(calendar.component(.day, from: day)))
+                        } else {
+                            Text("") // Empty cells to complete the grid
+                        }
+                    }
+                }
+                .frame(minHeight: 250)
+            }
+            .padding(20)
+        }
+    }
+    
+    // Generate month's day as Date optional array
+    private func daysInMonth(for date: Date) -> [Date?] {
+        // Local variable setup
+        var days: [Date?] = []
+        let range = calendar.range(of: .day, in: .month, for: date)!
+        let components = calendar.dateComponents([.year, .month], from: date)
+        let firstDayOfMonth = calendar.date(from: components)!
+        let weekdayOffset = calendar.component(.weekday, from: firstDayOfMonth) - 1
+        // Empty cells before first day of the month
+        days.append(contentsOf: Array(repeating: nil, count: weekdayOffset))
+        // Month's day generation
+        for day in range {
+            if let dayDate = calendar.date(byAdding: .day, value: day - 1, to: firstDayOfMonth) {
+                days.append(dayDate)
+            }
+        }
+        return days
+    }
 }
