@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Icon_Dark_Mode_2 1.png",
+      "filename" : "Icon_Dark_Mode.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Icon_Dark_Mode_2.png",
+      "filename" : "Icon_Dark_Mode 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "Icon_Awful_Mode_2.png",
+      "filename" : "Icon_Awful_Mode.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
