@@ -173,11 +173,11 @@ private struct AlarmView: View{
     private func updateRemainingTime() {
         let now = Date()
         // Determine the time difference between now and the wake time
-        let timeInterval = user.alarm.wakeTime.addingTimeInterval(user.alarm.wakeTime <= Date.now ? 86400 : 0).timeIntervalSince(now)
+        let timeInterval = user.alarm.wakeTime.timeIntervalSince(now)
         // Creates the component for the string
         if timeInterval > 0 {
             hours = Int(timeInterval) / 3600
-            minutes = ((Int(timeInterval) % 3600) / 60) + 1
+            minutes = ((Int(timeInterval) % 3600) / 60)
             ringsIn = String(format: "%02dh:%02dmin", hours, minutes)
         } else {
             ringsIn = "An error occurred, reschedule"

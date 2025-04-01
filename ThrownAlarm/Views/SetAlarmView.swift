@@ -352,7 +352,7 @@ private struct PickerView: View {
     }
     
     func updateTime() {
-        if (user.alarm.wakeTime < Date.now) {
+        if (user.alarm.wakeTime <= Date.now) {
             user.alarm.wakeTime = user.alarm.wakeTime.addingTimeInterval(86400) // Add a day to the date
         }
     }
