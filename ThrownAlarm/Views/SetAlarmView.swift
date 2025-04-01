@@ -18,9 +18,6 @@ struct SetAlarmView: View {
     @State private var audioPlayer: AVAudioPlayer?
     
     @Binding var showAlert: Bool // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
-    
-    @State private var pickerInitialized: Bool = false // Boolean value to prevent onChange trigger
-
 
     var body: some View {
         NavigationStack{
@@ -37,20 +34,11 @@ struct SetAlarmView: View {
                             Text("\(placeholder.alarm.rounds) rounds to wake up")
                         }
                         // Sound picker
-                        Picker("Alarm sound", selection: $placeholder.alarm.sound) {
+                        Picker("Alarm sound", selection: makeBinding()) {
                             ForEach(sounds, id:\.self) {
                                 Text($0.description)
                                     .tag($0)
                             }
-                        }
-                        // Previews the sound when the user selects it
-                        .onChange(of: placeholder.alarm.sound) { oldSound, newSound in
-                            guard pickerInitialized else { return } // Prevent the picker to be initialized to a different selection and trigger the onChange
-                            playAudio(for: newSound)
-                        }
-                        // Toggle a boolean value that prevent the picker to trigger the onChange before the user's value are loaded
-                        .onAppear(){
-                            pickerInitialized = true
                         }
                     }
                 }
@@ -107,6 +95,17 @@ struct SetAlarmView: View {
     func stopAudio(){
         audioPlayer?.stop()
     }
+    
+    // Assign new sound to user and preview it, returnign binding for the picker
+    private func makeBinding() -> Binding<String> {
+            Binding(
+                get: { placeholder.alarm.sound },
+                set: { newValue in
+                    placeholder.alarm.sound = newValue
+                    playAudio(for: newValue) // Trigger playback on every selection
+                }
+            )
+        }
 }
 
 // TODO: LINK ANGLE TO DATE, NOT ALLOW NEGATIVE DURATIONS
@@ -273,6 +272,7 @@ private struct PickerView: View {
         }
         // When the view appears it changes the handles to match user previous info
         .onAppear(){
+            updateTime()
             startAngle = getAngle(from: user.alarm.sleepTime)
             startSector = startAngle.degrees / 360
             endAngle = getAngle(from: user.alarm.wakeTime)
@@ -349,6 +349,12 @@ private struct PickerView: View {
             results.minute = (results.minute!) + 60
         }
         return (results.hour ?? 0, results.minute ?? 0)
+    }
+    
+    func updateTime() {
+        if (user.alarm.wakeTime < Date.now) {
+            user.alarm.wakeTime = user.alarm.wakeTime.addingTimeInterval(86400) // Add a day to the date
+        }
     }
 }
 
