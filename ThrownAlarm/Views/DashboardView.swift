@@ -104,6 +104,7 @@ private struct AlarmView: View{
                         .accessibilityLabel("Activate alarm")
                     // Delete the alarm if the user turns it off
                         .onChange(of: user.isActive){ oldValue, newValue in
+                            user.alarm.setAlarm() // Avoid alarms in the past
                             if !newValue{
                                 user.alarm.clearAllNotifications()
                             } else {
