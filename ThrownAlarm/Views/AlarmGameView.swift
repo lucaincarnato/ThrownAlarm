@@ -85,7 +85,7 @@ struct AlarmGameView: View {
                 }
                 .padding(.bottom, remainingCirclesCount == 0 ? 0 : 68)
                 // Basket sprite
-                Image("basket")
+                Image("Basket")
                     .resizable()
                     .scaledToFit()
                     .position(x: geometry.size.width / 2, y: geometry.size.height / 8.5)

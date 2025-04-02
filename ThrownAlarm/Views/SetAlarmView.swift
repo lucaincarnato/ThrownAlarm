@@ -40,6 +40,11 @@ struct SetAlarmView: View {
                                     .tag($0)
                             }
                         }
+                        NavigationLink(){
+                            ThrowSettingsView(imageSelection: $user.throwType)
+                        } label: {
+                            Text("Throw type")
+                        }
                     }
                 }
             }
@@ -396,5 +401,20 @@ private struct ClockView: View {
                 .offset(y: (radius - 130)) // Moved to the center
         }
         .rotationEffect(Angle(degrees: 90)) // Necessary because the parent will be -90 degrees rotated
+    }
+}
+
+private struct ThrowSettingsView: View {
+    @Binding var imageSelection: String
+    
+    var body: some View {
+        TabView () {
+            Image("Basket")
+                .resizable()
+                .scaledToFit()
+                .tag("Basket")
+          }
+          .tabViewStyle(PageTabViewStyle())
+        
     }
 }
