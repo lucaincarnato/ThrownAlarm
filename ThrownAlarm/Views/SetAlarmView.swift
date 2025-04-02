@@ -413,6 +413,9 @@ private struct ThrowSettingsView: View {
                 .resizable()
                 .scaledToFit()
                 .tag("Basket")
+            Text("Coming soon")
+                .bold()
+                .tag("Basket")
           }
           .tabViewStyle(PageTabViewStyle())
         
