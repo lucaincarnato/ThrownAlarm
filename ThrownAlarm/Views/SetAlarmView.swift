@@ -30,7 +30,7 @@ struct SetAlarmView: View {
                     }
                     // Section related to secondary options
                     Section (header: Text("Alarm options")){
-                        Stepper(value: $placeholder.alarm.rounds, in: 0...10) {
+                        Stepper(value: $placeholder.alarm.rounds, in: 1...10) {
                             Text("\(placeholder.alarm.rounds) rounds to wake up")
                         }
                         // Sound picker
