@@ -497,9 +497,6 @@
         }
       }
     },
-    "Dart" : {
-
-    },
     "Dashboard" : {
       "localizations" : {
         "en" : {
@@ -611,9 +608,6 @@
           }
         }
       }
-    },
-    "Export" : {
-
     },
     "Let's start" : {
       "localizations" : {
@@ -834,7 +828,6 @@
       }
     },
     "Throw type" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

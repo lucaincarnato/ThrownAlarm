@@ -109,17 +109,16 @@ struct SetAlarmView: View {
     
     // Assign new sound to user and preview it, returnign binding for the picker
     private func makeBinding() -> Binding<String> {
-            Binding(
-                get: { placeholder.alarm.sound },
-                set: { newValue in
-                    placeholder.alarm.sound = newValue
-                    playAudio(for: newValue) // Trigger playback on every selection
-                }
-            )
-        }
+        Binding(
+            get: { placeholder.alarm.sound },
+            set: { newValue in
+                placeholder.alarm.sound = newValue
+                playAudio(for: newValue) // Trigger playback on every selection
+            }
+        )
+    }
 }
 
-// TODO: LINK ANGLE TO DATE, NOT ALLOW NEGATIVE DURATIONS
 // Shows a wheel with draggable edges that allows the user to select go to sleep and wake up hours, with irl duration update
 private struct PickerView: View {
     @Binding var user: Profile// Returns the info about the user profile
@@ -412,11 +411,12 @@ private struct ThrowSettingsView: View {
                 .resizable()
                 .scaledToFit()
                 .tag("Basket")
-            Text("Dart")
-                .bold()
-                .tag("Dart")
-          }
-          .tabViewStyle(PageTabViewStyle())
+            Image("Target")
+                .resizable()
+                .scaledToFit()
+                .tag("Target")
+        }
+        .tabViewStyle(PageTabViewStyle())
         
     }
 }
