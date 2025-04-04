@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 import AVFoundation
 
 // Allows the user to change the alarm and its settings
@@ -406,9 +407,9 @@ private struct ThrowSettingsView: View {
                 .resizable()
                 .scaledToFit()
                 .tag("Basket")
-            Text("Coming soon")
+            Text("Dart")
                 .bold()
-                .tag("Basket")
+                .tag("Dart")
           }
           .tabViewStyle(PageTabViewStyle())
         

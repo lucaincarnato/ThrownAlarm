@@ -176,7 +176,7 @@ private struct AlarmView: View{
         // Determine the time difference between now and the wake time
         let timeInterval = user.alarm.wakeTime.timeIntervalSince(Date.now)
         // Creates the component for the string
-        if timeInterval > 0 {
+        if timeInterval >= 0 {
             hours = Int(timeInterval) / 3600
             minutes = ((Int(timeInterval) % 3600) / 60)
             ringsIn = String(format: "%02dh:%02dmin", hours, minutes)

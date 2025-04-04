@@ -98,7 +98,7 @@ struct AlarmGameView: View {
                         .frame(width: circleRadius * 2, height: circleRadius * 2)
                         // Adds the SF Symbol of a basketball over the circle
                         .overlay(
-                            Image(systemName: "basketball.fill")
+                            Image("\(user.throwType)User")
                                 .resizable()
                                 .scaledToFill()
                                 .clipShape(Circle()) // Let the image clip the circle's shape
