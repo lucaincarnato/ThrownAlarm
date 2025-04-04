@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FreemiumKit
 import UserNotifications
 import UIKit
 
@@ -19,6 +20,7 @@ struct OnceClockApp: App {
             DashboardView()
                 .preferredColorScheme(.dark) // Forces the app to run in dark mode
                 .environmentObject(deepLinkManager) // Push the manager into the environment so that DashboardView can get from it
+                .environmentObject(FreemiumKit.shared)
                 // Once the url is received, it is managed
                 .onOpenURL { url in
                     deepLinkManager.handleDeepLink(url)

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import StoreKit
+import FreemiumKit
 import AVFoundation
 
 // Allows the user to change the alarm and its settings
@@ -41,6 +41,11 @@ struct SetAlarmView: View {
                                     .tag($0)
                             }
                         }
+                        /* opens paywall if user has not purchased, else just like `Button`
+                        PaidFeatureButton("Export", systemImage: "square.and.arrow.up") {
+                           print("CIAO")
+                        }
+                        */
                         NavigationLink(){
                             ThrowSettingsView(imageSelection: $user.throwType)
                         } label: {
