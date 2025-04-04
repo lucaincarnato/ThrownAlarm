@@ -407,7 +407,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hora de dormir"
+            "value" : "Ve a dormir"
           }
         },
         "fr" : {
@@ -419,7 +419,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vai a letto"
+            "value" : "Vai a dormire"
           }
         }
       }
@@ -435,7 +435,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HORA DE DORMIR"
+            "value" : "VE A DORMIR"
           }
         },
         "fr" : {
@@ -447,7 +447,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "VAI A LETTO"
+            "value" : "VAI A DORMIRE"
           }
         }
       }
@@ -804,12 +804,12 @@
         }
       }
     },
-    "The alarm can't work with those active yet" : {
+    "The alarm can't work with those modes active" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The alarm can't work with those active yet"
+            "value" : "The alarm can't work with those modes active"
           }
         },
         "es" : {
@@ -818,22 +818,22 @@
             "value" : "La alarma no puede funcionar con esos modos activados"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La sveglia non può funzionare con queste attive"
+            "value" : "La sveglia non può funzionare con queste modalità attive"
           }
         }
       }
     },
     "Throw type" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Throw type"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -859,7 +859,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Despierta"
+            "value" : "Despertar"
           }
         },
         "fr" : {
@@ -887,7 +887,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DESPIERTA"
+            "value" : "DESPERTAR"
           }
         },
         "fr" : {
@@ -1067,7 +1067,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il tuo programma"
+            "value" : "La tua sveglia"
           }
         }
       }

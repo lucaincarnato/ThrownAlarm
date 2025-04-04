@@ -40,7 +40,7 @@ struct DashboardView: View {
                 SetAlarmView(user: user!, placeholder: Profile(), setAlarm: $setAlarm, save: modelContext.save, showAlert: $showAlert)
             }
             // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
-            .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those active yet")})
+            .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
             .navigationTitle("Dashboard")
             .onAppear{
                 if users.first == nil{
