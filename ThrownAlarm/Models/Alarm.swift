@@ -50,21 +50,9 @@ class Alarm{
     
     // Checks for alarms in the past and correct it
     func setAlarm(){
-        if self.wakeTime < Date.now {
+        if self.wakeTime <= Date.now {
             self.wakeTime = wakeTime.addingTimeInterval(86400)
         }
-    }
-    
-    // Allow the user to change the time of go to sleep and wake up, updating the duration
-    func setAlarm(_ sleepTime: Date, _ wakeTime: Date){
-        setAlarm() // Correct eventual errors
-        // Doesn't allow the user to set the alarm for a date before the go to sleep one
-        if(sleepTime > wakeTime) {
-            self.wakeTime = wakeTime.addingTimeInterval(86400)
-        }
-        self.sleepTime = sleepTime
-        self.wakeTime = wakeTime
-        setDuration() // Automatically determine the sleep duration
     }
     
     // Send a notification each 30 seconds for a total of 10 times

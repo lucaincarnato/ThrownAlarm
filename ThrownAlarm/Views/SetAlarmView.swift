@@ -277,7 +277,6 @@ private struct PickerView: View {
         }
         // When the view appears it changes the handles to match user previous info
         .onAppear(){
-            updateTime()
             startAngle = getAngle(from: user.alarm.sleepTime)
             startSector = startAngle.degrees / 360
             endAngle = getAngle(from: user.alarm.wakeTime)
@@ -309,7 +308,7 @@ private struct PickerView: View {
         let remainder = (progress.truncatingRemainder(dividingBy: 1) * 12).rounded() // Creates a minute step with five as base
         var minutes = remainder * 5
         minutes = (minutes > 55 ? 55 : minutes) // Don't allow approximation over 55
-        let now = Date()
+        let now = Date.now
         var calendar = Calendar.current
         calendar.timeZone = TimeZone.current
         // Build the date with the calendar component of the desired day
@@ -354,12 +353,6 @@ private struct PickerView: View {
             results.minute = (results.minute!) + 60
         }
         return (results.hour ?? 0, results.minute ?? 0)
-    }
-    
-    func updateTime() {
-        if (user.alarm.wakeTime <= Date.now) {
-            user.alarm.wakeTime = user.alarm.wakeTime.addingTimeInterval(86400) // Add a day to the date
-        }
     }
 }
 

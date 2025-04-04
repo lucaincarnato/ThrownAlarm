@@ -108,6 +108,7 @@ private struct AlarmView: View{
                             if !newValue{
                                 user.alarm.clearAllNotifications()
                             } else {
+                                user.alarm.setAlarm() // Makes eventual correction
                                 user.alarm.sendNotification()
                             }
                         }
@@ -172,9 +173,8 @@ private struct AlarmView: View{
     
     // Get the time interval between now and wake up time and convert into string
     private func updateRemainingTime() {
-        let now = Date()
         // Determine the time difference between now and the wake time
-        let timeInterval = user.alarm.wakeTime.timeIntervalSince(now)
+        let timeInterval = user.alarm.wakeTime.timeIntervalSince(Date.now)
         // Creates the component for the string
         if timeInterval > 0 {
             hours = Int(timeInterval) / 3600
