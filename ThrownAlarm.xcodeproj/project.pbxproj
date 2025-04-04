@@ -52,7 +52,6 @@
 			children = (
 				420F35F72D98A0580045CA30 /* Localizable.xcstrings */,
 				423571BB2D039F6B00979A4F /* ThrownAlarm */,
-				42F0AB002D10D9AC00DBAE8B /* Frameworks */,
 				423571BA2D039F6B00979A4F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,13 +62,6 @@
 				423571B92D039F6B00979A4F /* ThrownAlarm.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		42F0AB002D10D9AC00DBAE8B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,10 +109,10 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				it,
 				es,
 				fr,
+				Base,
 			);
 			mainGroup = 423571B02D039F6B00979A4F;
 			minimizedProjectReferenceProxies = 1;
@@ -293,7 +285,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ThrownAlarm/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ThrownAlarm;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -332,7 +325,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ThrownAlarm/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ThrownAlarm;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

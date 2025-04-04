@@ -2,16 +2,10 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
     "%@" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20,8 +14,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%@"
           }
         },
         "fr" : {
@@ -32,20 +26,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%@"
           }
         }
       }
     },
     "%@ %@" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -54,8 +42,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
           }
         },
         "fr" : {
@@ -66,20 +54,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
           }
         }
       }
     },
     "%lld" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -88,8 +70,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld"
           }
         },
         "fr" : {
@@ -100,20 +82,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld"
           }
         }
       }
     },
     "%lld balls remaining" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -122,8 +98,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Hay %lld pelotas restantes"
           }
         },
         "fr" : {
@@ -134,20 +110,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld palle rimanenti"
           }
         }
       }
     },
     "%lld day" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -156,8 +126,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld día"
           }
         },
         "fr" : {
@@ -168,20 +138,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld giorno"
           }
         }
       }
     },
     "%lld days" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -190,8 +154,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld días"
           }
         },
         "fr" : {
@@ -202,20 +166,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld giorni"
           }
         }
       }
     },
     "%lld rounds remaining" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -224,8 +182,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Hay %lld rondas restantes"
           }
         },
         "fr" : {
@@ -236,20 +194,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld round rimanenti"
           }
         }
       }
     },
     "%lld rounds to wake up" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -258,8 +210,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld rondas para despertar"
           }
         },
         "fr" : {
@@ -270,20 +222,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%lld round per svegliarsi"
           }
         }
       }
     },
     "%lldh:%lldmin" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -292,8 +238,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%1$lldh:%2$lldmin"
           }
         },
         "fr" : {
@@ -304,20 +250,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "%1$lldh:%2$lldmin"
           }
         }
       }
     },
     "Activate alarm" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -326,8 +266,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Activar alarma"
           }
         },
         "fr" : {
@@ -338,20 +278,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Attiva sveglia"
           }
         }
       }
     },
     "Alarm disabled" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -360,8 +294,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Alarma desactivada"
           }
         },
         "fr" : {
@@ -372,20 +306,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Sveglia non attiva"
           }
         }
       }
     },
     "Alarm options" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -394,8 +322,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Opciones de alarma"
           }
         },
         "fr" : {
@@ -406,20 +334,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Opzioni sveglia"
           }
         }
       }
     },
     "Alarm sound" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -428,8 +350,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Sonido de alarma"
           }
         },
         "fr" : {
@@ -440,20 +362,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Suono sveglia"
           }
         }
       }
     },
     "Ball" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -462,8 +378,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Pelota"
           }
         },
         "fr" : {
@@ -474,20 +390,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Palla"
           }
         }
       }
     },
     "Bedtime" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -496,8 +406,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Hora de dormir"
           }
         },
         "fr" : {
@@ -508,20 +418,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Vai a letto"
           }
         }
       }
     },
     "BEDTIME" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -530,8 +434,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "HORA DE DORMIR"
           }
         },
         "fr" : {
@@ -542,20 +446,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "VAI A LETTO"
           }
         }
       }
     },
     "Cancel" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -564,8 +462,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Cancelar"
           }
         },
         "fr" : {
@@ -576,23 +474,30 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Annulla"
           }
         }
       }
     },
     "Coming soon" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proximamente"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presto disponibile"
+          }
+        }
+      }
     },
     "Dashboard" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -601,8 +506,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Panel de control"
           }
         },
         "fr" : {
@@ -613,20 +518,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Dashboard"
           }
         }
       }
     },
     "DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -635,8 +534,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "DESHABILITAR MODO SILENCIOSO Y MODO DE ENFOQUE ANTES DE IR A DORMIR"
           }
         },
         "fr" : {
@@ -647,20 +546,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "DISATTIVA LA MODALITÀ SILENZIOSO E LA MODALITÀ FOCUS PRIMA DI ANDARE A DORMIRE"
           }
         }
       }
     },
     "Done" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -669,8 +562,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Finalizar"
           }
         },
         "fr" : {
@@ -681,20 +574,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Fatto"
           }
         }
       }
     },
     "Duration: %lld hours and %lld minutes" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -703,8 +590,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Duración: %1$lld horas y %2$lld minutos"
           }
         },
         "fr" : {
@@ -715,20 +602,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Durata: %1$lld ore e %2$lld minuti"
           }
         }
       }
     },
     "Let's start" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -737,8 +618,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Comenzar"
           }
         },
         "fr" : {
@@ -749,20 +630,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Iniziamo"
           }
         }
       }
     },
     "Next" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -771,8 +646,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Siguiente"
           }
         },
         "fr" : {
@@ -783,20 +658,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Prossimo"
           }
         }
       }
     },
     "Next month" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -805,8 +674,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Siguiente mes"
           }
         },
         "fr" : {
@@ -817,20 +686,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Prossimo mese"
           }
         }
       }
     },
     "Previous month" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -839,8 +702,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Mes anterior"
           }
         },
         "fr" : {
@@ -851,20 +714,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Mese precedente"
           }
         }
       }
     },
     "Rings in %@" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -873,8 +730,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Sonará en %@"
           }
         },
         "fr" : {
@@ -885,20 +742,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Suona in %@"
           }
         }
       }
     },
     "Rings in %lld hours and %lld minutes" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -907,8 +758,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Sonará en %1$lld horas y %2$lld minutos"
           }
         },
         "fr" : {
@@ -919,20 +770,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Suona in %1$lld ore e %2$lld minuti"
           }
         }
       }
     },
     "Set Alarm" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -941,8 +786,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Cambiar alarma"
           }
         },
         "fr" : {
@@ -953,20 +798,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Imposta sveglia"
           }
         }
       }
     },
     "The alarm can't work with those active yet" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -975,8 +814,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "La alarma no puede funcionar con esos modos activados"
           }
         },
         "fr" : {
@@ -987,23 +826,30 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "La sveglia non può funzionare con queste attive"
           }
         }
       }
     },
     "Throw type" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo de tiro"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipo di lancio"
+          }
+        }
+      }
     },
     "Wake up" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1012,8 +858,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Despierta"
           }
         },
         "fr" : {
@@ -1024,20 +870,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Sveglia"
           }
         }
       }
     },
     "WAKE UP" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1046,8 +886,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "DESPIERTA"
           }
         },
         "fr" : {
@@ -1058,20 +898,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "SVEGLIA"
           }
         }
       }
     },
     "Welcome to ThrownAlarm" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1080,8 +914,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Bienvenido a ThrownAlarm"
           }
         },
         "fr" : {
@@ -1092,20 +926,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Benvenuto in ThrownAlarm"
           }
         }
       }
     },
     "You snoozed" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1114,8 +942,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Pospusiste"
           }
         },
         "fr" : {
@@ -1126,20 +954,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Hai posticipato"
           }
         }
       }
     },
     "You snoozed %@" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1148,8 +970,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Pospusiste %@"
           }
         },
         "fr" : {
@@ -1160,20 +982,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Hai posticipato %@"
           }
         }
       }
     },
     "You woke up for" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1182,8 +998,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Te despertaste"
           }
         },
         "fr" : {
@@ -1194,20 +1010,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Ti sei svegliato per"
           }
         }
       }
     },
     "You woke up for %@" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1216,8 +1026,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Te despertaste %@"
           }
         },
         "fr" : {
@@ -1228,20 +1038,14 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Ti sei svegliato per %@"
           }
         }
       }
     },
     "Your schedule" : {
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : ""
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1250,8 +1054,8 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Tu agenda"
           }
         },
         "fr" : {
@@ -1262,8 +1066,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : ""
+            "state" : "translated",
+            "value" : "Il tuo programma"
           }
         }
       }
