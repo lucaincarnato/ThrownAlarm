@@ -405,7 +405,7 @@ private struct ThrowSettingsView: View {
     @Binding var imageSelection: String
     
     var body: some View {
-        TabView () {
+        TabView (selection: $imageSelection) {
             Image("Basket")
                 .resizable()
                 .scaledToFit()

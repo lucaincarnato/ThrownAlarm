@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		420F35F82D98A0580045CA30 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 420F35F72D98A0580045CA30 /* Localizable.xcstrings */; };
+		426D71872DA191590026D92C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426D71862DA191590026D92C /* StoreKit.framework */; };
 		42F17EAB2DA0775A00B4AA0E /* FreemiumKit in Frameworks */ = {isa = PBXBuildFile; productRef = 42F17EAA2DA0775A00B4AA0E /* FreemiumKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		420F35F72D98A0580045CA30 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		423571B92D039F6B00979A4F /* ThrownAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThrownAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		426D71862DA191590026D92C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -43,6 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42F17EAB2DA0775A00B4AA0E /* FreemiumKit in Frameworks */,
+				426D71872DA191590026D92C /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +57,7 @@
 			children = (
 				420F35F72D98A0580045CA30 /* Localizable.xcstrings */,
 				423571BB2D039F6B00979A4F /* ThrownAlarm */,
+				426D71832DA191500026D92C /* Frameworks */,
 				423571BA2D039F6B00979A4F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -64,6 +68,14 @@
 				423571B92D039F6B00979A4F /* ThrownAlarm.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		426D71832DA191500026D92C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				426D71862DA191590026D92C /* StoreKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,7 +294,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"$(SRCROOT)/ThrownAlarm/Preview Content\"";
 				DEVELOPMENT_TEAM = W3B7XH945C;
 				ENABLE_PREVIEWS = YES;
@@ -302,7 +314,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.LucaIncarnato.ThrownAlarm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -322,7 +334,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"$(SRCROOT)/ThrownAlarm/Preview Content\"";
 				DEVELOPMENT_TEAM = W3B7XH945C;
 				ENABLE_PREVIEWS = YES;
@@ -342,7 +354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.LucaIncarnato.ThrownAlarm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
