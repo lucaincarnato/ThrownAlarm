@@ -173,6 +173,7 @@ private struct AlarmView: View{
     
     // Get the time interval between now and wake up time and convert into string
     private func updateRemainingTime() {
+        user.alarm.setAlarm() 
         // Determine the time difference between now and the wake time
         let timeInterval = user.alarm.wakeTime.timeIntervalSince(Date.now)
         // Creates the component for the string

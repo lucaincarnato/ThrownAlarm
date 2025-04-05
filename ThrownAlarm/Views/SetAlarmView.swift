@@ -41,15 +41,14 @@ struct SetAlarmView: View {
                                     .tag($0)
                             }
                         }
-                        /* opens paywall if user has not purchased, else just like `Button`
-                        PaidFeatureButton("Export", systemImage: "square.and.arrow.up") {
-                           print("CIAO")
-                        }
-                        */
-                        NavigationLink(){
-                            ThrowSettingsView(imageSelection: $user.throwType)
-                        } label: {
-                            Text("Throw type")
+                        PaidFeatureView {
+                            NavigationLink(){
+                                ThrowSettingsView(imageSelection: $user.throwType)
+                            } label: {
+                                Text("Throw type")
+                            }
+                        } lockedView: {
+                            Label("Throw Type", systemImage: "lock")
                         }
                     }
                 }
