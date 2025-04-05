@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		420F35F82D98A0580045CA30 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 420F35F72D98A0580045CA30 /* Localizable.xcstrings */; };
 		426D71872DA191590026D92C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426D71862DA191590026D92C /* StoreKit.framework */; };
+		42EE463F2DA1A2FD00EFEEF5 /* ThrowType.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 42EE463E2DA1A2FD00EFEEF5 /* ThrowType.storekit */; };
 		42F17EAB2DA0775A00B4AA0E /* FreemiumKit in Frameworks */ = {isa = PBXBuildFile; productRef = 42F17EAA2DA0775A00B4AA0E /* FreemiumKit */; };
 /* End PBXBuildFile section */
 
@@ -16,6 +17,7 @@
 		420F35F72D98A0580045CA30 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		423571B92D039F6B00979A4F /* ThrownAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThrownAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		426D71862DA191590026D92C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		42EE463E2DA1A2FD00EFEEF5 /* ThrowType.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = ThrowType.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -55,6 +57,7 @@
 		423571B02D039F6B00979A4F = {
 			isa = PBXGroup;
 			children = (
+				42EE463E2DA1A2FD00EFEEF5 /* ThrowType.storekit */,
 				420F35F72D98A0580045CA30 /* Localizable.xcstrings */,
 				423571BB2D039F6B00979A4F /* ThrownAlarm */,
 				426D71832DA191500026D92C /* Frameworks */,
@@ -149,6 +152,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42EE463F2DA1A2FD00EFEEF5 /* ThrowType.storekit in Resources */,
 				420F35F82D98A0580045CA30 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
