@@ -480,23 +480,6 @@
         }
       }
     },
-    "Coming soon" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Proximamente"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Presto disponibile"
-          }
-        }
-      }
-    },
     "Dashboard" : {
       "localizations" : {
         "en" : {
@@ -777,6 +760,38 @@
         }
       }
     },
+    "Select" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccione"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleziona"
+          }
+        }
+      }
+    },
+    "Selected" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionado"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selezionato"
+          }
+        }
+      }
+    },
     "Set Alarm" : {
       "localizations" : {
         "en" : {
@@ -828,6 +843,7 @@
       }
     },
     "Throw type" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -848,9 +864,6 @@
           }
         }
       }
-    },
-    "Throw Type" : {
-
     },
     "Wake up" : {
       "localizations" : {

@@ -43,12 +43,16 @@ struct SetAlarmView: View {
                         }
                         PaidFeatureView {
                             NavigationLink(){
-                                ThrowSettingsView(imageSelection: $user.throwType)
+                                TabView (selection: $user.throwType) {
+                                    ThrowTypeView(user: $placeholder, save: save, throwType: "Basket")
+                                    ThrowTypeView(user: $placeholder, save: save, throwType: "Target")
+                                }
+                                .tabViewStyle(PageTabViewStyle())
                             } label: {
                                 Text("Throw type")
                             }
                         } lockedView: {
-                            Label("Throw Type", systemImage: "lock")
+                            Label("Throw type", systemImage: "lock")
                         }
                     }
                 }
@@ -401,21 +405,31 @@ private struct ClockView: View {
     }
 }
 
-private struct ThrowSettingsView: View {
-    @Binding var imageSelection: String
+private struct ThrowTypeView: View {
+    @Binding var user: Profile // Returns the info about the user profile
+    
+    var save: () throws -> Void // Funciton to update data
+    var throwType: String = "Basket"
     
     var body: some View {
-        TabView (selection: $imageSelection) {
-            Image("Basket")
+        VStack{
+            Image(throwType)
                 .resizable()
                 .scaledToFit()
-                .tag("Basket")
-            Image("Target")
-                .resizable()
-                .scaledToFit()
-                .tag("Target")
+                .tag(throwType)
+            Button() {
+                user.throwType = throwType
+                try? save()
+            } label: {
+                Text((user.throwType == throwType ? "Selected" : "Select"))
+                    .disabled(user.throwType == throwType)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+            }
+            .buttonStyle(.borderedProminent)
+            .padding()
         }
-        .tabViewStyle(PageTabViewStyle())
-        
     }
 }
