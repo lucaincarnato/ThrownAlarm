@@ -17,7 +17,7 @@ struct CircleModel: Identifiable {
 
 // Shows the game space where the user can throw balls into the basket
 struct AlarmGameView: View {
-    @State var alarm: Alarm // Binding value for the user profile
+    @Binding var alarm: Alarm // Binding value for the user profile
     @Query private var backtrack: [Night]
     @Environment(\.modelContext) private var modelContext
     @Binding var showSheet: Bool // Boolean value to allow modality

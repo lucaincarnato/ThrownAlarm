@@ -11,7 +11,7 @@ import AVFoundation
 
 // Allows the user to change the alarm and its settings
 struct SetAlarmView: View {
-    @State var alarm: Alarm // Returns the info about the user profile
+    @Binding var alarm: Alarm // Returns the info about the user profile
     @State var placeholder: Alarm // Placeholder to not save date on cancel
     @Binding var setAlarm: Bool // Binding value for the modality
     @Environment(\.modelContext) private var modelContext

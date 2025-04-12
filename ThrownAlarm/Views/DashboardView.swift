@@ -14,17 +14,12 @@ import FreemiumKit
 struct DashboardView: View {
     // Boolean variable for the onboarding
     @AppStorage("firstLaunch") var firstLaunch: Bool = true
-    @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
     
     // Context and query to get info from database
     @Environment(\.modelContext) private var modelContext
     @Query private var alarms: [Alarm]
     @Query private var backtrack: [Night]
-    
-    @State var alarmActive: Bool = true // Tells if the alarm is active, enabling the system to track the hour
-    @State var setAlarm: Bool = false // Boolean value for the modality
-    @State var showAlert: Bool = false // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
-    
+        
     // TODO: CHANGE WITH USER DEFAULTS
     @State var streak: Int = 0
     @State var snoozedDays: Int = 0
@@ -42,21 +37,9 @@ struct DashboardView: View {
                         VStack( alignment: .leading, spacing: 0){
                             // Cards for the info about the alarm
                             ForEach(alarms, id: \.self) { alarm in
-                                AlarmView(alarm: alarm, setAlarm: $setAlarm)
-                                // Modality for the alarm settings
-                                    .sheet(isPresented: $setAlarm){
-                                        SetAlarmView(alarm: alarm, placeholder: Alarm(), setAlarm: $setAlarm, showAlert: $showAlert)
-                                    }
-                                // Opens the minigame if the deep link is correct
-                                    .fullScreenCover(isPresented: $deepLinkManager.showModal) {
-                                        if deepLinkManager.targetView == .alarmView {
-                                            AlarmGameView(alarm: alarm, showSheet: $deepLinkManager.showModal, save: modelContext.save)
-                                        }
-                                    }
+                                AlarmView(alarm: alarm)
                             }
                         }
-                        // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
-                        .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
                         .onAppear{
                             updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
                             try? modelContext.save()
@@ -83,7 +66,7 @@ struct DashboardView: View {
                 OnboardingView(firstLaunch: $firstLaunch)
                     .interactiveDismissDisabled() // Disable closing interaction for modal
             }
-
+            
         }
     }
     
@@ -109,12 +92,16 @@ struct DashboardView: View {
 private struct AlarmView: View{
     @State var alarm: Alarm // Binding value for the user profile
     
-    @Binding var setAlarm: Bool // Binding value for the modality
+    @State var setAlarm: Bool = false // Binding value for the modality
     @State var sleepDuration: TimeInterval = 0
     @State var ringsIn: String = ""
     
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
+    @State var showAlert: Bool = false // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
+    
+    @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View{
         ZStack{
@@ -203,6 +190,18 @@ private struct AlarmView: View{
                 }
                 .accessibilityAddTraits(.isButton)
             }
+            // Modality for the alarm settings
+            .sheet(isPresented: $setAlarm){
+                SetAlarmView(alarm: $alarm, placeholder: Alarm(), setAlarm: $setAlarm, showAlert: $showAlert)
+            }
+            // Opens the minigame if the deep link is correct
+            .fullScreenCover(isPresented: $deepLinkManager.showModal) {
+                if deepLinkManager.targetView == .alarmView {
+                    AlarmGameView(alarm: $alarm, showSheet: $deepLinkManager.showModal, save: modelContext.save)
+                }
+            }
+            // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
+            .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
         }
         .frame(height: 200)
     }
