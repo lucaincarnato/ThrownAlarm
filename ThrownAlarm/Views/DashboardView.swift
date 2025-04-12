@@ -31,36 +31,51 @@ struct DashboardView: View {
     
     var body: some View {
         NavigationStack{
-            ScrollView{
-                VStack( alignment: .leading, spacing: 0){
-                    // Cards for the info about the alarm
-                    ForEach(alarms, id: \.self) { alarm in
-                        AlarmView(alarm: alarm, setAlarm: $setAlarm)
-                        // Modality for the alarm settings
-                            .sheet(isPresented: $setAlarm){
-                                SetAlarmView(alarm: alarm, placeholder: Alarm(), setAlarm: $setAlarm, save: modelContext.save, showAlert: $showAlert)
+            ZStack{
+                if alarms.isEmpty {
+                    Text("No alarms")
+                        .font(.subheadline)
+                        .padding()
+                        .foregroundStyle(.gray)
+                } else {
+                    ScrollView{
+                        VStack( alignment: .leading, spacing: 0){
+                            // Cards for the info about the alarm
+                            ForEach(alarms, id: \.self) { alarm in
+                                AlarmView(alarm: alarm, setAlarm: $setAlarm)
+                                // Modality for the alarm settings
+                                    .sheet(isPresented: $setAlarm){
+                                        SetAlarmView(alarm: alarm, placeholder: Alarm(), setAlarm: $setAlarm, showAlert: $showAlert)
+                                    }
+                                // Opens the minigame if the deep link is correct
+                                    .fullScreenCover(isPresented: $deepLinkManager.showModal) {
+                                        if deepLinkManager.targetView == .alarmView {
+                                            AlarmGameView(alarm: alarm, showSheet: $deepLinkManager.showModal, save: modelContext.save)
+                                        }
+                                    }
                             }
-                        // Opens the minigame if the deep link is correct
-                            .fullScreenCover(isPresented: $deepLinkManager.showModal) {
-                                if deepLinkManager.targetView == .alarmView {
-                                    AlarmGameView(alarm: alarm, showSheet: $deepLinkManager.showModal, save: modelContext.save)
-                                }
-                            }
+                        }
+                        // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
+                        .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
+                        .onAppear{
+                            updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
+                            try? modelContext.save()
+                        }
+                        // Updates the profile when the user completes the minigame (not checking with snoozed bc if snoozed the user exits the app and onAppear is called)
+                        .onChange(of: backtrack.last?.wakeUpSuccess) { oldValue, newValue in
+                            updateProfile()
+                        }
                     }
                 }
-                // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
-                .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
-                .navigationTitle("Schedule")
-                .onAppear{
-                    updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
-                    if alarms.isEmpty {
-                        modelContext.insert(Alarm())
+            }
+            .navigationTitle("Schedule")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("", systemImage: "plus") {
+                        let newAlarm = Alarm()
+                        modelContext.insert(newAlarm)
+                        try? modelContext.save()
                     }
-                    try? modelContext.save()
-                }
-                // Updates the profile when the user completes the minigame (not checking with snoozed bc if snoozed the user exits the app and onAppear is called)
-                .onChange(of: backtrack.last?.wakeUpSuccess) { oldValue, newValue in
-                    updateProfile()
                 }
             }
             // Modality for the onboarding
@@ -68,6 +83,7 @@ struct DashboardView: View {
                 OnboardingView(firstLaunch: $firstLaunch)
                     .interactiveDismissDisabled() // Disable closing interaction for modal
             }
+
         }
     }
     

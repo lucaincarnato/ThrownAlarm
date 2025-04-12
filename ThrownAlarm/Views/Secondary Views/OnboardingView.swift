@@ -10,6 +10,7 @@ import SwiftUI
 // Shows a list of the features of the app when the user enters it for the first time
 struct OnboardingView: View {
     @Binding var firstLaunch: Bool // Boolean value for the one time only modality
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         NavigationStack{
@@ -67,6 +68,10 @@ struct OnboardingView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .padding()
+            }
+            .onAppear() {
+                modelContext.insert(Alarm())
+                try? modelContext.save()
             }
         }
     }

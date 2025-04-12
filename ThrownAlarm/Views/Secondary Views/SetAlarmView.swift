@@ -14,7 +14,7 @@ struct SetAlarmView: View {
     @State var alarm: Alarm // Returns the info about the user profile
     @State var placeholder: Alarm // Placeholder to not save date on cancel
     @Binding var setAlarm: Bool // Binding value for the modality
-    var save: () throws -> Void // Funciton to update data
+    @Environment(\.modelContext) private var modelContext
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"] // Available sound's names
     @State private var audioPlayer: AVAudioPlayer?
     
@@ -22,7 +22,7 @@ struct SetAlarmView: View {
 
     var body: some View {
         NavigationStack{
-            VStack (alignment: .leading){
+            VStack{
                 // Form where the user will update the alarm
                 Form{
                     // Section related to the start and stop hour for the alarm
@@ -42,6 +42,15 @@ struct SetAlarmView: View {
                             }
                         }
                     }
+                    Button(){
+                        modelContext.delete(alarm)
+                        setAlarm.toggle()
+                    } label: {
+                        Text("Delete alarm")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .tint(Color.red)
+                    .frame(maxWidth: .infinity)
                 }
             }
             .navigationTitle("Set Alarm")
@@ -61,7 +70,7 @@ struct SetAlarmView: View {
                         stopAudio() // Stops all the sound when the user exits from modal
                         alarm.setDuration()
                         alarm.isActive = true
-                        try? save()
+                        try? modelContext.save()
                         alarm.sendNotification() // Schedule the notifications when the user changes the alarm
                         setAlarm.toggle()
                         showAlert = true // MARK: TOGGLE FOR THE ALERT, TO BE REMOVED

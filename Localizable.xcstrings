@@ -517,6 +517,9 @@
     "days" : {
 
     },
+    "Delete alarm" : {
+
+    },
     "DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP" : {
       "localizations" : {
         "en" : {
@@ -684,6 +687,9 @@
           }
         }
       }
+    },
+    "No alarms" : {
+
     },
     "Previous month" : {
       "localizations" : {
