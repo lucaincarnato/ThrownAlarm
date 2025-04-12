@@ -100,11 +100,11 @@ private struct AlarmView: View{
                             .accessibilityAddTraits(.isHeader)
                     }
                     .accessibilityAddTraits(.isButton)
-                    Toggle("", isOn:$user.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
+                    Toggle("", isOn:$user.alarm.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
                         .accessibilityAddTraits(.isToggle)
                         .accessibilityLabel("Activate alarm")
                     // Delete the alarm if the user turns it off
-                        .onChange(of: user.isActive){ oldValue, newValue in
+                        .onChange(of: user.alarm.isActive){ oldValue, newValue in
                             user.alarm.setAlarm() // Avoid alarms in the past
                             if !newValue{
                                 user.alarm.clearAllNotifications()
@@ -154,9 +154,9 @@ private struct AlarmView: View{
                             }
                         }
                         // Live info about the duration of the sleep
-                        Text(!user.isActive ? "Alarm disabled" : "Rings in \(ringsIn)")
+                        Text(!user.alarm.isActive ? "Alarm disabled" : "Rings in \(ringsIn)")
                             .foregroundStyle(Color.accentColor)
-                            .accessibilityLabel(!user.isActive ? "Alarm disabled" : "Rings in \(hours) hours and \(minutes) minutes")
+                            .accessibilityLabel(!user.alarm.isActive ? "Alarm disabled" : "Rings in \(hours) hours and \(minutes) minutes")
                             // Everytime the text is rendered a timer from now to wake up time is created and updated
                             .onAppear {
                                 updateRemainingTime()

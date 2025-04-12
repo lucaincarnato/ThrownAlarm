@@ -17,8 +17,6 @@ class Profile{
     // Placeholder Nights
     var backtrack: [Night] = []
     var snoozedDays: Int = 0 // Number of days the user snoozed
-    var throwType: String = "Basket"
-    var isActive: Bool = false // Determines if the user needs to be woke up by the alarm
     
     // General initializer to allow model 
     init(){
