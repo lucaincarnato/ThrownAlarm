@@ -117,6 +117,7 @@
       }
     },
     "%lld day" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -145,6 +146,7 @@
       }
     },
     "%lld days" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -481,6 +483,7 @@
       }
     },
     "Dashboard" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -507,6 +510,12 @@
           }
         }
       }
+    },
+    "day" : {
+
+    },
+    "days" : {
+
     },
     "DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP" : {
       "localizations" : {
@@ -760,6 +769,9 @@
         }
       }
     },
+    "Schedule" : {
+
+    },
     "Select" : {
       "localizations" : {
         "es" : {
@@ -820,6 +832,12 @@
         }
       }
     },
+    "Snoozed" : {
+
+    },
+    "Streak" : {
+
+    },
     "The alarm can't work with those modes active" : {
       "localizations" : {
         "en" : {
@@ -843,7 +861,6 @@
       }
     },
     "Throw type" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -949,7 +966,11 @@
         }
       }
     },
+    "Woke up" : {
+
+    },
     "You snoozed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -978,6 +999,7 @@
       }
     },
     "You snoozed %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1005,7 +1027,14 @@
         }
       }
     },
+    "You snoozed for a total of %@" : {
+
+    },
+    "You successfully woke up for %@" : {
+
+    },
     "You woke up for" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1034,6 +1063,7 @@
       }
     },
     "You woke up for %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

@@ -14,17 +14,26 @@ import UIKit
 struct OnceClockApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate // App delegate
     @StateObject private var deepLinkManager = DeepLinkManager()
-
+    
     var body: some Scene {
         WindowGroup {
-            DashboardView()
-                .preferredColorScheme(.dark) // Forces the app to run in dark mode
-                .environmentObject(deepLinkManager) // Push the manager into the environment so that DashboardView can get from it
-                .environmentObject(FreemiumKit.shared)
-                // Once the url is received, it is managed
-                .onOpenURL { url in
-                    deepLinkManager.handleDeepLink(url)
-                }
+            TabView{
+                DashboardView()
+                    .tabItem {
+                        Label("Schedule", systemImage: "alarm.fill")
+                    }
+                ProfileView()
+                    .tabItem {
+                        Label("Streak", systemImage: "flame.fill")
+                    }
+            }
+            .preferredColorScheme(.dark) // Forces the app to run in dark mode
+            .environmentObject(deepLinkManager) // Push the manager into the environment so that DashboardView can get from it
+            .environmentObject(FreemiumKit.shared)
+            // Once the url is received, it is managed
+            .onOpenURL { url in
+                deepLinkManager.handleDeepLink(url)
+            }
         }
         .modelContainer(for: Profile.self)
     }
@@ -34,7 +43,7 @@ struct OnceClockApp: App {
 class DeepLinkManager: ObservableObject {
     @Published var showModal: Bool = false
     @Published var targetView: TargetView?
-
+    
     // Toggles boolean for modality and direct the view to show
     func handleDeepLink(_ url: URL) {
         if url.host == "alarm" {
@@ -55,7 +64,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         UNUserNotificationCenter.current().delegate = self // Sets up the delegate for notifications
         return true
     }
-
+    
     // Get the deep link and create the url
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         if let deepLink = response.notification.request.content.userInfo["deepLink"] as? String,
