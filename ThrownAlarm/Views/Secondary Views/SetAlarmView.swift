@@ -42,14 +42,13 @@ struct SetAlarmView: View {
                             }
                         }
                     }
-                    Button(){
+                    Button(role: .destructive){
                         modelContext.delete(alarm)
                         setAlarm.toggle()
                     } label: {
                         Text("Delete alarm")
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
-                    .tint(Color.red)
                     .frame(maxWidth: .infinity)
                 }
             }
@@ -65,7 +64,7 @@ struct SetAlarmView: View {
                 }
                 // Toolbar button for saving and updating the alarm
                 ToolbarItem(placement: .confirmationAction){
-                    Button("Done"){
+                    Button("Save"){
                         alarm.copy(alarm: placeholder) // Saves the data only when user is done, not when cancels
                         stopAudio() // Stops all the sound when the user exits from modal
                         alarm.setDuration()

@@ -54,10 +54,12 @@ struct DashboardView: View {
             .navigationTitle("Schedule")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("", systemImage: "plus") {
+                    Button() {
                         let newAlarm = Alarm()
                         modelContext.insert(newAlarm)
                         try? modelContext.save()
+                    } label: {
+                        Image(systemName: "plus")
                     }
                 }
             }
@@ -115,7 +117,7 @@ private struct AlarmView: View{
                     Button{
                         setAlarm.toggle()
                     } label: {
-                        Text("Your schedule")
+                        Text("Schedule")
                             .font(.title2)
                             .bold()
                             .foregroundStyle(Color.white)
@@ -204,6 +206,15 @@ private struct AlarmView: View{
             .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
         }
         .frame(height: 200)
+        // Allow the long press for the deletion and the share
+        .contextMenu {
+            // Delete
+            Button (role: .destructive) {
+                modelContext.delete(alarm)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
     }
     
     // Get the time interval between now and wake up time and convert into string

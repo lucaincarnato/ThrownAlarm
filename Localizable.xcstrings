@@ -517,6 +517,9 @@
     "days" : {
 
     },
+    "Delete" : {
+
+    },
     "Delete alarm" : {
 
     },
@@ -774,6 +777,9 @@
           }
         }
       }
+    },
+    "Save" : {
+
     },
     "Schedule" : {
 
@@ -1101,6 +1107,7 @@
       }
     },
     "Your schedule" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
