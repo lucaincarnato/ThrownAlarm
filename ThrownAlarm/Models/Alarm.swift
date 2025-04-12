@@ -17,7 +17,6 @@ class Alarm{
     var sound: String = "Princess"
     var rounds: Int = 3
     var isActive: Bool = false // Determines if the user needs to be woke up by the alarm
-    var throwType: String = "Basket" // Determines the skin for the throwing game
     
     // Initializer for
     init () {

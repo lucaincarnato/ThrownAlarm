@@ -11,7 +11,7 @@ import UserNotifications
 import UIKit
 
 @main
-struct OnceClockApp: App {
+struct ThrownAlarmApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate // App delegate
     @StateObject private var deepLinkManager = DeepLinkManager()
     
@@ -29,13 +29,13 @@ struct OnceClockApp: App {
             }
             .preferredColorScheme(.dark) // Forces the app to run in dark mode
             .environmentObject(deepLinkManager) // Push the manager into the environment so that DashboardView can get from it
-            .environmentObject(FreemiumKit.shared)
+            .environmentObject(FreemiumKit.shared) // Needed to implement freemium paywall call from FreemiumKit
             // Once the url is received, it is managed
             .onOpenURL { url in
                 deepLinkManager.handleDeepLink(url)
             }
         }
-        .modelContainer(for: Profile.self)
+        .modelContainer(for: [Alarm.self, Night.self])
     }
 }
 

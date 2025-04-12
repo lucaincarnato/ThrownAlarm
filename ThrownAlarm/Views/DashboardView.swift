@@ -14,50 +14,53 @@ import FreemiumKit
 struct DashboardView: View {
     // Boolean variable for the onboarding
     @AppStorage("firstLaunch") var firstLaunch: Bool = true
-    // Context and query to get info from database
-    @Environment(\.modelContext) private var modelContext
-    @Query private var users: [Profile]
-    
     @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
     
-    var user: Profile? { // Returns the info about the first(and only) user profile of the database
-        users.first ?? Profile()
-    }
+    // Context and query to get info from database
+    @Environment(\.modelContext) private var modelContext
+    @Query private var alarms: [Alarm]
+    @Query private var backtrack: [Night]
+    
     @State var alarmActive: Bool = true // Tells if the alarm is active, enabling the system to track the hour
     @State var setAlarm: Bool = false // Boolean value for the modality
-    
     @State var showAlert: Bool = false // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
+    
+    // TODO: CHANGE WITH USER DEFAULTS
+    @State var streak: Int = 0
+    @State var snoozedDays: Int = 0
     
     var body: some View {
         NavigationStack{
             ScrollView{
                 VStack( alignment: .leading, spacing: 0){
-                    // Card for the info about the alarm
-                    AlarmView(user: user!, setAlarm: $setAlarm, save: modelContext.save)
-                }
-                // Modality for the alarm settings
-                .sheet(isPresented: $setAlarm){
-                    SetAlarmView(user: user!, placeholder: Profile(), setAlarm: $setAlarm, save: modelContext.save, showAlert: $showAlert)
+                    // Cards for the info about the alarm
+                    ForEach(alarms, id: \.self) { alarm in
+                        AlarmView(alarm: alarm, setAlarm: $setAlarm)
+                        // Modality for the alarm settings
+                            .sheet(isPresented: $setAlarm){
+                                SetAlarmView(alarm: alarm, placeholder: Alarm(), setAlarm: $setAlarm, save: modelContext.save, showAlert: $showAlert)
+                            }
+                        // Opens the minigame if the deep link is correct
+                            .fullScreenCover(isPresented: $deepLinkManager.showModal) {
+                                if deepLinkManager.targetView == .alarmView {
+                                    AlarmGameView(alarm: alarm, showSheet: $deepLinkManager.showModal, save: modelContext.save)
+                                }
+                            }
+                    }
                 }
                 // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
                 .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
                 .navigationTitle("Schedule")
                 .onAppear{
-                    if users.first == nil{
-                        modelContext.insert(user!)
+                    updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
+                    if alarms.isEmpty {
+                        modelContext.insert(Alarm())
                     }
-                    user!.updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
                     try? modelContext.save()
                 }
                 // Updates the profile when the user completes the minigame (not checking with snoozed bc if snoozed the user exits the app and onAppear is called)
-                .onChange(of: user!.backtrack.last?.wakeUpSuccess) { oldValue, newValue in
-                    user!.updateProfile()
-                }
-                // Opens the minigame if the deep link is correct
-                .fullScreenCover(isPresented: $deepLinkManager.showModal) {
-                    if deepLinkManager.targetView == .alarmView {
-                        AlarmGameView(user: user!, showSheet: $deepLinkManager.showModal, save: modelContext.save)
-                    }
+                .onChange(of: backtrack.last?.wakeUpSuccess) { oldValue, newValue in
+                    updateProfile()
                 }
             }
             // Modality for the onboarding
@@ -67,19 +70,35 @@ struct DashboardView: View {
             }
         }
     }
+    
+    func updateProfile() -> Void {
+        // Update snoozed days
+        snoozedDays = 0
+        for night in backtrack{
+            if (night.snoozed) {snoozedDays += 1}
+        }
+        // Update streak days by checking the reversed index of the first day snoozed
+        for (index, element) in backtrack.reversed().enumerated(){
+            if !element.wakeUpSuccess && element.snoozed {
+                streak = index
+                return
+            }
+        }
+        streak = backtrack.count // If never snoozed, the index should be last + 1, aka all
+        return
+    }
 }
 
 // Card to show the info about the alarm
 private struct AlarmView: View{
-    @State var user: Profile // Binding value for the user profile
+    @State var alarm: Alarm // Binding value for the user profile
+    
     @Binding var setAlarm: Bool // Binding value for the modality
     @State var sleepDuration: TimeInterval = 0
     @State var ringsIn: String = ""
     
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
-    
-    var save: () throws -> Void // Context update
     
     var body: some View{
         ZStack{
@@ -100,17 +119,17 @@ private struct AlarmView: View{
                             .accessibilityAddTraits(.isHeader)
                     }
                     .accessibilityAddTraits(.isButton)
-                    Toggle("", isOn:$user.alarm.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
+                    Toggle("", isOn: $alarm.isActive).toggleStyle(SwitchToggleStyle()) // TODO: SAVE THAT INFO
                         .accessibilityAddTraits(.isToggle)
                         .accessibilityLabel("Activate alarm")
                     // Delete the alarm if the user turns it off
-                        .onChange(of: user.alarm.isActive){ oldValue, newValue in
-                            user.alarm.setAlarm() // Avoid alarms in the past
+                        .onChange(of: alarm.isActive){ oldValue, newValue in
+                            alarm.setAlarm() // Avoid alarms in the past
                             if !newValue{
-                                user.alarm.clearAllNotifications()
+                                alarm.clearAllNotifications()
                             } else {
-                                user.alarm.setAlarm() // Makes eventual correction
-                                user.alarm.sendNotification()
+                                alarm.setAlarm() // Makes eventual correction
+                                alarm.sendNotification()
                             }
                         }
                 }
@@ -130,7 +149,7 @@ private struct AlarmView: View{
                                         .font(.subheadline)
                                         .bold()
                                 }
-                                Text(user.alarm.sleepTime.formatted(date: .omitted, time: .shortened))
+                                Text(alarm.sleepTime.formatted(date: .omitted, time: .shortened))
                                     .font(.largeTitle)
                                     .bold()
                                     .foregroundStyle(Color.white)
@@ -147,17 +166,17 @@ private struct AlarmView: View{
                                         .font(.subheadline)
                                         .bold()
                                 }
-                                Text(user.alarm.wakeTime.formatted(date: .omitted, time: .shortened))
+                                Text(alarm.wakeTime.formatted(date: .omitted, time: .shortened))
                                     .font(.largeTitle)
                                     .bold()
                                     .foregroundStyle(Color.white)
                             }
                         }
                         // Live info about the duration of the sleep
-                        Text(!user.alarm.isActive ? "Alarm disabled" : "Rings in \(ringsIn)")
+                        Text(!alarm.isActive ? "Alarm disabled" : "Rings in \(ringsIn)")
                             .foregroundStyle(Color.accentColor)
-                            .accessibilityLabel(!user.alarm.isActive ? "Alarm disabled" : "Rings in \(hours) hours and \(minutes) minutes")
-                            // Everytime the text is rendered a timer from now to wake up time is created and updated
+                            .accessibilityLabel(!alarm.isActive ? "Alarm disabled" : "Rings in \(hours) hours and \(minutes) minutes")
+                        // Everytime the text is rendered a timer from now to wake up time is created and updated
                             .onAppear {
                                 updateRemainingTime()
                                 startTimer()
@@ -174,9 +193,9 @@ private struct AlarmView: View{
     
     // Get the time interval between now and wake up time and convert into string
     private func updateRemainingTime() {
-        user.alarm.setAlarm() 
+        alarm.setAlarm()
         // Determine the time difference between now and the wake time
-        let timeInterval = user.alarm.wakeTime.timeIntervalSince(Date.now)
+        let timeInterval = alarm.wakeTime.timeIntervalSince(Date.now)
         // Creates the component for the string
         hours = Int(timeInterval) / 3600
         minutes = ((Int(timeInterval) % 3600) / 60)

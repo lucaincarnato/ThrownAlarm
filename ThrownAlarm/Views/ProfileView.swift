@@ -11,24 +11,11 @@ import Foundation
 import FreemiumKit
 
 struct ProfileView: View {
-    @AppStorage("firstLaunch") var firstLaunch: Bool = true
-    // Context and query to get info from database
-    @Environment(\.modelContext) private var modelContext
-    @Query private var users: [Profile]
-    
-    @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
-    
-    var user: Profile? { // Returns the info about the first(and only) user profile of the database
-        users.first ?? Profile()
-    }
-    
-    @State private var showSheet: Bool = false
-    
     var body: some View {
         NavigationStack{
             ScrollView{
-                StreakView(user: user!)
-                MonthlyCalendarView(user: user!)
+                StreakView()
+                MonthlyCalendarView()
             }
             .navigationTitle("Streak")
         }
@@ -37,9 +24,10 @@ struct ProfileView: View {
 
 // Shows the info about the user's streak
 private struct StreakView: View {
-    @State var user: Profile // Binding value for the user profile
-    @State private var showSheet: Bool = false
-    
+    // TODO: CHANGE WITH USER DEFAULTS
+    @State var streak: Int = 0
+    @State var snoozedDays: Int = 0
+        
     var body: some View {
         VStack (alignment: .leading){
             // Shows the streak
@@ -56,18 +44,18 @@ private struct StreakView: View {
                         .accessibilityHidden(true)
                 }
                 HStack{
-                    Text("\(user.streak)")
+                    Text("\(streak)")
                         .font(.largeTitle)
                         .bold()
                         .accessibilityHidden(true)
-                    Text(user.streak == 1 ? "day" : "days")
+                    Text(streak == 1 ? "day" : "days")
                         .font(.title3)
                         .accessibilityHidden(true)
                 }
             }
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
-            .accessibilityLabel("You successfully woke up for \(user.streak > 1 ? "\(user.streak) day" : "\(user.streak) days")")
+            .accessibilityLabel("You successfully woke up for \(streak > 1 ? "\(streak) day" : "\(streak) days")")
             VStack (alignment: .leading){
                 HStack{
                     Image(systemName: "battery.25percent")
@@ -81,18 +69,18 @@ private struct StreakView: View {
                         .accessibilityHidden(true)
                 }
                 HStack {
-                    Text("\(user.snoozedDays)")
+                    Text("\(snoozedDays)")
                         .font(.largeTitle)
                         .bold()
                         .accessibilityHidden(true)
-                    Text(user.snoozedDays == 1 ? "day" : "days")
+                    Text(snoozedDays == 1 ? "day" : "days")
                         .font(.title3)
                         .accessibilityHidden(true)
                 }
             }
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
-            .accessibilityLabel("You snoozed for a total of \(user.snoozedDays == 1 ? "\(user.snoozedDays) day" : "\(user.snoozedDays) days")")
+            .accessibilityLabel("You snoozed for a total of \(snoozedDays == 1 ? "\(snoozedDays) day" : "\(snoozedDays) days")")
         }
         .padding(20)
     }
@@ -100,7 +88,6 @@ private struct StreakView: View {
 
 // Shows user's backtracking
 private struct MonthlyCalendarView: View {
-    @State var user: Profile // Binding value for the user profile
     let calendar = Calendar.current
     @State private var selectedMonth: Date = Date()
     
@@ -148,7 +135,7 @@ private struct MonthlyCalendarView: View {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
                     ForEach(days, id: \.self) { day in
                         if let day = day {
-                            DayView(user: user, day: day, isExtendedView: true, text: String(calendar.component(.day, from: day)))
+                            DayView(day: day, isExtendedView: true, text: String(calendar.component(.day, from: day)))
                         } else {
                             Text("") // Empty cells to complete the grid
                         }
@@ -182,7 +169,8 @@ private struct MonthlyCalendarView: View {
 
 // Shows a circle for each day of the previous week, with a color associated to the info about that
 private struct DayView: View {
-    @State var user: Profile // Binding value for the user profile
+    @Query private var backtrack: [Night]
+    
     var day: Date // Actual date of the card
     var isExtendedView: Bool = false // Checks if it is needed the number of the day (true) or just the letter (false)
     var text = "" // Text for the number of the day
@@ -221,9 +209,9 @@ private struct DayView: View {
     
     // See if the actual day is in the backtrack array, meaning that the user used the app
     func checkTracking() -> Bool{
-        if user.backtrack.isEmpty{return false} // Avoid crashing when dataset is empty
+        if backtrack.isEmpty{return false} // Avoid crashing when dataset is empty
         let current = Calendar.current
-        for night in user.backtrack {
+        for night in backtrack {
             if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day))){return true}
         }
         return false
@@ -231,9 +219,9 @@ private struct DayView: View {
     
     // Checks if the actual date is in the backtrack array and, if yes, also if that night the user snoozed
     func checkSnoozed() -> Bool{
-        if user.backtrack.isEmpty{return false} // Avoid crashing when dataset is empty
+        if backtrack.isEmpty{return false} // Avoid crashing when dataset is empty
         let current = Calendar.current
-        for night in user.backtrack{
+        for night in backtrack{
             if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day)) && night.snoozed){return true}
         }
         return false

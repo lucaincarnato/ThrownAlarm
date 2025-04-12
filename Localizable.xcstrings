@@ -773,6 +773,7 @@
 
     },
     "Select" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -789,6 +790,7 @@
       }
     },
     "Selected" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -861,6 +863,7 @@
       }
     },
     "Throw type" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

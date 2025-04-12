@@ -11,8 +11,8 @@ import AVFoundation
 
 // Allows the user to change the alarm and its settings
 struct SetAlarmView: View {
-    @State var user: Profile // Returns the info about the user profile
-    @State var placeholder: Profile // Placeholder to not save date on cancel
+    @State var alarm: Alarm // Returns the info about the user profile
+    @State var placeholder: Alarm // Placeholder to not save date on cancel
     @Binding var setAlarm: Bool // Binding value for the modality
     var save: () throws -> Void // Funciton to update data
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"] // Available sound's names
@@ -27,12 +27,12 @@ struct SetAlarmView: View {
                 Form{
                     // Section related to the start and stop hour for the alarm
                     Section {
-                        PickerView(user: $placeholder)
+                        PickerView(alarm: $placeholder)
                     }
                     // Section related to secondary options
                     Section (header: Text("Alarm options")){
-                        Stepper(value: $placeholder.alarm.rounds, in: 1...10) {
-                            Text("\(placeholder.alarm.rounds) rounds to wake up")
+                        Stepper(value: $placeholder.rounds, in: 1...10) {
+                            Text("\(placeholder.rounds) rounds to wake up")
                         }
                         // Sound picker
                         Picker("Alarm sound", selection: makeBinding()) {
@@ -40,19 +40,6 @@ struct SetAlarmView: View {
                                 Text($0.description)
                                     .tag($0)
                             }
-                        }
-                        PaidFeatureView {
-                            NavigationLink(){
-                                TabView (selection: $user.throwType) {
-                                    ThrowTypeView(user: $placeholder, save: save, throwType: "Basket")
-                                    ThrowTypeView(user: $placeholder, save: save, throwType: "Target")
-                                }
-                                .tabViewStyle(PageTabViewStyle())
-                            } label: {
-                                Text("Throw type")
-                            }
-                        } lockedView: {
-                            Label("Throw type", systemImage: "lock")
                         }
                     }
                 }
@@ -70,12 +57,12 @@ struct SetAlarmView: View {
                 // Toolbar button for saving and updating the alarm
                 ToolbarItem(placement: .confirmationAction){
                     Button("Done"){
-                        user.alarm.copy(alarm: placeholder.alarm) // Saves the data only when user is done, not when cancels
+                        alarm.copy(alarm: placeholder) // Saves the data only when user is done, not when cancels
                         stopAudio() // Stops all the sound when the user exits from modal
-                        user.alarm.setDuration()
-                        user.isActive = true
+                        alarm.setDuration()
+                        alarm.isActive = true
                         try? save()
-                        user.alarm.sendNotification() // Schedule the notifications when the user changes the alarm
+                        alarm.sendNotification() // Schedule the notifications when the user changes the alarm
                         setAlarm.toggle()
                         showAlert = true // MARK: TOGGLE FOR THE ALERT, TO BE REMOVED
                     }
@@ -83,7 +70,7 @@ struct SetAlarmView: View {
             }
             .onAppear(){
                 // Initialize the placeholder with real values
-                user.alarm.export(alarm: placeholder.alarm)
+                alarm.export(alarm: placeholder)
             }
         }
     }
@@ -113,9 +100,9 @@ struct SetAlarmView: View {
     // Assign new sound to user and preview it, returnign binding for the picker
     private func makeBinding() -> Binding<String> {
         Binding(
-            get: { placeholder.alarm.sound },
+            get: { placeholder.sound },
             set: { newValue in
-                placeholder.alarm.sound = newValue
+                placeholder.sound = newValue
                 playAudio(for: newValue) // Trigger playback on every selection
             }
         )
@@ -124,7 +111,7 @@ struct SetAlarmView: View {
 
 // Shows a wheel with draggable edges that allows the user to select go to sleep and wake up hours, with irl duration update
 private struct PickerView: View {
-    @Binding var user: Profile// Returns the info about the user profile
+    @Binding var alarm: Alarm// Returns the info about the user profile
 
     @State var startAngle: Angle = Angle(degrees: 0) // Angles relative to the sleep handle
     @State var endAngle: Angle = Angle(degrees: 180) // Angles relative to the wake up handle
@@ -146,7 +133,7 @@ private struct PickerView: View {
                             .font(.subheadline)
                             .bold()
                     }
-                    Text(user.alarm.sleepTime.formatted(date: .omitted, time: .shortened))
+                    Text(alarm.sleepTime.formatted(date: .omitted, time: .shortened))
                         .font(.largeTitle)
                         .bold()
                         .foregroundStyle(Color.white)
@@ -164,7 +151,7 @@ private struct PickerView: View {
                             .font(.subheadline)
                             .bold()
                     }
-                    Text(user.alarm.wakeTime.formatted(date: .omitted, time: .shortened))
+                    Text(alarm.wakeTime.formatted(date: .omitted, time: .shortened))
                         .font(.largeTitle)
                         .bold()
                         .foregroundStyle(Color.white)
@@ -214,7 +201,7 @@ private struct PickerView: View {
                         DragGesture()
                             .onChanged({ value in
                                 onDrag(value: value, fromSlider: true)
-                                user.alarm.sleepTime = getTime(angle: startAngle) // Update user's info
+                                alarm.sleepTime = getTime(angle: startAngle) // Update user's info
                             })
                     )
                     .accessibilityLabel("Bedtime")
@@ -226,12 +213,12 @@ private struct PickerView: View {
                         case .increment:
                             self.startAngle.degrees += 1.25
                             self.startSector += 1.25 / 360
-                            user.alarm.sleepTime = getTime(angle: startAngle)
+                            alarm.sleepTime = getTime(angle: startAngle)
                             break
                         case .decrement:
                             self.startAngle.degrees -= 1.25
                             self.startSector -= 1.25 / 360
-                            user.alarm.sleepTime = getTime(angle: startAngle)
+                            alarm.sleepTime = getTime(angle: startAngle)
                             break
                         @unknown default:
                             break
@@ -250,8 +237,8 @@ private struct PickerView: View {
                         DragGesture()
                             .onChanged({ value in
                                 onDrag(value: value)
-                                user.alarm.wakeTime = getTime(angle: endAngle) // Update user's info
-                                user.alarm.sleepDuration = TimeInterval(getTimeDifference().0 * 3600 + getTimeDifference().1 * 60)
+                                alarm.wakeTime = getTime(angle: endAngle) // Update user's info
+                                alarm.sleepDuration = TimeInterval(getTimeDifference().0 * 3600 + getTimeDifference().1 * 60)
                             })
                     )
                     .accessibilityLabel("Wake up")
@@ -263,12 +250,12 @@ private struct PickerView: View {
                         case .increment:
                             self.endAngle.degrees += 1.25
                             self.endSector += 1.25 / 360
-                            user.alarm.wakeTime = getTime(angle: endAngle)
+                            alarm.wakeTime = getTime(angle: endAngle)
                             break
                         case .decrement:
                             self.endAngle.degrees -= 1.25
                             self.endSector -= 1.25 / 360
-                            user.alarm.wakeTime = getTime(angle: endAngle)
+                            alarm.wakeTime = getTime(angle: endAngle)
                             break
                         @unknown default:
                             break
@@ -285,9 +272,9 @@ private struct PickerView: View {
         }
         // When the view appears it changes the handles to match user previous info
         .onAppear(){
-            startAngle = getAngle(from: user.alarm.sleepTime)
+            startAngle = getAngle(from: alarm.sleepTime)
             startSector = startAngle.degrees / 360
-            endAngle = getAngle(from: user.alarm.wakeTime)
+            endAngle = getAngle(from: alarm.wakeTime)
             endSector = endAngle.degrees / 360
         }
     }
@@ -402,34 +389,5 @@ private struct ClockView: View {
                 .offset(y: (radius - 130)) // Moved to the center
         }
         .rotationEffect(Angle(degrees: 90)) // Necessary because the parent will be -90 degrees rotated
-    }
-}
-
-private struct ThrowTypeView: View {
-    @Binding var user: Profile // Returns the info about the user profile
-    
-    var save: () throws -> Void // Funciton to update data
-    var throwType: String = "Basket"
-    
-    var body: some View {
-        VStack{
-            Image(throwType)
-                .resizable()
-                .scaledToFit()
-                .tag(throwType)
-            Button() {
-                user.throwType = throwType
-                try? save()
-            } label: {
-                Text((user.throwType == throwType ? "Selected" : "Select"))
-                    .disabled(user.throwType == throwType)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-            }
-            .buttonStyle(.borderedProminent)
-            .padding()
-        }
     }
 }
