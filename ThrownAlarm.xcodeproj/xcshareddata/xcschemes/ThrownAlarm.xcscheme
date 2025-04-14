@@ -51,7 +51,7 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <StoreKitConfigurationFileReference
-         identifier = "../../ThrowType.storekit">
+         identifier = "../../ThrownAlarm/Models/ThrownAlarm.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
