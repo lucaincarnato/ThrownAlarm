@@ -14,13 +14,76 @@
 
   ],
   "products" : [
-
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "6744249082",
+      "localizations" : [
+        {
+          "description" : "Add more alarms for a more effective wake up",
+          "displayName" : "ThrowAlarm Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "ThrowTypes",
+      "referenceName" : "ThrownAlarm Pro",
+      "type" : "NonConsumable"
+    }
   ],
   "settings" : {
     "_applicationInternalID" : "6739508825",
     "_developerTeamID" : "W3B7XH945C",
     "_failTransactionsEnabled" : false,
-    "_shouldSetupSyncOnLoad" : true
+    "_lastSynchronizedDate" : 766332232.57986104,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
   },
   "subscriptionGroups" : [
 
