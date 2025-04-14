@@ -214,6 +214,13 @@ private struct AlarmView: View{
                 Label("Delete", systemImage: "trash")
             }
         }
+        .onAppear(){
+            if alarm.justCreated {
+                setAlarm = true
+                alarm.justCreated = false
+                try? modelContext.save()
+            }
+        }
     }
     
     // Get the time interval between now and wake up time and convert into string
