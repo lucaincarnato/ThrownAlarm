@@ -19,7 +19,7 @@ struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var alarms: [Alarm]
     @Query private var backtrack: [Night]
-        
+    
     @AppStorage("streak") private var streak: Int = 0
     @AppStorage("snoozedDays") private var snoozedDays: Int = 0
     
@@ -32,33 +32,42 @@ struct DashboardView: View {
                         .padding()
                         .foregroundStyle(.gray)
                 } else {
-                    ScrollView{
-                        VStack( alignment: .leading, spacing: 0){
-                            // Cards for the info about the alarm
-                            ForEach(alarms, id: \.self) { alarm in
-                                AlarmView(alarm: alarm)
+                    VStack(alignment: .leading, spacing: 0) {
+                        PaidFeatureView {
+                            ScrollView{
+                                // Cards for the info about the alarm
+                                ForEach(alarms, id: \.self) { alarm in
+                                    AlarmView(alarm: alarm, isFirst: false)
+                                }
                             }
+                        } lockedView: {
+                            AlarmPaidView(alarm: alarms.first!)
                         }
-                        .onAppear{
-                            updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
-                            try? modelContext.save()
-                        }
-                        // Updates the profile when the user completes the minigame (not checking with snoozed bc if snoozed the user exits the app and onAppear is called)
-                        .onChange(of: backtrack.last?.wakeUpSuccess) { oldValue, newValue in
-                            updateProfile()
-                        }
+                    }
+                    .onAppear{
+                        updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
+                        try? modelContext.save()
+                    }
+                    // Updates the profile when the user completes the minigame (not checking with snoozed bc if snoozed the user exits the app and onAppear is called)
+                    .onChange(of: backtrack.last?.wakeUpSuccess) { oldValue, newValue in
+                        updateProfile()
                     }
                 }
             }
-            .navigationTitle("Schedule")
+            .navigationTitle("Alarms")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button() {
-                        let newAlarm = Alarm()
-                        modelContext.insert(newAlarm)
-                        try? modelContext.save()
-                    } label: {
-                        Image(systemName: "plus")
+                    PaidFeatureView{
+                        Button() {
+                            let newAlarm = Alarm()
+                            modelContext.insert(newAlarm)
+                            try? modelContext.save()
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                    } lockedView: {
+                        Label("", systemImage: "plus")
+                            .foregroundStyle(Color.accentColor)
                     }
                 }
             }
@@ -92,6 +101,7 @@ struct DashboardView: View {
 // Card to show the info about the alarm
 private struct AlarmView: View{
     @State var alarm: Alarm // Binding value for the user profile
+    @State var isFirst: Bool
     
     @State var setAlarm: Bool = false // Binding value for the modality
     @State var sleepDuration: TimeInterval = 0
@@ -99,7 +109,7 @@ private struct AlarmView: View{
     
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
-    @State var showAlert: Bool = false // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
+    @State var showAlert: Bool = false
     
     @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
     @Environment(\.modelContext) private var modelContext
@@ -209,9 +219,9 @@ private struct AlarmView: View{
         .contextMenu {
             // Delete
             Button (role: .destructive) {
-                modelContext.delete(alarm)
+                if !isFirst { modelContext.delete(alarm) }
             } label: {
-                Label("Delete", systemImage: "trash")
+                Label(isFirst ? "Cannot delete alarm" : "Delete", systemImage: isFirst ? "exclamationmark.triangle.fill" : "trash")
             }
         }
         .onAppear(){
@@ -240,5 +250,43 @@ private struct AlarmView: View{
             updateRemainingTime()
         }
     }
+}
+
+private struct AlarmPaidView: View {
+    var alarm: Alarm
     
+    var body: some View {
+        ScrollView {
+            AlarmView(alarm: alarm, isFirst: true)
+            ZStack{
+                VStack{
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 15)
+                            .padding()
+                            .foregroundStyle(Color.gray.opacity(0.2))
+                            .frame(height: 200)
+                        Text("Unlock more with ThrownAlarm Pro")
+                            .foregroundStyle(Color.accentColor)
+                    }
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 15)
+                            .padding()
+                            .foregroundStyle(Color.gray.opacity(0.2))
+                            .frame(height: 200)
+                        Text("Unlock more with ThrownAlarm Pro")
+                            .foregroundStyle(Color.accentColor)
+                    }
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 15)
+                            .padding()
+                            .foregroundStyle(Color.gray.opacity(0.2))
+                            .frame(height: 200)
+                        Text("Unlock more with ThrownAlarm Pro")
+                            .foregroundStyle(Color.accentColor)
+                    }
+                }
+            }
+        }
+        .scrollDisabled(true)
+    }
 }

@@ -26,6 +26,13 @@ class Alarm{
         self.setDuration()
     }
     
+    init (_ justCreated: Bool) {
+        self.justCreated = justCreated
+        // Compiler needs all properties to be initialized before calling method
+        self.sleepDuration = 0
+        self.setDuration()
+    }
+    
     // Copy in this object the value from another object
     func copy(alarm: Alarm){
         self.sleepTime = alarm.sleepTime

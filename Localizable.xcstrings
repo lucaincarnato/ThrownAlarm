@@ -370,6 +370,9 @@
         }
       }
     },
+    "Alarms" : {
+
+    },
     "Ball" : {
       "localizations" : {
         "en" : {
@@ -481,6 +484,9 @@
           }
         }
       }
+    },
+    "Cannot delete alarm" : {
+
     },
     "Dashboard" : {
       "extractionState" : "stale",
@@ -896,6 +902,9 @@
           }
         }
       }
+    },
+    "Unlock more with ThrownAlarm Pro" : {
+
     },
     "Wake up" : {
       "localizations" : {

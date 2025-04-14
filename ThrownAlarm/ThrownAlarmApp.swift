@@ -20,7 +20,7 @@ struct ThrownAlarmApp: App {
             TabView{
                 DashboardView()
                     .tabItem {
-                        Label("Schedule", systemImage: "alarm.fill")
+                        Label("Alarms", systemImage: "alarm.fill")
                     }
                 ProfileView()
                     .tabItem {

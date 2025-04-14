@@ -59,6 +59,8 @@ struct OnboardingView: View {
                 // Button to close the onboarding and start the app
                 Button() {
                     firstLaunch.toggle()
+                    modelContext.insert(Alarm(false))
+                    try? modelContext.save()
                 } label: {
                     Text("Let's start")
                         .font(.title2)
@@ -68,10 +70,6 @@ struct OnboardingView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .padding()
-            }
-            .onAppear() {
-                modelContext.insert(Alarm())
-                try? modelContext.save()
             }
         }
     }
