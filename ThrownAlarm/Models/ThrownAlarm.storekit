@@ -23,6 +23,16 @@
           "description" : "Add more alarms for a more effective wake up",
           "displayName" : "ThrowAlarm Pro",
           "locale" : "en_US"
+        },
+        {
+          "description" : "Más alarmas para un despertar más eficaz",
+          "displayName" : "ThrownAlarm Pro",
+          "locale" : "es_MX"
+        },
+        {
+          "description" : "Sblocca più sveglie per un risveglio migliore",
+          "displayName" : "ThrownAlarm Pro",
+          "locale" : "it"
         }
       ],
       "productID" : "ThrowTypes",
@@ -34,7 +44,7 @@
     "_applicationInternalID" : "6739508825",
     "_developerTeamID" : "W3B7XH945C",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 766332232.57986104,
+    "_lastSynchronizedDate" : 766334584.77325904,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
