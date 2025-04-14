@@ -505,6 +505,7 @@
       }
     },
     "Delete alarm" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {

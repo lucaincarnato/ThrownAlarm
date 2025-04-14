@@ -203,7 +203,7 @@ private struct AlarmView: View{
             }
             // Modality for the alarm settings
             .sheet(isPresented: $setAlarm){
-                SetAlarmView(alarm: $alarm, placeholder: Alarm(), setAlarm: $setAlarm, showAlert: $showAlert)
+                SetAlarmView(alarm: $alarm, placeholder: Alarm(), setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert)
             }
             // Opens the minigame if the deep link is correct
             .fullScreenCover(isPresented: $deepLinkManager.showModal) {
@@ -219,10 +219,11 @@ private struct AlarmView: View{
         .contextMenu {
             // Delete
             Button (role: .destructive) {
-                if !isFirst { modelContext.delete(alarm) }
+                modelContext.delete(alarm)
             } label: {
                 Label(isFirst ? "Cannot delete alarm" : "Delete", systemImage: isFirst ? "exclamationmark.triangle.fill" : "trash")
             }
+            .disabled(isFirst)
         }
         .onAppear(){
             if alarm.justCreated {

@@ -14,6 +14,7 @@ struct SetAlarmView: View {
     @Binding var alarm: Alarm // Returns the info about the user profile
     @State var placeholder: Alarm // Placeholder to not save date on cancel
     @Binding var setAlarm: Bool // Binding value for the modality
+    @Binding var isFirst: Bool
     @Environment(\.modelContext) private var modelContext
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"] // Available sound's names
     @State private var audioPlayer: AVAudioPlayer?
@@ -46,9 +47,10 @@ struct SetAlarmView: View {
                         modelContext.delete(alarm)
                         setAlarm.toggle()
                     } label: {
-                        Text("Delete alarm")
+                        Text(isFirst ? "Cannot delete alarm" : "Delete")
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .disabled(isFirst)
                     .frame(maxWidth: .infinity)
                 }
             }
