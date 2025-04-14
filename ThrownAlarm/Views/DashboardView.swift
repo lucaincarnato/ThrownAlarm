@@ -20,9 +20,8 @@ struct DashboardView: View {
     @Query private var alarms: [Alarm]
     @Query private var backtrack: [Night]
         
-    // TODO: CHANGE WITH USER DEFAULTS
-    @State var streak: Int = 0
-    @State var snoozedDays: Int = 0
+    @AppStorage("streak") private var streak: Int = 0
+    @AppStorage("snoozedDays") private var snoozedDays: Int = 0
     
     var body: some View {
         NavigationStack{

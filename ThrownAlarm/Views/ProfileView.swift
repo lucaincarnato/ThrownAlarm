@@ -24,9 +24,8 @@ struct ProfileView: View {
 
 // Shows the info about the user's streak
 private struct StreakView: View {
-    // TODO: CHANGE WITH USER DEFAULTS
-    @State var streak: Int = 0
-    @State var snoozedDays: Int = 0
+    @AppStorage("streak") private var streak: Int = 0
+    @AppStorage("snoozedDays") private var snoozedDays: Int = 0
         
     var body: some View {
         VStack (alignment: .leading){
