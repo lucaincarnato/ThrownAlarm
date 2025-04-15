@@ -1,6 +1,6 @@
 //
 //  AudioPlayer.swift
-//  OnceClock
+//  ThrownAlarm
 //
 //  Created by Luca Maria Incarnato on 16/12/24.
 //
@@ -30,7 +30,7 @@ class AudioPlayer: ObservableObject {
             if loop {
                 player?.numberOfLoops = -1 // Infinite loop
             }
-            player?.volume = 0.1
+            player?.volume = 0.1 // Lowers the volume for better waking up experience
             player?.play()
         } catch {
             print("Error while playing audio file: \(error.localizedDescription)")

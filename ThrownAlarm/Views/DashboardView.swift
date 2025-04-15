@@ -1,6 +1,6 @@
 //
 //  DashboardView.swift
-//  AmericanoChallenge
+//  ThrownAlarm
 //
 //  Created by Luca Maria Incarnato on 08/12/24.
 //
@@ -13,19 +13,19 @@ import FreemiumKit
 // Shows the Gamification dashboard, it is the entry point of the application
 struct DashboardView: View {
     // Boolean variable for the onboarding
-    @AppStorage("firstLaunch") var firstLaunch: Bool = true
+    @AppStorage("firstLaunch") var firstLaunch: Bool = true // UserDefault to enable onboarding
+    @AppStorage("streak") private var streak: Int = 0 // UserDefault for nights' streak
+    @AppStorage("snoozedDays") private var snoozedDays: Int = 0 // UserDefault for snoozed days
     
     // Context and query to get info from database
-    @Environment(\.modelContext) private var modelContext
-    @Query private var alarms: [Alarm]
-    @Query private var backtrack: [Night]
-    
-    @AppStorage("streak") private var streak: Int = 0
-    @AppStorage("snoozedDays") private var snoozedDays: Int = 0
+    @Query private var alarms: [Alarm] // Query to access the user's alarms
+    @Query private var backtrack: [Night] // Query to access the backtrack of nights for streak updates
+    @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
     
     var body: some View {
         NavigationStack{
             ZStack{
+                // Communicate the absence of alarms
                 if alarms.isEmpty {
                     Text("No alarms")
                         .font(.subheadline)
@@ -33,6 +33,7 @@ struct DashboardView: View {
                         .foregroundStyle(.gray)
                 } else {
                     VStack(alignment: .leading, spacing: 0) {
+                        // Paywall to show only first alarm and button to pay
                         PaidFeatureView {
                             ScrollView{
                                 // Cards for the info about the alarm
@@ -55,8 +56,10 @@ struct DashboardView: View {
                 }
             }
             .navigationTitle("Alarms")
+            // Enables adding alarms
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
+                    // Paywall to enable adding only after paying
                     PaidFeatureView{
                         Button() {
                             let newAlarm = Alarm()
@@ -80,6 +83,7 @@ struct DashboardView: View {
         }
     }
     
+    // Updates the streak and the snoozed days based on backtrack
     func updateProfile() -> Void {
         // Update snoozed days
         snoozedDays = 0
@@ -100,19 +104,17 @@ struct DashboardView: View {
 
 // Card to show the info about the alarm
 private struct AlarmView: View{
-    @State var alarm: Alarm // Binding value for the user profile
-    @State var isFirst: Bool
+    @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
+    @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
     
+    @State var alarm: Alarm // Binding value for the user profile
+    @State var isFirst: Bool // Determine if the alarm is the first free one
     @State var setAlarm: Bool = false // Binding value for the modality
     @State var sleepDuration: TimeInterval = 0
     @State var ringsIn: String = ""
-    
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
-    @State var showAlert: Bool = false
-    
-    @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
-    @Environment(\.modelContext) private var modelContext
+    @State var showAlert: Bool = false // Modality for the notification alert
     
     var body: some View{
         ZStack{
@@ -203,28 +205,29 @@ private struct AlarmView: View{
             }
             // Modality for the alarm settings
             .sheet(isPresented: $setAlarm){
-                SetAlarmView(alarm: $alarm, placeholder: Alarm(), setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert)
+                SetAlarmView(alarm: $alarm, setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert, placeholder: Alarm())
             }
             // Opens the minigame if the deep link is correct
             .fullScreenCover(isPresented: $deepLinkManager.showModal) {
                 if deepLinkManager.targetView == .alarmView {
-                    AlarmGameView(alarm: $alarm, showSheet: $deepLinkManager.showModal, save: modelContext.save)
+                    AlarmGameView(alarm: $alarm, showSheet: $deepLinkManager.showModal)
                 }
             }
-            // MARK: ALERT FOR THE SILENT AND FOCUS MODE, TO BE REMOVED
+            // Alert for the Silent and Focus mode
             .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
         }
         .frame(height: 200)
         // Allow the long press for the deletion and the share
         .contextMenu {
-            // Delete
+            // Delete button on context menu
             Button (role: .destructive) {
                 modelContext.delete(alarm)
             } label: {
                 Label(isFirst ? "Cannot delete alarm" : "Delete", systemImage: isFirst ? "exclamationmark.triangle.fill" : "trash")
             }
-            .disabled(isFirst)
+            .disabled(isFirst) // Disables if it is the first free alarm
         }
+        // Opens modality if the alarm is just created
         .onAppear(){
             if alarm.justCreated {
                 setAlarm = true
@@ -253,12 +256,14 @@ private struct AlarmView: View{
     }
 }
 
+// Shows the first free alarm and some card that represents alarms unlocked with Pro
 private struct AlarmPaidView: View {
-    var alarm: Alarm
+    @State var alarm: Alarm // First alarm reference
     
     var body: some View {
         ScrollView {
-            AlarmView(alarm: alarm, isFirst: true)
+            AlarmView(alarm: alarm, isFirst: true) // Shows the first alarm
+            // Shows a series of cards with a paywall
             ZStack{
                 VStack{
                     ZStack{
@@ -288,6 +293,6 @@ private struct AlarmPaidView: View {
                 }
             }
         }
-        .scrollDisabled(true)
+        .scrollDisabled(true) // Does not allow scrolling
     }
 }

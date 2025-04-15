@@ -10,7 +10,7 @@ import SwiftUI
 // Shows a list of the features of the app when the user enters it for the first time
 struct OnboardingView: View {
     @Binding var firstLaunch: Bool // Boolean value for the one time only modality
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
     
     var body: some View {
         NavigationStack{
@@ -59,6 +59,7 @@ struct OnboardingView: View {
                 // Button to close the onboarding and start the app
                 Button() {
                     firstLaunch.toggle()
+                    // Once starting the app, it is created the first alarm (free)
                     modelContext.insert(Alarm(false))
                     try? modelContext.save()
                 } label: {

@@ -1,6 +1,6 @@
 //
-//  CirclePhysicsView.swift
-//  AmericanoChallenge
+//  AlarmGameView.swift
+//  ThrownAlarm
 //
 //  Created by Luca Maria Incarnato on 11/12/24.
 //
@@ -17,21 +17,22 @@ struct CircleModel: Identifiable {
 
 // Shows the game space where the user can throw balls into the basket
 struct AlarmGameView: View {
+    @Query private var backtrack: [Night] // Query to access the backtrack of nights for streak updates
+    @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
+    
     @Binding var alarm: Alarm // Binding value for the user profile
-    @Query private var backtrack: [Night]
-    @Environment(\.modelContext) private var modelContext
     @Binding var showSheet: Bool // Boolean value to allow modality
     
-    var save: () throws -> Void // Context update
-    var player: AudioPlayer = AudioPlayer()
+    var player: AudioPlayer = AudioPlayer() // Audio player to play alarm sounds on background
     
     @State var bouncing: Bool = false
     @State var circles: [CircleModel] = [] // Array of logical circles
     @State var timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect() // Timer to update the scene at 60 FPS
     @State var remainingCirclesCount: Int = 0 // Remaining circles counter
-    
     @State var initialCircleCount = 1 // Initial number of circles
     @State var rounds = 1 // Number of round done
+    @State private var holdingCircle: Bool = false // Determines if user is dragging the circle
+    
     let launchSpeedReductionFactor: CGFloat = 20.0 // Speed reduction factor for difficulty balance
     let colliderSize = CGSize(width: 30, height: 30) // Basket's collider size
     var circleRadius: CGFloat = 30.0 // Radius for each circle rendered
@@ -39,9 +40,6 @@ struct AlarmGameView: View {
     // Scrren size to dynamically place elements
     let screenHeight = UIScreen.main.bounds.height
     let screenWidth = UIScreen.main.bounds.width
-    
-    @State private var holdingCircle: Bool = false
-    @State var hapticAllowed: Bool = true // MARK: FUTURE IMPLEMENTATION, ALLOW USER TO DECIDE FEEDBACK
     
     var body: some View {
         // Geometric plane where game objects will be rendered
@@ -114,7 +112,7 @@ struct AlarmGameView: View {
                                 // Drag modifier
                                 .onChanged { value in
                                     moveCircle(withID: circle.id, to: value.location)
-                                    if hapticAllowed {holdingCircle.toggle()}
+                                    holdingCircle.toggle()
                                 }
                                 // Throw modifier
                                 .onEnded { value in
@@ -223,17 +221,18 @@ struct AlarmGameView: View {
         }
     }
     
+    // Method called when the minigame appears
     private func startGame(){
         self.rounds = alarm.rounds // Get rounds from the user once the game is loaded
         alarm.clearAllNotifications() // Avoids sending other notification to the user
         alarm.isActive = false // Disables toggle to communicate the user the alarm is not active anymore
         player.playSound(alarm.sound, loop: true) // Plays the sound in loop to wake the user up
         // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
-        modelContext.insert(Night(date: Date.now, duration: alarm.sleepDuration, wakeUpSuccess: false, snoozed: false))
+        modelContext.insert(Night(date: Date.now, wakeUpSuccess: false, snoozed: false))
         // Before updating the snooze, it checks if there is other tracks of that night
         if !alreadyTracked() {
             backtrack.last!.snoozed = true
-            try? save()
+            try? modelContext.save()
         } else {
             modelContext.delete(backtrack[backtrack.count - 1]) // Remove the appended night if the user already tracked it
         }
@@ -245,12 +244,13 @@ struct AlarmGameView: View {
             // Night correctly recorded
             backtrack.last!.snoozed = false
             backtrack.last!.wakeUpSuccess = true
-            try? save() // Saves
+            try? modelContext.save() // Saves
         } else {
             modelContext.delete(backtrack.last!)
         }
     }
     
+    // Checks if the actual night has already been tracked
     private func alreadyTracked() -> Bool {
         if backtrack.isEmpty {return false} // If none night wase recorded how can one be already tracked...
         for tracked in backtrack {

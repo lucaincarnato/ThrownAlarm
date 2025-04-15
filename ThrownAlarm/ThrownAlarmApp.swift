@@ -1,6 +1,6 @@
 //
-//  AmericanoChallengeApp.swift
-//  AmericanoChallenge
+//  ThrownAlarmApp.swift
+//  ThrownAlarm
 //
 //  Created by Luca Maria Incarnato on 06/12/24.
 //
@@ -13,10 +13,11 @@ import UIKit
 @main
 struct ThrownAlarmApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate // App delegate
-    @StateObject private var deepLinkManager = DeepLinkManager()
+    @StateObject private var deepLinkManager = DeepLinkManager() // Deep link manager for the notification link to the minigame
     
     var body: some Scene {
         WindowGroup {
+            // Tab Bar for the two sections: user alarms and user streak
             TabView{
                 DashboardView()
                     .tabItem {
@@ -35,7 +36,7 @@ struct ThrownAlarmApp: App {
                 deepLinkManager.handleDeepLink(url)
             }
         }
-        .modelContainer(for: [Alarm.self, Night.self])
+        .modelContainer(for: [Alarm.self, Night.self]) // Enables these two models to be stored with SwiftData (on the same file)
     }
 }
 

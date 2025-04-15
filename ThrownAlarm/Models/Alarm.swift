@@ -1,6 +1,6 @@
 //
 //  Alarm.swift
-//  AmericanoChallenge
+//  ThrownAlarm
 //
 //  Created by Luca Maria Incarnato on 06/12/24.
 //
@@ -10,25 +10,26 @@ import Foundation
 import UserNotifications
 
 @Model
+// Describes the alarm user needs to wake up
 class Alarm{
+    // Alarm information
     var sleepTime: Date = Date.now
     var wakeTime: Date = Date.now.addingTimeInterval(28800) // Sets the wake time 8h from the sleeps as default
     var sleepDuration: TimeInterval = 28800
-    var sound: String = "Princess"
-    var rounds: Int = 3
+    var sound: String = "Princess" // String name before wav/m4a extention
+    var rounds: Int = 3 // Number of rounds for the minigame
     var isActive: Bool = false // Determines if the user needs to be woke up by the alarm
-    var justCreated: Bool = true
+    var justCreated: Bool = true // Enables the modal once the alarm is created
     
-    // Initializer for
+    // Initializer for common adding
     init () {
-        // Compiler needs all properties to be initialized before calling method
         self.sleepDuration = 0
         self.setDuration()
     }
     
+    // Initializer for first alarm, that doesn't need to be inizialized with modal active
     init (_ justCreated: Bool) {
         self.justCreated = justCreated
-        // Compiler needs all properties to be initialized before calling method
         self.sleepDuration = 0
         self.setDuration()
     }
@@ -125,16 +126,5 @@ class Alarm{
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllPendingNotificationRequests() // Clear not yet sent ones
         notificationCenter.removeAllDeliveredNotifications() // Clear delivered ones
-    }
-    
-    // Configure notification's category, in order to send them as critical
-    private func configureNotificationCategories() {
-        let category = UNNotificationCategory(
-            identifier: "critical",
-            actions: [],
-            intentIdentifiers: [],
-            options: [.customDismissAction]
-        )
-        UNUserNotificationCenter.current().setNotificationCategories([category])
     }
 }

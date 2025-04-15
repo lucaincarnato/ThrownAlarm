@@ -1,6 +1,6 @@
 //
-//  DashboardView.swift
-//  AmericanoChallenge
+//  Profile.swift
+//  ThrownAlarm
 //
 //  Created by Luca Maria Incarnato on 08/12/24.
 //
@@ -10,6 +10,7 @@ import SwiftData
 import Foundation
 import FreemiumKit
 
+// Shows the streaks and the month backtrack
 struct ProfileView: View {
     var body: some View {
         NavigationStack{
@@ -24,8 +25,8 @@ struct ProfileView: View {
 
 // Shows the info about the user's streak
 private struct StreakView: View {
-    @AppStorage("streak") private var streak: Int = 0
-    @AppStorage("snoozedDays") private var snoozedDays: Int = 0
+    @AppStorage("streak") private var streak: Int = 0 // UserDefault for nights' streak
+    @AppStorage("snoozedDays") private var snoozedDays: Int = 0 // UserDefault for snoozed days
         
     var body: some View {
         VStack (alignment: .leading){
@@ -53,8 +54,9 @@ private struct StreakView: View {
                 }
             }
             .padding(.vertical, 10)
-            .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel("You successfully woke up for \(streak > 1 ? "\(streak) day" : "\(streak) days")")
+            // Shows the snoozed days
             VStack (alignment: .leading){
                 HStack{
                     Image(systemName: "battery.25percent")
@@ -78,7 +80,7 @@ private struct StreakView: View {
                 }
             }
             .padding(.vertical, 10)
-            .frame(maxWidth: .infinity, alignment: .leading) // Allinea il contenuto alla sinistra dello schermo
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel("You snoozed for a total of \(snoozedDays == 1 ? "\(snoozedDays) day" : "\(snoozedDays) days")")
         }
         .padding(20)

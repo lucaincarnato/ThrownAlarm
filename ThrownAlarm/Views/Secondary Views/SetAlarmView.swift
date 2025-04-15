@@ -1,6 +1,6 @@
 //
 //  SetAlarmView.swift
-//  AmericanoChallenge
+//  ThrownAlarm
 //
 //  Created by Luca Maria Incarnato on 08/12/24.
 //
@@ -11,16 +11,19 @@ import AVFoundation
 
 // Allows the user to change the alarm and its settings
 struct SetAlarmView: View {
+    @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
+
     @Binding var alarm: Alarm // Returns the info about the user profile
-    @State var placeholder: Alarm // Placeholder to not save date on cancel
     @Binding var setAlarm: Bool // Binding value for the modality
     @Binding var isFirst: Bool
-    @Environment(\.modelContext) private var modelContext
-    var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"] // Available sound's names
-    @State private var audioPlayer: AVAudioPlayer?
-    
     @Binding var showAlert: Bool // MARK: BOOLEAN FOR THE SILENT AND FOCUS MODE ALERT, TO BE REMOVED
 
+    @State private var audioPlayer: AVAudioPlayer?
+    @State var placeholder: Alarm // Placeholder to not save date on cancel
+
+    // Available sound's names
+    var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"]
+    
     var body: some View {
         NavigationStack{
             VStack{
@@ -43,6 +46,7 @@ struct SetAlarmView: View {
                             }
                         }
                     }
+                    // Delete button and close the modal
                     Button(role: .destructive){
                         modelContext.delete(alarm)
                         setAlarm.toggle()
@@ -50,7 +54,7 @@ struct SetAlarmView: View {
                         Text(isFirst ? "Cannot delete alarm" : "Delete")
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
-                    .disabled(isFirst)
+                    .disabled(isFirst) // Disables if it is the first free alarm
                     .frame(maxWidth: .infinity)
                 }
             }
