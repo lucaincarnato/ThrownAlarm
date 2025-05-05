@@ -228,7 +228,7 @@ struct AlarmGameView: View {
         alarm.isActive = false // Disables toggle to communicate the user the alarm is not active anymore
         player.playSound(alarm.sound, loop: true) // Plays the sound in loop to wake the user up
         // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
-        modelContext.insert(Night(date: Date.now, wakeUpSuccess: false, snoozed: false))
+        modelContext.insert(Night(date: Date.now, snoozed: false))
         // Before updating the snooze, it checks if there is other tracks of that night
         if !alreadyTracked() {
             backtrack.last!.snoozed = true
@@ -243,7 +243,6 @@ struct AlarmGameView: View {
         if !alreadyTracked() {
             // Night correctly recorded
             backtrack.last!.snoozed = false
-            backtrack.last!.wakeUpSuccess = true
             try? modelContext.save() // Saves
         } else {
             modelContext.delete(backtrack.last!)

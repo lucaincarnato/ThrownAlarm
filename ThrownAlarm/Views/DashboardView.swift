@@ -50,7 +50,7 @@ struct DashboardView: View {
                         try? modelContext.save()
                     }
                     // Updates the profile when the user completes the minigame (not checking with snoozed bc if snoozed the user exits the app and onAppear is called)
-                    .onChange(of: backtrack.last?.wakeUpSuccess) { oldValue, newValue in
+                    .onChange(of: backtrack.last?.snoozed) { oldValue, newValue in
                         updateProfile()
                     }
                 }
@@ -92,7 +92,7 @@ struct DashboardView: View {
         }
         // Update streak days by checking the reversed index of the first day snoozed
         for (index, element) in backtrack.reversed().enumerated(){
-            if !element.wakeUpSuccess && element.snoozed {
+            if element.snoozed {
                 streak = index
                 return
             }

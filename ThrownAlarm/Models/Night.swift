@@ -13,19 +13,17 @@ import Foundation
 class Night: Identifiable{
     var id: UUID = UUID()
     var date: Date = Date.now
-    var wakeUpSuccess: Bool = true // I believe in people
     var snoozed: Bool = false
     
     // Initizlize the Night with user's info
-    init(date: Date, wakeUpSuccess: Bool, snoozed: Bool) {
-        setNight(date, wakeUpSuccess, snoozed)
+    init(date: Date, snoozed: Bool) {
+        setNight(date, snoozed)
     }
     
     // Changes Night's information
-    func setNight(_ date: Date, _ wakeUpSuccess: Bool, _ snoozed: Bool) {
+    func setNight(_ date: Date, _ snoozed: Bool) {
         if(date > Date.now) {return} // Doesn't allow the user to record a night that has not happened yet
         self.date = date
-        self.wakeUpSuccess = wakeUpSuccess
         self.snoozed = snoozed
     }
 }
