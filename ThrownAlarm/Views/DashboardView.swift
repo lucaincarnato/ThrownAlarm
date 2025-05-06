@@ -14,12 +14,9 @@ import FreemiumKit
 struct DashboardView: View {
     // Boolean variable for the onboarding
     @AppStorage("firstLaunch") var firstLaunch: Bool = true // UserDefault to enable onboarding
-    @AppStorage("streak") private var streak: Int = 0 // UserDefault for nights' streak
-    @AppStorage("snoozedDays") private var snoozedDays: Int = 0 // UserDefault for snoozed days
     
     // Context and query to get info from database
     @Query private var alarms: [Alarm] // Query to access the user's alarms
-    @Query private var backtrack: [Night] // Query to access the backtrack of nights for streak updates
     @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
     
     var body: some View {
@@ -44,14 +41,6 @@ struct DashboardView: View {
                         } lockedView: {
                             AlarmPaidView(alarm: alarms.first!)
                         }
-                    }
-                    .onAppear{
-                        updateProfile() // Updates the streak everytime the user enters the app (so also when the user has snoozed)
-                        try? modelContext.save()
-                    }
-                    // Updates the profile when the user completes the minigame (not checking with snoozed bc if snoozed the user exits the app and onAppear is called)
-                    .onChange(of: backtrack.last?.snoozed) { oldValue, newValue in
-                        updateProfile()
                     }
                 }
             }
@@ -79,33 +68,17 @@ struct DashboardView: View {
                 OnboardingView(firstLaunch: $firstLaunch)
                     .interactiveDismissDisabled() // Disable closing interaction for modal
             }
-            
         }
-    }
-    
-    // Updates the streak and the snoozed days based on backtrack
-    func updateProfile() -> Void {
-        // Update snoozed days
-        snoozedDays = 0
-        for night in backtrack{
-            if (night.snoozed) {snoozedDays += 1}
-        }
-        // Update streak days by checking the reversed index of the first day snoozed
-        for (index, element) in backtrack.reversed().enumerated(){
-            if element.snoozed {
-                streak = index
-                return
-            }
-        }
-        streak = backtrack.count // If never snoozed, the index should be last + 1, aka all
-        return
     }
 }
 
 // Card to show the info about the alarm
 private struct AlarmView: View{
+    @Query private var backtrack: [Night] // Query to access the backtrack of nights for streak updates
     @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
     @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
+    @AppStorage("streak") private var streak: Int = 0 // UserDefault for nights' streak
+    @AppStorage("snoozedDays") private var snoozedDays: Int = 0 // UserDefault for snoozed days
     
     @State var alarm: Alarm // Binding value for the user profile
     @State var isFirst: Bool // Determine if the alarm is the first free one
@@ -208,7 +181,10 @@ private struct AlarmView: View{
                 SetAlarmView(alarm: $alarm, setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert, placeholder: Alarm())
             }
             // Opens the minigame if the deep link is correct
-            .fullScreenCover(isPresented: Binding(get: { deepLinkManager.id == alarm.id }, set: { newValue in print("Value changed")})) {
+            .fullScreenCover(
+                isPresented: Binding(get: { deepLinkManager.id == alarm.id }, set: { newValue in print("Value changed")}),
+                onDismiss: { updateProfile()
+                }) {
                 if deepLinkManager.targetView == .alarmView {
                     AlarmGameView(alarm: $alarm)
                 }
@@ -235,6 +211,24 @@ private struct AlarmView: View{
                 try? modelContext.save()
             }
         }
+    }
+    
+    // Updates the streak and the snoozed days based on backtrack
+    func updateProfile() -> Void {
+        // Update snoozed days
+        snoozedDays = 0
+        for night in backtrack{
+            if (night.snoozed) {snoozedDays += 1}
+        }
+        // Update streak days by checking the reversed index of the first day snoozed
+        for (index, element) in backtrack.reversed().enumerated(){
+            if element.snoozed {
+                streak = index
+                return
+            }
+        }
+        streak = backtrack.count // If never snoozed, the index should be last + 1, aka all
+        return
     }
     
     // Get the time interval between now and wake up time and convert into string

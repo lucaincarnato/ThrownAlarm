@@ -199,10 +199,13 @@ private struct DayView: View {
     
     // Return a color based on the tracking and snoozing information of the actual day
     func determineBackground() -> Color{
+        // Day not tracked
         if (!checkTracking()){
             return Color.clear
+        // Day tracked but snoozed
         } else if (checkSnoozed()){
             return Color.red
+        // Day tracked and not snoozed
         } else {
             return Color.green
         }

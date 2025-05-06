@@ -12,7 +12,7 @@ import UserNotifications
 @Model
 // Describes the alarm user needs to wake up
 class Alarm{
-    var id: String = "IdNotAvailable"
+    var id: String = "IdNotAvailable" // id to differentiate the alarms (needed for notification purposes)
     // Alarm information
     var sleepTime: Date = Date.now
     var wakeTime: Date = Date.now.addingTimeInterval(28800) // Sets the wake time 8h from the sleeps as default
@@ -73,8 +73,9 @@ class Alarm{
     // Send a notification each 30 seconds for a total of 10 times
     func sendNotification(){
         requestNotificationPermission() // Request permission to send notification
-        clearAllNotifications()
-        scheduleNotification(self.sleepTime, isAlarm: false, code: -1)
+        clearAllNotifications() // Clear notifications already scheduled or delivered form the self alarm
+        // MARK: Each notification has a date, a selector to determine if it is a reminder or a wake up notification and a code to differentiate the identifier
+        scheduleNotification(self.sleepTime, isAlarm: false, code: -1) // Schedule the reminder notification
         // Send the 10 notifications
         for i in 0..<10{
             scheduleNotification(self.wakeTime.addingTimeInterval(Double(30 * i)), isAlarm: true, code: i)
@@ -112,7 +113,9 @@ class Alarm{
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date.addingTimeInterval((Date.now > date) ? 86400 : 0))
         // Create the trigger based on date components
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        // Create a unique request
+        // Create a unique request with an id composed of:
+        //    * A base to identify the alarm that is sending the notification
+        //    * A code that differentiate the notifications related to the same alarm
         let request = UNNotificationRequest(identifier: self.id + "\(code)", content: content, trigger: trigger)
         // Adds request to notification center
         UNUserNotificationCenter.current().add(request)
@@ -121,10 +124,13 @@ class Alarm{
     // Clear the notification center from all the notification
     func clearAllNotifications() {
         var identifiers: [String] = []
-        identifiers.append(self.id + "-1")
+        // ids are gotten merging the alarm's id to the notification code (that goes from -1, the reminder, to 10, the wake up)
+        identifiers.append(self.id + "-1") // Get the id for the reminder notification
+        // Get the id for the ten wake up notifications
         for i in 0..<10 {
             identifiers.append(self.id + "\(i)")
         }
+        // Remove all delivered notifications and only the identified ones among the pending
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllDeliveredNotifications() // Clear not yet sent ones
         notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers) // Clear delivered ones

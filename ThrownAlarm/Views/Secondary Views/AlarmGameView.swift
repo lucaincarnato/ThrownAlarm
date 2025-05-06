@@ -17,14 +17,12 @@ struct CircleModel: Identifiable {
 
 // Shows the game space where the user can throw balls into the basket
 struct AlarmGameView: View {
+    @Binding var alarm: Alarm // Binding value for the user profile
+    
     @Query private var backtrack: [Night] // Query to access the backtrack of nights for streak updates
     @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
     @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
     @Environment(\.dismiss) private var dismiss
-
-    @Binding var alarm: Alarm // Binding value for the user profile
-    
-    var player: AudioPlayer = AudioPlayer() // Audio player to play alarm sounds on background
     
     @State var bouncing: Bool = false
     @State var circles: [CircleModel] = [] // Array of logical circles
@@ -33,6 +31,8 @@ struct AlarmGameView: View {
     @State var initialCircleCount = 1 // Initial number of circles
     @State var rounds = 1 // Number of round done
     @State private var holdingCircle: Bool = false // Determines if user is dragging the circle
+    
+    var player: AudioPlayer = AudioPlayer() // Audio player to play alarm sounds on background
     
     let launchSpeedReductionFactor: CGFloat = 20.0 // Speed reduction factor for difficulty balance
     let colliderSize = CGSize(width: 30, height: 30) // Basket's collider size
@@ -68,17 +68,7 @@ struct AlarmGameView: View {
                     // Button to go to the next round when remaining balls are zero
                     if remainingCirclesCount == 0 {
                         Button(rounds == 1 ? "Done" : "Next") {
-                            rounds -= 1
-                            initialCircleCount += 1
-                            if (rounds == 0) {
-                                player.stopSound() // Stops the sound when the game is completed
-                                recordNight() // Updates night
-                                deepLinkManager.id = ""
-                                dismiss()
-                            } else {
-                                remainingCirclesCount = initialCircleCount
-                                generateInitialCircles(in: geometry.size)
-                            }
+                            changeRound(in: geometry.size)
                         }
                         .buttonStyle(.bordered)
                         .controlSize(.large)
@@ -236,7 +226,7 @@ struct AlarmGameView: View {
             try? modelContext.save()
         } else {
             modelContext.delete(backtrack[backtrack.count - 1]) // Remove the appended night if the user already tracked it
-            backtrack.last!.snoozed = true 
+            backtrack.last!.snoozed = true // Set back to snoozed because the user needs to clear the game in all the alarms he sets
         }
     }
     
@@ -245,7 +235,7 @@ struct AlarmGameView: View {
         if !alreadyTracked() {
             // Night correctly recorded
             backtrack.last!.snoozed = false
-            try? modelContext.save() // Saves
+            try? modelContext.save()
         } else {
             modelContext.delete(backtrack.last!)
         }
@@ -264,8 +254,25 @@ struct AlarmGameView: View {
         return false
     }
     
+    // Updates rounds and remaining circles after a round has ended and checks if it was the last
+    private func changeRound(in size: CGSize){
+        rounds -= 1 // Advance with rounds
+        initialCircleCount += 1 // Increase difficulty
+        // The game has ended
+        if (rounds == 0) {
+            player.stopSound() // Stops the sound when the game is completed
+            recordNight() // Updates night
+            deepLinkManager.id = "" // Reset the deep link to allow other alarms' notifications
+            dismiss() // Close the modal
+        // The game has not ended yet
+        } else {
+            remainingCirclesCount = initialCircleCount  // Update number of remanining circles
+            generateInitialCircles(in: size) // Generate circles
+        }
+    }
+    
     // Removes the circle when the VoiceOver is active
-    func accessibleRemove(_ circle: CircleModel, _ size: CGSize){
+    private func accessibleRemove(_ circle: CircleModel, _ size: CGSize){
         moveCircle(withID: circle.id, to: CGPoint(x: (size.width - colliderSize.width) / 2, y: (size.height - colliderSize.height) / 10))
     }
 }
