@@ -12,6 +12,7 @@ import UserNotifications
 @Model
 // Describes the alarm user needs to wake up
 class Alarm{
+    var id: String = "IdNotAvailable"
     // Alarm information
     var sleepTime: Date = Date.now
     var wakeTime: Date = Date.now.addingTimeInterval(28800) // Sets the wake time 8h from the sleeps as default
@@ -23,12 +24,14 @@ class Alarm{
     
     // Initializer for common adding
     init () {
+        id = UUID().uuidString
         self.sleepDuration = 0
         self.setDuration()
     }
     
     // Initializer for first alarm, that doesn't need to be inizialized with modal active
     init (_ justCreated: Bool) {
+        id = UUID().uuidString
         self.justCreated = justCreated
         self.sleepDuration = 0
         self.setDuration()
@@ -36,6 +39,7 @@ class Alarm{
     
     // Copy in this object the value from another object
     func copy(alarm: Alarm){
+        self.id = alarm.id
         self.sleepTime = alarm.sleepTime
         self.wakeTime = alarm.wakeTime
         self.sleepDuration = alarm.sleepDuration
@@ -45,6 +49,7 @@ class Alarm{
     
     // Copy in another object what's inside this
     func export(alarm: Alarm){
+        alarm.id = self.id
         alarm.sleepTime = self.sleepTime
         alarm.wakeTime = self.wakeTime
         alarm.sleepDuration = self.sleepDuration
@@ -68,12 +73,11 @@ class Alarm{
     // Send a notification each 30 seconds for a total of 10 times
     func sendNotification(){
         requestNotificationPermission() // Request permission to send notification
-        clearAllNotifications() // Clear notification center
-        // configureNotificationCategories() // Configure the type of notification as critical
-        scheduleNotification(self.sleepTime, isAlarm: false)
+        clearAllNotifications()
+        scheduleNotification(self.sleepTime, isAlarm: false, code: -1)
         // Send the 10 notifications
         for i in 0..<10{
-            scheduleNotification(self.wakeTime.addingTimeInterval(Double(30 * i)), isAlarm: true)
+            scheduleNotification(self.wakeTime.addingTimeInterval(Double(30 * i)), isAlarm: true, code: i)
         }
     }
     
@@ -83,12 +87,11 @@ class Alarm{
             if let error = error {
                 print("Error while asking permission: \(error.localizedDescription)")
             }
-            print("Permission granted: \(granted)")
         }
     }
     
     // Schedule the notification for a specific date and with a custom sound
-    private func scheduleNotification(_ date: Date, isAlarm: Bool) {
+    private func scheduleNotification(_ date: Date, isAlarm: Bool, code: Int) {
         let content = UNMutableNotificationContent()
         // Differentiate the notification based on the fact that it is for the wake up or the bedtime reminder
         if isAlarm {
@@ -96,7 +99,7 @@ class Alarm{
             content.title = "It's time to wake up"
             content.body = "Wake up or you will lose the streak."
             content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(self.sound).wav"))
-            content.userInfo = ["deepLink": "throwalarm://alarm"] // Deep link for the minigame only in alarm notification
+            content.userInfo = ["deepLink": "throwalarm://\(self.id)/alarm"] // Deep link for the minigame only in alarm notification
         } else {
             // Sets up notification information for the bedtime
             content.title = "It's bedtime!"
@@ -110,21 +113,20 @@ class Alarm{
         // Create the trigger based on date components
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         // Create a unique request
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: self.id + "\(code)", content: content, trigger: trigger)
         // Adds request to notification center
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Error while scheduling notification: \(error.localizedDescription)")
-            } else {
-                print("Notification successfully scheduled for \(date.addingTimeInterval((Date.now > date) ? 86400 : 0)).")
-            }
-        }
+        UNUserNotificationCenter.current().add(request)
     }
 
     // Clear the notification center from all the notification
     func clearAllNotifications() {
+        var identifiers: [String] = []
+        identifiers.append(self.id + "-1")
+        for i in 0..<10 {
+            identifiers.append(self.id + "\(i)")
+        }
         let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.removeAllPendingNotificationRequests() // Clear not yet sent ones
-        notificationCenter.removeAllDeliveredNotifications() // Clear delivered ones
+        notificationCenter.removeAllDeliveredNotifications() // Clear not yet sent ones
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: identifiers) // Clear delivered ones
     }
 }

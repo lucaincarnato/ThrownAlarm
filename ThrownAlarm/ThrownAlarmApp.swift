@@ -42,14 +42,14 @@ struct ThrownAlarmApp: App {
 
 // Manage the target when a deep link is received
 class DeepLinkManager: ObservableObject {
-    @Published var showModal: Bool = false
     @Published var targetView: TargetView?
+    @Published var id: String?
     
     // Toggles boolean for modality and direct the view to show
     func handleDeepLink(_ url: URL) {
-        if url.host == "alarm" {
+        if url.lastPathComponent == "alarm" {
             targetView = .alarmView
-            showModal = true
+            id = url.host()
         }
     }
 }

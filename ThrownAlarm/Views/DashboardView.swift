@@ -208,9 +208,9 @@ private struct AlarmView: View{
                 SetAlarmView(alarm: $alarm, setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert, placeholder: Alarm())
             }
             // Opens the minigame if the deep link is correct
-            .fullScreenCover(isPresented: $deepLinkManager.showModal) {
+            .fullScreenCover(isPresented: Binding(get: { deepLinkManager.id == alarm.id }, set: { newValue in print("Value changed")})) {
                 if deepLinkManager.targetView == .alarmView {
-                    AlarmGameView(alarm: $alarm, showSheet: $deepLinkManager.showModal)
+                    AlarmGameView(alarm: $alarm)
                 }
             }
             // Alert for the Silent and Focus mode

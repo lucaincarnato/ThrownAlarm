@@ -18,10 +18,11 @@ struct CircleModel: Identifiable {
 // Shows the game space where the user can throw balls into the basket
 struct AlarmGameView: View {
     @Query private var backtrack: [Night] // Query to access the backtrack of nights for streak updates
+    @EnvironmentObject var deepLinkManager: DeepLinkManager // Deep link manager from the environment
     @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
-    
+    @Environment(\.dismiss) private var dismiss
+
     @Binding var alarm: Alarm // Binding value for the user profile
-    @Binding var showSheet: Bool // Boolean value to allow modality
     
     var player: AudioPlayer = AudioPlayer() // Audio player to play alarm sounds on background
     
@@ -72,7 +73,8 @@ struct AlarmGameView: View {
                             if (rounds == 0) {
                                 player.stopSound() // Stops the sound when the game is completed
                                 recordNight() // Updates night
-                                showSheet.toggle()
+                                deepLinkManager.id = ""
+                                dismiss()
                             } else {
                                 remainingCirclesCount = initialCircleCount
                                 generateInitialCircles(in: geometry.size)
@@ -224,7 +226,6 @@ struct AlarmGameView: View {
     // Method called when the minigame appears
     private func startGame(){
         self.rounds = alarm.rounds // Get rounds from the user once the game is loaded
-        alarm.clearAllNotifications() // Avoids sending other notification to the user
         alarm.isActive = false // Disables toggle to communicate the user the alarm is not active anymore
         player.playSound(alarm.sound, loop: true) // Plays the sound in loop to wake the user up
         // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
@@ -235,6 +236,7 @@ struct AlarmGameView: View {
             try? modelContext.save()
         } else {
             modelContext.delete(backtrack[backtrack.count - 1]) // Remove the appended night if the user already tracked it
+            backtrack.last!.snoozed = true 
         }
     }
     
@@ -247,6 +249,7 @@ struct AlarmGameView: View {
         } else {
             modelContext.delete(backtrack.last!)
         }
+        alarm.clearAllNotifications() // Avoids sending other notification to the user
     }
     
     // Checks if the actual night has already been tracked
