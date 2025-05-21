@@ -205,6 +205,7 @@ private struct AlarmView: View{
         }
         // Opens modality if the alarm is just created
         .onAppear(){
+            updateProfile()
             if alarm.justCreated {
                 setAlarm = true
                 alarm.justCreated = false

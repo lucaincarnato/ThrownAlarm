@@ -219,26 +219,18 @@ struct AlarmGameView: View {
         alarm.isActive = false // Disables toggle to communicate the user the alarm is not active anymore
         player.playSound(alarm.sound, loop: true) // Plays the sound in loop to wake the user up
         // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
-        modelContext.insert(Night(date: Date.now, snoozed: false))
         // Before updating the snooze, it checks if there is other tracks of that night
         if !alreadyTracked() {
-            backtrack.last!.snoozed = true
-            try? modelContext.save()
+            modelContext.insert(Night(date: Date.now, snoozed: true))
         } else {
-            modelContext.delete(backtrack[backtrack.count - 1]) // Remove the appended night if the user already tracked it
             backtrack.last!.snoozed = true // Set back to snoozed because the user needs to clear the game in all the alarms he sets
         }
+        try? modelContext.save()
     }
     
     // Checks if there's been records for the same day and, in case not, changes in positive the stats
     private func recordNight() {
-        if !alreadyTracked() {
-            // Night correctly recorded
-            backtrack.last!.snoozed = false
-            try? modelContext.save()
-        } else {
-            modelContext.delete(backtrack.last!)
-        }
+        backtrack.last!.snoozed = false
         alarm.clearAllNotifications() // Avoids sending other notification to the user
     }
     
@@ -247,7 +239,7 @@ struct AlarmGameView: View {
         if backtrack.isEmpty {return false} // If none night wase recorded how can one be already tracked...
         for tracked in backtrack {
             // Checks previous records for that same day
-            if Calendar.current.isDate(tracked.date, inSameDayAs: backtrack.last!.date) && tracked.id != backtrack.last!.id {
+            if Calendar.current.isDate(tracked.date, inSameDayAs: backtrack.last!.date) {
                 return true
             }
         }
