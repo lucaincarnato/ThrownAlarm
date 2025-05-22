@@ -33,9 +33,17 @@ struct DashboardView: View {
                         // Paywall to show only first alarm and button to pay
                         PaidFeatureView {
                             ScrollView{
-                                // Cards for the info about the alarm
+                                // Cards for the info about the active alarms
                                 ForEach(alarms, id: \.self) { alarm in
-                                    AlarmView(alarm: alarm, isFirst: false)
+                                    if alarm.isActive {
+                                        AlarmView(alarm: alarm, isFirst: false)
+                                    }
+                                }
+                                // Cards for the info about the non active alarms
+                                ForEach(alarms, id: \.self) { alarm in
+                                    if !alarm.isActive {
+                                        AlarmView(alarm: alarm, isFirst: false)
+                                    }
                                 }
                             }
                         } lockedView: {
