@@ -32,6 +32,9 @@ struct AlarmGameView: View {
     @State var rounds = 1 // Number of round done
     @State private var holdingCircle: Bool = false // Determines if user is dragging the circle
     
+    @State private var lastTrackedSnooze: Bool = false
+    @State private var isTracked: Bool = false
+    
     var player: AudioPlayer = AudioPlayer() // Audio player to play alarm sounds on background
     
     let launchSpeedReductionFactor: CGFloat = 20.0 // Speed reduction factor for difficulty balance
@@ -223,6 +226,9 @@ struct AlarmGameView: View {
         if !alreadyTracked() {
             modelContext.insert(Night(date: Date.now, snoozed: true))
         } else {
+            // The night has already been tracked, so its result gets stored
+            isTracked = true
+            lastTrackedSnooze = backtrack.last!.snoozed
             backtrack.last!.snoozed = true // Set back to snoozed because the user needs to clear the game in all the alarms he sets
         }
         try? modelContext.save()
@@ -230,8 +236,13 @@ struct AlarmGameView: View {
     
     // Checks if there's been records for the same day and, in case not, changes in positive the stats
     private func recordNight() {
-        backtrack.last!.snoozed = false
         alarm.clearAllNotifications() // Avoids sending other notification to the user
+        // If the user snoozed on the last tracking
+        if isTracked && lastTrackedSnooze {
+            backtrack.last!.snoozed = true
+            return
+        }
+        backtrack.last!.snoozed = false
     }
     
     // Checks if the actual night has already been tracked
