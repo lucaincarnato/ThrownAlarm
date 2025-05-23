@@ -223,13 +223,12 @@ struct AlarmGameView: View {
         player.playSound(alarm.sound, loop: true) // Plays the sound in loop to wake the user up
         // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
         // Before updating the snooze, it checks if there is other tracks of that night
-        if !alreadyTracked() {
-            modelContext.insert(Night(date: Date.now, snoozed: true))
-        } else {
-            // The night has already been tracked, so its result gets stored
-            isTracked = true
+        isTracked = alreadyTracked()
+        if isTracked {
             lastTrackedSnooze = backtrack.last!.snoozed
-            backtrack.last!.snoozed = true // Set back to snoozed because the user needs to clear the game in all the alarms he sets
+            backtrack.last!.setNight(Date.now, true)
+        } else {
+            modelContext.insert(Night(date: Date.now, snoozed: true))
         }
         try? modelContext.save()
     }
@@ -238,22 +237,15 @@ struct AlarmGameView: View {
     private func recordNight() {
         alarm.clearAllNotifications() // Avoids sending other notification to the user
         // If the user snoozed on the last tracking
-        if isTracked && lastTrackedSnooze {
-            backtrack.last!.snoozed = true
-            return
-        }
         backtrack.last!.snoozed = false
+        if isTracked && lastTrackedSnooze {backtrack.last!.snoozed = true}
+        try? modelContext.save()
     }
     
     // Checks if the actual night has already been tracked
     private func alreadyTracked() -> Bool {
         if backtrack.isEmpty {return false} // If none night wase recorded how can one be already tracked...
-        for tracked in backtrack {
-            // Checks previous records for that same day
-            if Calendar.current.isDate(tracked.date, inSameDayAs: backtrack.last!.date) {
-                return true
-            }
-        }
+        if Calendar.current.isDate(Date.now, inSameDayAs: backtrack.last!.date) {return true}
         return false
     }
     
