@@ -29,7 +29,7 @@ struct AlarmGameView: View {
     @State var timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect() // Timer to update the scene at 60 FPS
     @State var remainingCirclesCount: Int = 0 // Remaining circles counter
     @State var initialCircleCount = 1 // Initial number of circles
-    @State var rounds = 1 // Number of round done
+    @State var rounds : Int // Number of round done
     @State private var holdingCircle: Bool = false // Determines if user is dragging the circle
     
     @State private var lastTrackedSnooze: Bool = false
@@ -218,7 +218,6 @@ struct AlarmGameView: View {
     
     // Method called when the minigame appears
     private func startGame(){
-        self.rounds = alarm.rounds // Get rounds from the user once the game is loaded
         alarm.isActive = false // Disables toggle to communicate the user the alarm is not active anymore
         player.playSound(alarm.sound, loop: true) // Plays the sound in loop to wake the user up
         // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved

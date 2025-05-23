@@ -194,7 +194,7 @@ private struct AlarmView: View{
                 onDismiss: { updateProfile()
                 }) {
                 if deepLinkManager.targetView == .alarmView {
-                    AlarmGameView(alarm: $alarm)
+                    AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
                 }
             }
             // Alert for the Silent and Focus mode
