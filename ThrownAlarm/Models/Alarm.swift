@@ -72,22 +72,12 @@ class Alarm{
     
     // Send a notification each 30 seconds for a total of 10 times
     func sendNotification(){
-        requestNotificationPermission() // Request permission to send notification
         clearAllNotifications() // Clear notifications already scheduled or delivered form the self alarm
         // MARK: Each notification has a date, a selector to determine if it is a reminder or a wake up notification and a code to differentiate the identifier
         scheduleNotification(self.sleepTime, isAlarm: false, code: -1) // Schedule the reminder notification
         // Send the 10 notifications
         for i in 0..<10{
             scheduleNotification(self.wakeTime.addingTimeInterval(Double(30 * i)), isAlarm: true, code: i)
-        }
-    }
-    
-    // Request the user the permission to be sent notification
-    private func requestNotificationPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if let error = error {
-                print("Error while asking permission: \(error.localizedDescription)")
-            }
         }
     }
     

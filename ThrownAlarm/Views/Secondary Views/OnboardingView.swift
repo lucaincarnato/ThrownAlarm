@@ -58,6 +58,7 @@ struct OnboardingView: View {
                 .padding(.vertical)
                 // Button to close the onboarding and start the app
                 Button() {
+                    requestNotificationPermission()
                     firstLaunch.toggle()
                     // Once starting the app, it is created the first alarm (free)
                     modelContext.insert(Alarm(false))
@@ -71,6 +72,15 @@ struct OnboardingView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .padding()
+            }
+        }
+    }
+    
+    // Request the user the permission to be sent notification
+    private func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("Error while asking permission: \(error.localizedDescription)")
             }
         }
     }
