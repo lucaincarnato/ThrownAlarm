@@ -73,7 +73,6 @@ struct SetAlarmView: View {
                     Button("Save"){
                         alarm.copy(alarm: placeholder) // Saves the data only when user is done, not when cancels
                         stopAudio() // Stops all the sound when the user exits from modal
-                        alarm.setDuration()
                         alarm.setAlarm() // Set the date to not create conflicts with past dates
                         alarm.isActive = true // Activate alarm
                         try? modelContext.save()

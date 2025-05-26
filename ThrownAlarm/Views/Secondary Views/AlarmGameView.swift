@@ -135,8 +135,11 @@ struct AlarmGameView: View {
             .background(Color.black.ignoresSafeArea())
             // Determine and render circles once the view is loaded
             .onAppear {
-                startGame()
-                generateInitialCircles(in: geometry.size)
+                // Delays update and doesn't force view reload
+                DispatchQueue.main.async {
+                    startGame()
+                    generateInitialCircles(in: geometry.size)
+                }
             }
             // Each frame updates circles' position and velocity
             .onReceive(timer) { _ in

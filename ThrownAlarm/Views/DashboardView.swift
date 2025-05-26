@@ -33,17 +33,9 @@ struct DashboardView: View {
                         // Paywall to show only first alarm and button to pay
                         PaidFeatureView {
                             ScrollView{
-                                // Cards for the info about the active alarms
+                                // Cards for the info about the alarms
                                 ForEach(alarms, id: \.self) { alarm in
-                                    if alarm.isActive {
-                                        AlarmView(alarm: alarm, isFirst: false)
-                                    }
-                                }
-                                // Cards for the info about the non active alarms
-                                ForEach(alarms, id: \.self) { alarm in
-                                    if !alarm.isActive {
-                                        AlarmView(alarm: alarm, isFirst: false)
-                                    }
+                                    AlarmView(alarm: alarm, isFirst: false)
                                 }
                             }
                         } lockedView: {
@@ -121,7 +113,6 @@ private struct AlarmView: View{
                         .accessibilityLabel("Activate alarm")
                     // Delete the alarm if the user turns it off
                         .onChange(of: alarm.isActive){ oldValue, newValue in
-                            alarm.setAlarm() // Avoid alarms in the past
                             if !newValue{
                                 alarm.clearAllNotifications()
                             } else {

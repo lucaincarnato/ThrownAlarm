@@ -39,20 +39,18 @@ class Alarm{
     
     // Copy in this object the value from another object
     func copy(alarm: Alarm){
-        self.id = alarm.id
         self.sleepTime = alarm.sleepTime
         self.wakeTime = alarm.wakeTime
-        self.sleepDuration = alarm.sleepDuration
+        self.setDuration()
         self.sound = alarm.sound
         self.rounds = alarm.rounds
     }
     
     // Copy in another object what's inside this
     func export(alarm: Alarm){
-        alarm.id = self.id
         alarm.sleepTime = self.sleepTime
         alarm.wakeTime = self.wakeTime
-        alarm.sleepDuration = self.sleepDuration
+        alarm.setDuration()
         alarm.sound = self.sound
         alarm.rounds = self.rounds
     }
