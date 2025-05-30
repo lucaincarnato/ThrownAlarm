@@ -186,6 +186,17 @@ private struct AlarmView: View{
                 }) {
                 if deepLinkManager.targetView == .alarmView {
                     AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
+                        .onAppear(){
+                            // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
+                            // Before updating the snooze, it checks if there is other tracks of that night
+                            if alreadyTracked() {
+                                // lastTrackedSnooze = backtrack.last!.snoozed
+                                backtrack.last!.setNight(Date.now, true)
+                            } else {
+                                modelContext.insert(Night(date: Date.now, snoozed: true))
+                            }
+                            try? modelContext.save()
+                        }
                 }
             }
             // Alert for the Silent and Focus mode
@@ -247,6 +258,13 @@ private struct AlarmView: View{
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             updateRemainingTime()
         }
+    }
+    
+    // Checks if the actual night has already been tracked
+    private func alreadyTracked() -> Bool {
+        if backtrack.isEmpty {return false} // If none night wase recorded how can one be already tracked...
+        if Calendar.current.isDate(Date.now, inSameDayAs: backtrack.last!.date) {return true}
+        return false
     }
 }
 

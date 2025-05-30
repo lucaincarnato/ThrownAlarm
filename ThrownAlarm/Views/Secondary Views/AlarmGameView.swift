@@ -223,16 +223,6 @@ struct AlarmGameView: View {
     private func startGame(){
         alarm.isActive = false // Disables toggle to communicate the user the alarm is not active anymore
         player.playSound(alarm.sound, loop: true) // Plays the sound in loop to wake the user up
-        // On the launch of the minigame the night is recorded as a failure, if the game is completed the night is updated and saved
-        // Before updating the snooze, it checks if there is other tracks of that night
-        isTracked = alreadyTracked()
-        if isTracked {
-            lastTrackedSnooze = backtrack.last!.snoozed
-            backtrack.last!.setNight(Date.now, true)
-        } else {
-            modelContext.insert(Night(date: Date.now, snoozed: true))
-        }
-        try? modelContext.save()
     }
     
     // Checks if there's been records for the same day and, in case not, changes in positive the stats
@@ -242,13 +232,6 @@ struct AlarmGameView: View {
         backtrack.last!.snoozed = false
         if isTracked && lastTrackedSnooze {backtrack.last!.snoozed = true}
         try? modelContext.save()
-    }
-    
-    // Checks if the actual night has already been tracked
-    private func alreadyTracked() -> Bool {
-        if backtrack.isEmpty {return false} // If none night wase recorded how can one be already tracked...
-        if Calendar.current.isDate(Date.now, inSameDayAs: backtrack.last!.date) {return true}
-        return false
     }
     
     // Updates rounds and remaining circles after a round has ended and checks if it was the last
