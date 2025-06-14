@@ -27,14 +27,10 @@ struct DashboardView: View {
                         .foregroundStyle(.gray)
                 } else {
                     VStack(alignment: .leading, spacing: 0) {
-                        PaidFeatureView {
-                            ScrollView{
-                                ForEach(alarms, id: \.self) { alarm in
-                                    AlarmView(alarm: alarm, isFirst: false)
-                                }
+                        ScrollView{
+                            ForEach(alarms, id: \.self) { alarm in
+                                AlarmView(alarm: alarm, isFirst: false)
                             }
-                        } lockedView: {
-                            AlarmPaidView(alarm: alarms.first!)
                         }
                     }
                 }
@@ -48,7 +44,8 @@ struct DashboardView: View {
                             modelContext.insert(newAlarm)
                             try? modelContext.save()
                         } label: {
-                            Image(systemName: "plus")
+                            Label("", systemImage: "plus")
+                                .foregroundStyle(.accent)
                         }
                     } lockedView: {
                         Label("", systemImage: "plus")
@@ -238,45 +235,6 @@ private struct AlarmView: View{
         if backtrack.isEmpty {return false}
         if Calendar.current.isDate(Date.now, inSameDayAs: backtrack.last!.date) {return true}
         return false
-    }
-}
-
-private struct AlarmPaidView: View {
-    @State var alarm: Alarm
-    
-    var body: some View {
-        ScrollView {
-            AlarmView(alarm: alarm, isFirst: true)
-            ZStack{
-                VStack{
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 15)
-                            .padding()
-                            .foregroundStyle(Color.gray.opacity(0.2))
-                            .frame(height: 200)
-                        Text("Unlock more with ThrownAlarm Pro")
-                            .foregroundStyle(Color.accentColor)
-                    }
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 15)
-                            .padding()
-                            .foregroundStyle(Color.gray.opacity(0.2))
-                            .frame(height: 200)
-                        Text("Unlock more with ThrownAlarm Pro")
-                            .foregroundStyle(Color.accentColor)
-                    }
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 15)
-                            .padding()
-                            .foregroundStyle(Color.gray.opacity(0.2))
-                            .frame(height: 200)
-                        Text("Unlock more with ThrownAlarm Pro")
-                            .foregroundStyle(Color.accentColor)
-                    }
-                }
-            }
-        }
-        .scrollDisabled(true) 
     }
 }
 

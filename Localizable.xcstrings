@@ -910,6 +910,7 @@
       }
     },
     "Unlock more with ThrownAlarm Pro" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
