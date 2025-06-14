@@ -10,7 +10,6 @@ import SwiftData
 import Foundation
 import FreemiumKit
 
-// Shows the streaks and the month backtrack
 struct ProfileView: View {
     var body: some View {
         NavigationStack{
@@ -23,14 +22,12 @@ struct ProfileView: View {
     }
 }
 
-// Shows the info about the user's streak
 private struct StreakView: View {
-    @AppStorage("streak") private var streak: Int = 0 // UserDefault for nights' streak
-    @AppStorage("snoozedDays") private var snoozedDays: Int = 0 // UserDefault for snoozed days
+    @AppStorage("streak") private var streak: Int = 0
+    @AppStorage("snoozedDays") private var snoozedDays: Int = 0
         
     var body: some View {
         VStack (alignment: .leading){
-            // Shows the streak
             VStack (alignment: .leading){
                 HStack{
                     Image(systemName: "flame.fill")
@@ -56,7 +53,6 @@ private struct StreakView: View {
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel("You successfully woke up for \(streak > 1 ? "\(streak) day" : "\(streak) days")")
-            // Shows the snoozed days
             VStack (alignment: .leading){
                 HStack{
                     Image(systemName: "battery.25percent")
@@ -87,7 +83,6 @@ private struct StreakView: View {
     }
 }
 
-// Shows user's backtracking
 private struct MonthlyCalendarView: View {
     let calendar = Calendar.current
     @State private var selectedMonth: Date = Date()
@@ -98,9 +93,7 @@ private struct MonthlyCalendarView: View {
                 .padding()
                 .foregroundStyle(Color.gray.opacity(0.3))
             VStack {
-                // Month selector
                 HStack {
-                    // Previous month
                     Button{
                         selectedMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) ?? selectedMonth
                     } label: {
@@ -112,7 +105,6 @@ private struct MonthlyCalendarView: View {
                         .font(.title2)
                         .bold()
                         .frame(maxWidth: .infinity)
-                    // Next month
                     Button{
                         selectedMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) ?? selectedMonth
                     } label:{
@@ -122,7 +114,6 @@ private struct MonthlyCalendarView: View {
                     }
                 }
                 .padding()
-                // Weekdays
                 HStack {
                     ForEach(calendar.shortWeekdaySymbols, id: \.self) { weekday in
                         Text(weekday)
@@ -131,14 +122,13 @@ private struct MonthlyCalendarView: View {
                             .accessibilityHidden(true)
                     }
                 }
-                // Daily grid per month
                 let days = daysInMonth(for: selectedMonth)
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
                     ForEach(days, id: \.self) { day in
                         if let day = day {
                             DayView(day: day, isExtendedView: true, text: String(calendar.component(.day, from: day)))
                         } else {
-                            Text("") // Empty cells to complete the grid
+                            Text("")
                         }
                     }
                 }
@@ -148,17 +138,13 @@ private struct MonthlyCalendarView: View {
         }
     }
     
-    // Generate month's day as Date optional array
     private func daysInMonth(for date: Date) -> [Date?] {
-        // Local variable setup
         var days: [Date?] = []
         let range = calendar.range(of: .day, in: .month, for: date)!
         let components = calendar.dateComponents([.year, .month], from: date)
         let firstDayOfMonth = calendar.date(from: components)!
         let weekdayOffset = calendar.component(.weekday, from: firstDayOfMonth) - 1
-        // Empty cells before first day of the month
         days.append(contentsOf: Array(repeating: nil, count: weekdayOffset))
-        // Month's day generation
         for day in range {
             if let dayDate = calendar.date(byAdding: .day, value: day - 1, to: firstDayOfMonth) {
                 days.append(dayDate)
@@ -168,14 +154,12 @@ private struct MonthlyCalendarView: View {
     }
 }
 
-// Shows a circle for each day of the previous week, with a color associated to the info about that
 private struct DayView: View {
     @Query private var backtrack: [Night]
     
-    var day: Date // Actual date of the card
-    var isExtendedView: Bool = false // Checks if it is needed the number of the day (true) or just the letter (false)
-    var text = "" // Text for the number of the day
-    // Date formatter to return the letter of the day
+    var day: Date
+    var isExtendedView: Bool = false
+    var text = ""
     var formatter: DateFormatter {
         let buffer = DateFormatter()
         buffer.dateFormat = "EEEE"
@@ -197,23 +181,18 @@ private struct DayView: View {
         .padding(.trailing, 8)
     }
     
-    // Return a color based on the tracking and snoozing information of the actual day
     func determineBackground() -> Color{
-        // Day not tracked
         if (!checkTracking()){
             return Color.clear
-        // Day tracked but snoozed
         } else if (checkSnoozed()){
             return Color.red
-        // Day tracked and not snoozed
         } else {
             return Color.green
         }
     }
     
-    // See if the actual day is in the backtrack array, meaning that the user used the app
     func checkTracking() -> Bool{
-        if backtrack.isEmpty{return false} // Avoid crashing when dataset is empty
+        if backtrack.isEmpty{return false}
         let current = Calendar.current
         for night in backtrack {
             if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day))){return true}
@@ -221,9 +200,8 @@ private struct DayView: View {
         return false
     }
     
-    // Checks if the actual date is in the backtrack array and, if yes, also if that night the user snoozed
     func checkSnoozed() -> Bool{
-        if backtrack.isEmpty{return false} // Avoid crashing when dataset is empty
+        if backtrack.isEmpty{return false} 
         let current = Calendar.current
         for night in backtrack{
             if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day)) && night.snoozed){return true}

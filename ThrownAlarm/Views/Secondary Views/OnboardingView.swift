@@ -7,20 +7,17 @@
 
 import SwiftUI
 
-// Shows a list of the features of the app when the user enters it for the first time
 struct OnboardingView: View {
-    @Binding var firstLaunch: Bool // Boolean value for the one time only modality
-    @Environment(\.modelContext) private var modelContext // Context needed for SwiftData operations
+    @Binding var firstLaunch: Bool
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         NavigationStack{
             VStack {
-                // App icon shown on the top of the screen
                 Image("IconImage")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 85, height: 85)
-                    // Custom shape to show outline
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .overlay{
                         RoundedRectangle(cornerRadius: 20)
@@ -28,13 +25,11 @@ struct OnboardingView: View {
                             .opacity(0.5)
                     }
                     .padding()
-                // Welcoming text
                 Text("Welcome to ThrownAlarm")
                     .font(.largeTitle)
                     .multilineTextAlignment(.center)
                     .bold()
                     .frame(maxWidth: .infinity)
-                // Vertical list of all the features of the app
                 VStack {
                     PageView(
                         title: "Set an alarm",
@@ -56,11 +51,9 @@ struct OnboardingView: View {
                     )
                 }
                 .padding(.vertical)
-                // Button to close the onboarding and start the app
                 Button() {
                     requestNotificationPermission()
                     firstLaunch.toggle()
-                    // Once starting the app, it is created the first alarm (free)
                     modelContext.insert(Alarm(false))
                     try? modelContext.save()
                 } label: {
@@ -76,7 +69,6 @@ struct OnboardingView: View {
         }
     }
     
-    // Request the user the permission to be sent notification
     private func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
@@ -86,16 +78,13 @@ struct OnboardingView: View {
     }
 }
 
-// Single row of features' list
 private struct PageView: View {
-    var title: String = "" // Feature brief description
-    var content: String = "" // Feature long description
-    var imageName: String = "" // SF Symbol's image for that feature
+    var title: String = ""
+    var content: String = ""
+    var imageName: String = ""
     
     var body: some View {
-        // Horizontally place image and texts
         HStack(alignment: .center) {
-            // Set a custom frame for the SF Symbol in order to not disalign texts due to different image sizes
             ZStack {
                 Color.clear
                     .frame(width: 32, height: 32)
@@ -106,7 +95,6 @@ private struct PageView: View {
                     .foregroundStyle(Color.accentColor)
                     .padding(.trailing, 15)
             }
-            // Vertically placing the two texts
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
@@ -116,7 +104,7 @@ private struct PageView: View {
                     .opacity(0.7)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading) // Uniforma la larghezza
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 10)
         .padding(.horizontal, 30)
     }
