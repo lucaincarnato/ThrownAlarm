@@ -12,6 +12,7 @@ import FreemiumKit
 
 struct DashboardView: View {
     @AppStorage("firstLaunch") var firstLaunch: Bool = true
+    @AppStorage("Update1.2") var update: Bool = true
     
     @Query private var alarms: [Alarm]
     @Environment(\.modelContext) private var modelContext
@@ -59,6 +60,11 @@ struct DashboardView: View {
                 OnboardingView(firstLaunch: $firstLaunch)
                     .interactiveDismissDisabled()
             }
+            /*
+            .sheet(isPresented: $update) {
+                DisclaimerView(update: $update)
+            }
+            */
         }
     }
 }
@@ -271,5 +277,38 @@ private struct AlarmPaidView: View {
             }
         }
         .scrollDisabled(true) 
+    }
+}
+
+private struct DisclaimerView: View {
+    @Binding var update: Bool
+    
+    var body: some View {
+        NavigationStack{
+            VStack{
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .resizable()
+                    .frame(width: 150, height: 150)
+                    .foregroundStyle(.red)
+                Text("Heads up! Maintenance coming")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(20)
+                Text("We're doing some data maintenance to update and improve our database.\n\nAs part of this process, all current data in the app will be deleted.\n\nThanks for your understanding – and sorry for the inconvenience!")
+                    .font(.headline)
+                    .padding(.horizontal, 20)
+                Button() {
+                    update.toggle()
+                } label: {
+                    Text("Got it")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
+            }
+        }
     }
 }
