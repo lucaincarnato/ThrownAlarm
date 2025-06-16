@@ -16,6 +16,7 @@ class Alarm{
     var wakeTime: Date = Date.now.addingTimeInterval(28800)
     var sleepDuration: TimeInterval = 28800
     var sound: String = "Princess"
+    var volume: Float = 1
     var rounds: Int = 3
     var isActive: Bool = false
     var justCreated: Bool = true
@@ -38,6 +39,7 @@ class Alarm{
         self.wakeTime = alarm.wakeTime
         self.setDuration()
         self.sound = alarm.sound
+        self.volume = alarm.volume
         self.rounds = alarm.rounds
     }
     
@@ -46,6 +48,7 @@ class Alarm{
         alarm.wakeTime = self.wakeTime
         alarm.setDuration()
         alarm.sound = self.sound
+        alarm.volume = self.volume
         alarm.rounds = self.rounds
     }
     

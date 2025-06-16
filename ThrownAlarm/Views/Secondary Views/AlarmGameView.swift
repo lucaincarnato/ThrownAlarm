@@ -190,7 +190,7 @@ struct AlarmGameView: View {
     
     private func startGame(){
         alarm.isActive = false
-        player.playSound(alarm.sound, loop: true)
+        player.playSound(alarm.sound, volume: alarm.volume, loop: true)
     }
     
     private func recordNight() {

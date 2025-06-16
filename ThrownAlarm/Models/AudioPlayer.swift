@@ -11,7 +11,7 @@ import AVFoundation
 class AudioPlayer: ObservableObject {
     private var player: AVAudioPlayer?
     
-    func playSound(_ fileName: String, loop: Bool = false) {
+    func playSound(_ fileName: String, volume: Float, loop: Bool = false) {
         if let player = player, player.isPlaying {
             return
         }
@@ -24,7 +24,7 @@ class AudioPlayer: ObservableObject {
             if loop {
                 player?.numberOfLoops = -1
             }
-            player?.volume = 0.1
+            player?.volume = volume
             player?.play()
         } catch {
             print("Error while playing audio file: \(error.localizedDescription)")

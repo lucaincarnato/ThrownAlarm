@@ -84,9 +84,16 @@ private struct AlarmView: View{
     
     var body: some View{
         ZStack{
-            RoundedRectangle(cornerRadius: 15)
-                .padding()
-                .foregroundStyle(Color.gray.opacity(0.3))
+            if #available(iOS 26.0, *) {
+                RoundedRectangle(cornerRadius: 15)
+                    .glassEffect(in: RoundedRectangle(cornerRadius: 15))
+                    .padding()
+                    .foregroundStyle(Color.gray.opacity(0.3))
+            } else {
+                RoundedRectangle(cornerRadius: 15)
+                    .padding()
+                    .foregroundStyle(Color.gray.opacity(0.3))
+            }
             VStack{
                 HStack{
                     Button{

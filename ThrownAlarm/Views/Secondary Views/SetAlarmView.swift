@@ -39,6 +39,16 @@ struct SetAlarmView: View {
                                     .tag($0)
                             }
                         }
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Game Volume")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            HStack {
+                                Image(systemName: "speaker.fill")
+                                Slider(value: $placeholder.volume, in: 0.0...1.0, step: 0.1)
+                                Image(systemName: "speaker.wave.3.fill")
+                            }
+                        }
                     }
                     Button(role: .destructive){
                         modelContext.delete(alarm)
