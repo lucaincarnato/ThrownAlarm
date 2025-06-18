@@ -608,12 +608,6 @@
     "Game Volume" : {
 
     },
-    "Got it" : {
-
-    },
-    "Heads up! Maintenance coming" : {
-
-    },
     "Let's start" : {
       "localizations" : {
         "en" : {
@@ -984,9 +978,6 @@
           }
         }
       }
-    },
-    "We're doing some data maintenance to update and improve our database.\n\nAs part of this process, all current data in the app will be deleted.\n\nThanks for your understanding – and sorry for the inconvenience!" : {
-
     },
     "Welcome to ThrownAlarm" : {
       "localizations" : {

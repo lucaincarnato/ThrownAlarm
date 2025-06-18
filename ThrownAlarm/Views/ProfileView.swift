@@ -50,7 +50,7 @@ private struct StreakView: View {
                         .accessibilityHidden(true)
                 }
             }
-            .padding(.vertical, 10)
+            .padding(.top, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel("You successfully woke up for \(streak > 1 ? "\(streak) day" : "\(streak) days")")
             VStack (alignment: .leading){
@@ -75,11 +75,11 @@ private struct StreakView: View {
                         .accessibilityHidden(true)
                 }
             }
-            .padding(.vertical, 10)
+            .padding(.top, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityLabel("You snoozed for a total of \(snoozedDays == 1 ? "\(snoozedDays) day" : "\(snoozedDays) days")")
         }
-        .padding(20)
+        .padding([.horizontal, .top], 20)
     }
 }
 
@@ -89,17 +89,33 @@ private struct MonthlyCalendarView: View {
     
     var body: some View {
         ZStack{
-            RoundedRectangle(cornerRadius: 15)
-                .padding()
-                .foregroundStyle(Color.gray.opacity(0.3))
+            if #available(iOS 26.0, *) {
+                RoundedRectangle(cornerRadius: 15)
+                    .glassEffect(in: RoundedRectangle(cornerRadius: 15))
+                    .padding()
+                    .foregroundStyle(Color.gray.opacity(0.3))
+            } else {
+                RoundedRectangle(cornerRadius: 15)
+                    .padding()
+                    .foregroundStyle(Color.gray.opacity(0.3))
+            }
             VStack {
                 HStack {
                     Button{
                         selectedMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) ?? selectedMonth
                     } label: {
-                        Image(systemName: "chevron.left")
-                            .font(.title2)
-                            .accessibilityLabel("Previous month")
+                        if #available(iOS 26.0, *) {
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .accessibilityLabel("Previous month")
+                                .padding()
+                                .glassEffect(.regular.interactive())
+                        } else {
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .accessibilityLabel("Previous month")
+                                .padding()
+                        }
                     }
                     Text(selectedMonth, format: .dateTime.year().month(.wide))
                         .font(.title2)
@@ -107,10 +123,19 @@ private struct MonthlyCalendarView: View {
                         .frame(maxWidth: .infinity)
                     Button{
                         selectedMonth = calendar.date(byAdding: .month, value: 1, to: selectedMonth) ?? selectedMonth
-                    } label:{
-                        Image(systemName: "chevron.right")
-                            .font(.title2)
-                            .accessibilityLabel("Next month")
+                    } label: {
+                        if #available(iOS 26.0, *) {
+                            Image(systemName: "chevron.right")
+                                .font(.title2)
+                                .accessibilityLabel("Next month")
+                                .padding()
+                                .glassEffect(.regular.interactive())
+                        } else {
+                            Image(systemName: "chevron.right")
+                                .font(.title2)
+                                .accessibilityLabel("Next month")
+                                .padding()
+                        }
                     }
                 }
                 .padding()
@@ -169,9 +194,16 @@ private struct DayView: View {
     var body: some View {
         let weekdayString = formatter.string(from: day)
         ZStack{
-            RoundedRectangle(cornerRadius: 100)
-                .frame(width: 30, height: 30)
-                .foregroundStyle(determineBackground())
+            if #available(iOS 26.0, *), determineBackground() != Color.clear {
+                RoundedRectangle(cornerRadius: 100)
+                    .frame(width: 30, height: 30)
+                    .foregroundStyle(determineBackground())
+                    .glassEffect()
+            } else {
+                RoundedRectangle(cornerRadius: 100)
+                    .frame(width: 30, height: 30)
+                    .foregroundStyle(determineBackground())
+            }
             Text(isExtendedView ? text : String(weekdayString.prefix(1)))
                 .bold()
                 .foregroundStyle(checkTracking() ? Color.black : Color.white.opacity(0.3))
