@@ -8,9 +8,18 @@
 import Foundation
 import AVFoundation
 
+/// Model for audio player support
 class AudioPlayer: ObservableObject {
+    // MARK: - Attributes
+    /// Actual support where audio is played
     private var player: AVAudioPlayer?
     
+    // MARK: - Public methods
+    /// Plays an audio with its file name
+    /// - Parameters:
+    ///   - fileName: Name of the audio file
+    ///   - volume: Volume of the audio
+    ///   - loop: Determines if the audio should loop or not
     func playSound(_ fileName: String, volume: Float, loop: Bool = false) {
         if let player = player, player.isPlaying {
             return
@@ -31,6 +40,7 @@ class AudioPlayer: ObservableObject {
         }
     }
     
+    /// Stops any playing sound
     func stopSound() {
         if let player = player {
             player.stop()

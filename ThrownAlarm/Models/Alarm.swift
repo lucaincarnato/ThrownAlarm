@@ -43,13 +43,13 @@ class Alarm{
     }
     
     // MARK: - Public methods
-    /// Determine the duration of the sleep set up in the alarm
+    /// Determines the duration of the sleep set up in the alarm
     /// - Returns: Difference between the wake up time and the sleep time
     func getDuration() -> TimeInterval {
         return self.wakeTime.timeIntervalSinceReferenceDate - self.sleepTime.timeIntervalSinceReferenceDate
     }
     
-    /// Enable or disable the alarm, sending or deleting the notifications according
+    /// Enables or disable the alarm, sending or deleting the notifications according
     /// - Parameter flag: Determines if the alarm should be enabled or not
     func setAlarm(_ flag: Bool) {
         correctTime()
@@ -61,7 +61,7 @@ class Alarm{
         }
     }
     
-    /// Impede alarms that has wake up times in the past
+    /// Impedes alarms that has wake up times in the past
     func correctTime() {
         if self.wakeTime <= Date.now {
             self.wakeTime = wakeTime.addingTimeInterval(86400)
@@ -69,7 +69,7 @@ class Alarm{
     }
     
     // MARK: - Private methods
-    /// Send a notification at the sleep time and 10 notification at the wake up time with the alarm's id to trigger the mingame
+    /// Sends a notification at the sleep time and 10 notification at the wake up time with the alarm's id to trigger the mingame
     private func sendNotification(){
         clearNotifications()
         scheduleNotification(self.sleepTime, isAlarm: false, code: -1)
@@ -78,10 +78,10 @@ class Alarm{
         }
     }
     
-    /// Schedule a notification based on the time, the use and the code for the deepLink
+    /// Schedules a notification based on the time, the use and the code for the deepLink
     /// - Parameters:
     ///   - date: Instant in which the notification should be delivered
-    ///   - isAlarm: Determine if the notification should be the alarm one or the "Good night" one
+    ///   - isAlarm: Determines if the notification should be the alarm one or the "Good night" one
     ///   - code: Additional parameter for the UNNotificationRequest's identifier to tag each notification of the same alarm (same id but different codes)
     private func scheduleNotification(_ date: Date, isAlarm: Bool, code: Int) {
         let content = UNMutableNotificationContent()
@@ -102,7 +102,7 @@ class Alarm{
         UNUserNotificationCenter.current().add(request)
     }
     
-    /// Remove from the UNUserNotificationCenter the notifications that shares the same id, aka the alarm's one
+    /// Removes from the UNUserNotificationCenter the notifications that shares the same id, aka the alarm's one
     private func clearNotifications() {
         var identifiers: [String] = []
         identifiers.append(self.identifier + "-1")
