@@ -14,7 +14,6 @@ struct SetAlarmView: View {
     @Environment(\.dismiss) private var dismiss
 
     @Binding var alarm: Alarm
-    @Binding var setAlarm: Bool
     @Binding var isFirst: Bool
     @Binding var showAlert: Bool
 
@@ -52,7 +51,7 @@ struct SetAlarmView: View {
                     }
                     Button(role: .destructive) {
                         modelContext.delete(alarm)
-                        setAlarm.toggle()
+                        dismiss()
                     } label: {
                         Text(isFirst ? "Cannot delete alarm" : "Delete")
                             .frame(maxWidth: .infinity, alignment: .center)
@@ -66,7 +65,6 @@ struct SetAlarmView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         stopAudio()
-                        setAlarm.toggle()
                         if didBeginUndoGroup {
                             modelContext.undoManager?.endUndoGrouping()
                             modelContext.undoManager?.undo()
@@ -82,7 +80,6 @@ struct SetAlarmView: View {
                             modelContext.undoManager?.endUndoGrouping()
                         }
                         try? modelContext.save()
-                        setAlarm.toggle()
                         showAlert = true
                         dismiss()
                     }
