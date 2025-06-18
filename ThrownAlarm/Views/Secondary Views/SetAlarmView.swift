@@ -18,7 +18,6 @@ struct SetAlarmView: View {
     @Binding var showAlert: Bool
 
     @State private var audioPlayer: AVAudioPlayer?
-    @State var placeholder: Alarm
 
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"]
     
@@ -27,11 +26,11 @@ struct SetAlarmView: View {
             VStack{
                 Form{
                     Section {
-                        PickerView(alarm: $placeholder)
+                        PickerView(alarm: $alarm)
                     }
                     Section (header: Text("Alarm options")){
-                        Stepper(value: $placeholder.rounds, in: 1...10) {
-                            Text("\(placeholder.rounds) rounds to wake up")
+                        Stepper(value: $alarm.rounds, in: 1...10) {
+                            Text("\(alarm.rounds) rounds to wake up")
                         }
                         Picker("Alarm sound", selection: makeBinding()) {
                             ForEach(sounds, id:\.self) {
@@ -45,7 +44,7 @@ struct SetAlarmView: View {
                                 .foregroundStyle(.secondary)
                             HStack {
                                 Image(systemName: "speaker.fill")
-                                Slider(value: $placeholder.volume, in: 0.0...1.0, step: 0.1)
+                                Slider(value: $alarm.volume, in: 0.0...1.0, step: 0.1)
                                 Image(systemName: "speaker.wave.3.fill")
                             }
                         }
@@ -68,11 +67,11 @@ struct SetAlarmView: View {
                     Button("Cancel"){
                         stopAudio()
                         setAlarm.toggle()
+                        modelContext.undoManager?.undo()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save"){
-                        alarm.copy(alarm: placeholder)
                         stopAudio()
                         alarm.setAlarm(true)
                         try? modelContext.save()
@@ -80,9 +79,6 @@ struct SetAlarmView: View {
                         showAlert = true
                     }
                 }
-            }
-            .onAppear(){
-                alarm.export(alarm: placeholder)
             }
         }
     }
@@ -107,9 +103,9 @@ struct SetAlarmView: View {
     
     private func makeBinding() -> Binding<String> {
         Binding(
-            get: { placeholder.sound },
+            get: { alarm.sound },
             set: { newValue in
-                placeholder.sound = newValue
+                alarm.sound = newValue
                 playAudio(for: newValue)
             }
         )

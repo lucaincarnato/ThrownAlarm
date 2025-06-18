@@ -159,7 +159,7 @@ private struct AlarmView: View{
                 .accessibilityAddTraits(.isButton)
             }
             .sheet(isPresented: $setAlarm){
-                SetAlarmView(alarm: $alarm, setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert, placeholder: Alarm())
+                SetAlarmView(alarm: $alarm, setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert)
             }
             .fullScreenCover(
                 isPresented: Binding(get: { deepLinkManager.id == alarm.identifier }, set: { newValue in print("Value changed")}),

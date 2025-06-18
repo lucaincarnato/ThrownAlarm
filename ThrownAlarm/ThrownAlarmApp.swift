@@ -34,7 +34,7 @@ struct ThrownAlarmApp: App {
                 deepLinkManager.handleDeepLink(url)
             }
         }
-        .modelContainer(for: [Alarm.self, Night.self])
+        .modelContainer(for: [Alarm.self, Night.self], isUndoEnabled: true)
     }
 }
 

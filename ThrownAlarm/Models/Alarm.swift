@@ -29,22 +29,6 @@ class Alarm{
         self.justCreated = justCreated
     }
     
-    func copy(alarm: Alarm){
-        self.sleepTime = alarm.sleepTime
-        self.wakeTime = alarm.wakeTime
-        self.sound = alarm.sound
-        self.volume = alarm.volume
-        self.rounds = alarm.rounds
-    }
-    
-    func export(alarm: Alarm){
-        alarm.sleepTime = self.sleepTime
-        alarm.wakeTime = self.wakeTime
-        alarm.sound = self.sound
-        alarm.volume = self.volume
-        alarm.rounds = self.rounds
-    }
-    
     func getDuration() -> TimeInterval {
         return self.wakeTime.timeIntervalSinceReferenceDate - self.sleepTime.timeIntervalSinceReferenceDate
     }
