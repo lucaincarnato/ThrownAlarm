@@ -11,6 +11,7 @@ import AVFoundation
 
 struct SetAlarmView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
 
     @Binding var alarm: Alarm
     @Binding var setAlarm: Bool
@@ -18,24 +19,24 @@ struct SetAlarmView: View {
     @Binding var showAlert: Bool
 
     @State private var audioPlayer: AVAudioPlayer?
+    @State private var didBeginUndoGroup = false
 
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"]
-    
+
     var body: some View {
-        NavigationStack{
-            VStack{
-                Form{
+        NavigationStack {
+            VStack {
+                Form {
                     Section {
                         PickerView(alarm: $alarm)
                     }
-                    Section (header: Text("Alarm options")){
+                    Section(header: Text("Alarm options")) {
                         Stepper(value: $alarm.rounds, in: 1...10) {
                             Text("\(alarm.rounds) rounds to wake up")
                         }
                         Picker("Alarm sound", selection: makeBinding()) {
-                            ForEach(sounds, id:\.self) {
-                                Text($0.description)
-                                    .tag($0)
+                            ForEach(sounds, id: \.self) {
+                                Text($0.description).tag($0)
                             }
                         }
                         VStack(alignment: .leading, spacing: 4) {
@@ -49,7 +50,7 @@ struct SetAlarmView: View {
                             }
                         }
                     }
-                    Button(role: .destructive){
+                    Button(role: .destructive) {
                         modelContext.delete(alarm)
                         setAlarm.toggle()
                     } label: {
@@ -57,32 +58,46 @@ struct SetAlarmView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                     .disabled(isFirst)
-                    .frame(maxWidth: .infinity)
                 }
             }
             .navigationTitle("Set Alarm")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar{
-                ToolbarItem(placement: .cancellationAction){
-                    Button("Cancel"){
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
                         stopAudio()
                         setAlarm.toggle()
-                        modelContext.undoManager?.undo()
+                        if didBeginUndoGroup {
+                            modelContext.undoManager?.endUndoGrouping()
+                            modelContext.undoManager?.undo()
+                        }
+                        dismiss()
                     }
                 }
-                ToolbarItem(placement: .confirmationAction){
-                    Button("Save"){
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
                         stopAudio()
                         alarm.setAlarm(true)
+                        if didBeginUndoGroup {
+                            modelContext.undoManager?.endUndoGrouping()
+                        }
                         try? modelContext.save()
                         setAlarm.toggle()
                         showAlert = true
+                        dismiss()
                     }
                 }
             }
+            .onAppear {
+                if modelContext.undoManager?.isUndoRegistrationEnabled == true && modelContext.undoManager?.groupingLevel == 0 {
+                    modelContext.undoManager?.beginUndoGrouping()
+                    didBeginUndoGroup = true
+                }
+                modelContext.insert(alarm)
+            }
         }
     }
-    
+
     func playAudio(for track: String?) {
         guard let track = track else { return }
         stopAudio()
@@ -96,11 +111,11 @@ struct SetAlarmView: View {
             print("Errore nella riproduzione audio: \(error)")
         }
     }
-    
-    func stopAudio(){
+
+    func stopAudio() {
         audioPlayer?.stop()
     }
-    
+
     private func makeBinding() -> Binding<String> {
         Binding(
             get: { alarm.sound },
