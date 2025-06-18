@@ -79,7 +79,7 @@ class Alarm{
             content.title = "It's time to wake up"
             content.body = "Wake up or you will lose the streak."
             content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "\(self.sound).wav"))
-            content.userInfo = ["deepLink": "throwalarm://\(self.id)/alarm"]
+            content.userInfo = ["deepLink": "throwalarm://\(self.identifier)/alarm"]
         } else {
             content.title = "It's bedtime!"
             content.body = "Don't lose your \(Int(self.getDuration() / 3600)) hours and \((Int(self.getDuration()) % 3600) / 60) minutes of sleep."
