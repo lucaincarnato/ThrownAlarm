@@ -12,7 +12,6 @@ import FreemiumKit
 
 struct DashboardView: View {
     @AppStorage("firstLaunch") var firstLaunch: Bool = true
-    @AppStorage("Update1.2") var update: Bool = true
     
     @Query private var alarms: [Alarm]
     @Environment(\.modelContext) private var modelContext
@@ -105,12 +104,7 @@ private struct AlarmView: View{
                         .accessibilityAddTraits(.isToggle)
                         .accessibilityLabel("Activate alarm")
                         .onChange(of: alarm.isActive){ oldValue, newValue in
-                            if !newValue{
-                                alarm.clearAllNotifications()
-                            } else {
-                                alarm.setAlarm()
-                                alarm.sendNotification()
-                            }
+                            alarm.setAlarm(newValue)
                         }
                 }
                 .padding(.horizontal, 40)
@@ -168,7 +162,7 @@ private struct AlarmView: View{
                 SetAlarmView(alarm: $alarm, setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert, placeholder: Alarm())
             }
             .fullScreenCover(
-                isPresented: Binding(get: { deepLinkManager.id == alarm.id }, set: { newValue in print("Value changed")}),
+                isPresented: Binding(get: { deepLinkManager.id == alarm.identifier }, set: { newValue in print("Value changed")}),
                 onDismiss: { updateProfile()
                 }) {
                 if deepLinkManager.targetView == .alarmView {
@@ -220,7 +214,7 @@ private struct AlarmView: View{
     }
     
     private func updateRemainingTime() {
-        alarm.setAlarm()
+        alarm.correctTime()
         let timeInterval = alarm.wakeTime.timeIntervalSince(Date.now)
         hours = Int(timeInterval) / 3600
         minutes = ((Int(timeInterval) % 3600) / 60)

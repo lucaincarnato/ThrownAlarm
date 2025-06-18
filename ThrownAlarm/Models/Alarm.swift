@@ -11,10 +11,9 @@ import UserNotifications
 
 @Model
 class Alarm{
-    var id: String = "IdNotAvailable"
+    var identifier: String = "IdNotAvailable"
     var sleepTime: Date = Date.now
     var wakeTime: Date = Date.now.addingTimeInterval(28800)
-    var sleepDuration: TimeInterval = 28800
     var sound: String = "Princess"
     var volume: Float = 1
     var rounds: Int = 3
@@ -22,22 +21,17 @@ class Alarm{
     var justCreated: Bool = true
     
     init () {
-        id = UUID().uuidString
-        self.sleepDuration = 0
-        self.setDuration()
+        identifier = UUID().uuidString
     }
     
     init (_ justCreated: Bool) {
-        id = UUID().uuidString
+        identifier = UUID().uuidString
         self.justCreated = justCreated
-        self.sleepDuration = 0
-        self.setDuration()
     }
     
     func copy(alarm: Alarm){
         self.sleepTime = alarm.sleepTime
         self.wakeTime = alarm.wakeTime
-        self.setDuration()
         self.sound = alarm.sound
         self.volume = alarm.volume
         self.rounds = alarm.rounds
@@ -46,24 +40,33 @@ class Alarm{
     func export(alarm: Alarm){
         alarm.sleepTime = self.sleepTime
         alarm.wakeTime = self.wakeTime
-        alarm.setDuration()
         alarm.sound = self.sound
         alarm.volume = self.volume
         alarm.rounds = self.rounds
     }
     
-    func setDuration(){
-        self.sleepDuration = self.wakeTime.timeIntervalSinceReferenceDate - self.sleepTime.timeIntervalSinceReferenceDate
+    func getDuration() -> TimeInterval {
+        return self.wakeTime.timeIntervalSinceReferenceDate - self.sleepTime.timeIntervalSinceReferenceDate
     }
     
-    func setAlarm(){
+    func setAlarm(_ flag: Bool) {
+        correctTime()
+        isActive = flag
+        if flag {
+            sendNotification()
+        } else {
+            clearNotifications()
+        }
+    }
+    
+    func correctTime() {
         if self.wakeTime <= Date.now {
             self.wakeTime = wakeTime.addingTimeInterval(86400)
         }
     }
     
-    func sendNotification(){
-        clearAllNotifications()
+    private func sendNotification(){
+        clearNotifications()
         scheduleNotification(self.sleepTime, isAlarm: false, code: -1)
         for i in 0..<10{
             scheduleNotification(self.wakeTime.addingTimeInterval(Double(30 * i)), isAlarm: true, code: i)
@@ -79,21 +82,21 @@ class Alarm{
             content.userInfo = ["deepLink": "throwalarm://\(self.id)/alarm"]
         } else {
             content.title = "It's bedtime!"
-            content.body = "Don't lose your \(Int(self.sleepDuration / 3600)) hours and \((Int(self.sleepDuration) % 3600) / 60) minutes of sleep."
+            content.body = "Don't lose your \(Int(self.getDuration() / 3600)) hours and \((Int(self.getDuration()) % 3600) / 60) minutes of sleep."
             content.sound = .default
         }
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date.addingTimeInterval((Date.now > date) ? 86400 : 0))
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let request = UNNotificationRequest(identifier: self.id + "\(code)", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: self.identifier + "\(code)", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
 
-    func clearAllNotifications() {
+    private func clearNotifications() {
         var identifiers: [String] = []
-        identifiers.append(self.id + "-1")
+        identifiers.append(self.identifier + "-1")
         for i in 0..<10 {
-            identifiers.append(self.id + "\(i)")
+            identifiers.append(self.identifier + "\(i)")
         }
         let notificationCenter = UNUserNotificationCenter.current()
         notificationCenter.removeAllDeliveredNotifications() // Clear not yet sent ones

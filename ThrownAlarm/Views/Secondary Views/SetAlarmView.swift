@@ -74,10 +74,8 @@ struct SetAlarmView: View {
                     Button("Save"){
                         alarm.copy(alarm: placeholder)
                         stopAudio()
-                        alarm.setAlarm()
-                        alarm.isActive = true
+                        alarm.setAlarm(true)
                         try? modelContext.save()
-                        alarm.sendNotification()
                         setAlarm.toggle()
                         showAlert = true
                     }
@@ -235,7 +233,6 @@ private struct PickerView: View {
                             .onChanged({ value in
                                 onDrag(value: value)
                                 alarm.wakeTime = getTime(angle: endAngle)
-                                alarm.sleepDuration = TimeInterval(getTimeDifference().0 * 3600 + getTimeDifference().1 * 60)
                             })
                     )
                     .accessibilityLabel("Wake up")

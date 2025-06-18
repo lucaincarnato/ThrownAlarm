@@ -194,7 +194,7 @@ struct AlarmGameView: View {
     }
     
     private func recordNight() {
-        alarm.clearAllNotifications()
+        alarm.setAlarm(false)
         backtrack.last!.snoozed = false
         if isTracked && lastTrackedSnooze {backtrack.last!.snoozed = true}
         try? modelContext.save()
