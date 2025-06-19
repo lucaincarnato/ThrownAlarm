@@ -338,11 +338,14 @@ private struct PickerView: View {
     }
 }
 
+/// Creates a static clock in the 24 hours format
 private struct ClockView: View {
+    /// Radius of  clock's circle
     var radius: CGFloat
     
     var body: some View {
         ZStack{
+            // Iterates for the 24 hours indicators
             ForEach(1...24, id:\.self) { i in
                 let d = Double(i)
                 Rectangle()
@@ -350,7 +353,9 @@ private struct ClockView: View {
                     .frame(width: 2, height: i % 6 == 0 ? 15 : 5)
                     .offset(y: (radius - 80))
                     .rotationEffect(Angle(degrees: d * 15))
+                // Get the number for only the multiple of 3 hours
                 let hours = [12, 15, 18, 21, 0, 3, 6, 9]
+                // Iterates for the hour number
                 ForEach(hours.indices, id:\.self){ i in
                     let d = Double(i)
                     Text("\(hours[i])")
@@ -362,6 +367,7 @@ private struct ClockView: View {
                         .rotationEffect(Angle(degrees: d * 45))
                 }
             }
+            // Shows images for daylight hours and night hours
             Image(systemName: "moon.haze.fill")
                 .foregroundStyle(Color.cyan)
                 .offset(y: (-radius + 130))
@@ -369,6 +375,6 @@ private struct ClockView: View {
                 .foregroundStyle(Color.yellow)
                 .offset(y: (radius - 130))
         }
-        .rotationEffect(Angle(degrees: 90)) 
+        .rotationEffect(Angle(degrees: 90))
     }
 }
