@@ -182,6 +182,7 @@ private struct AlarmView: View{
         .frame(height: 200)
         .contextMenu {
             Button (role: .destructive) {
+                alarm.setAlarm(false)
                 modelContext.delete(alarm)
             } label: {
                 Label(isFirst ? "Cannot delete alarm" : "Delete", systemImage: isFirst ? "exclamationmark.triangle.fill" : "trash")

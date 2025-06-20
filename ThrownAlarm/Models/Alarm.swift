@@ -43,12 +43,6 @@ class Alarm{
     }
     
     // MARK: - Public methods
-    /// Determines the duration of the sleep set up in the alarm
-    /// - Returns: Difference between the wake up time and the sleep time
-    func getDuration() -> TimeInterval {
-        return self.wakeTime.timeIntervalSinceReferenceDate - self.sleepTime.timeIntervalSinceReferenceDate
-    }
-    
     /// Enables or disable the alarm, sending or deleting the notifications according
     /// - Parameter flag: Determines if the alarm should be enabled or not
     func setAlarm(_ flag: Bool) {
@@ -69,6 +63,12 @@ class Alarm{
     }
     
     // MARK: - Private methods
+    /// Determines the duration of the sleep set up in the alarm
+    /// - Returns: Difference between the wake up time and the sleep time
+    private func getDuration() -> TimeInterval {
+        return self.wakeTime.timeIntervalSinceReferenceDate - self.sleepTime.timeIntervalSinceReferenceDate
+    }
+    
     /// Sends a notification at the sleep time and 10 notification at the wake up time with the alarm's id to trigger the mingame
     private func sendNotification(){
         clearNotifications()
