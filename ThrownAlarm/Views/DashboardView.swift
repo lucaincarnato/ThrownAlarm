@@ -169,8 +169,8 @@ private struct AlarmView: View{
                 if deepLinkManager.targetView == .alarmView {
                     AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
                         .onAppear(){
-                            if alreadyTracked() {
-                                backtrack.last!.setNight(Date.now, true)
+                            if alreadyTracked(){
+                                backtrack.last!.setNight(Date.now, backtrack.last!.snoozed)
                             } else {
                                 modelContext.insert(Night(date: Date.now, snoozed: true))
                             }
