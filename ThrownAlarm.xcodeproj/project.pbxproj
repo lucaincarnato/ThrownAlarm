@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		420F35F82D98A0580045CA30 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 420F35F72D98A0580045CA30 /* Localizable.xcstrings */; };
 		426D71872DA191590026D92C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426D71862DA191590026D92C /* StoreKit.framework */; };
-		42F17EAB2DA0775A00B4AA0E /* FreemiumKit in Frameworks */ = {isa = PBXBuildFile; productRef = 42F17EAA2DA0775A00B4AA0E /* FreemiumKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,7 +43,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42F17EAB2DA0775A00B4AA0E /* FreemiumKit in Frameworks */,
 				426D71872DA191590026D92C /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,7 +96,6 @@
 			);
 			name = ThrownAlarm;
 			packageProductDependencies = (
-				42F17EAA2DA0775A00B4AA0E /* FreemiumKit */,
 			);
 			productName = AmericanoChallenge;
 			productReference = 423571B92D039F6B00979A4F /* ThrownAlarm.app */;
@@ -131,7 +128,6 @@
 			mainGroup = 423571B02D039F6B00979A4F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				42F17EA92DA0775A00B4AA0E /* XCRemoteSwiftPackageReference "FreemiumKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 423571BA2D039F6B00979A4F /* Products */;
@@ -311,7 +307,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -350,7 +346,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -390,25 +386,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		42F17EA92DA0775A00B4AA0E /* XCRemoteSwiftPackageReference "FreemiumKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/FlineDev/FreemiumKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.18.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		42F17EAA2DA0775A00B4AA0E /* FreemiumKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 42F17EA92DA0775A00B4AA0E /* XCRemoteSwiftPackageReference "FreemiumKit" */;
-			productName = FreemiumKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 423571B12D039F6B00979A4F /* Project object */;
 }
