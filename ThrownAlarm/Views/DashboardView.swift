@@ -11,8 +11,7 @@ import Foundation
 import FreemiumKit
 
 struct DashboardView: View {
-    @AppStorage("firstLaunch") var firstLaunch: Bool = true
-    @AppStorage("Update1.2") var update: Bool = true
+    @AppStorage("Onboarding") var onboarding: Bool = false
     
     @Query private var alarms: [Alarm]
     @Environment(\.modelContext) private var modelContext
@@ -53,15 +52,10 @@ struct DashboardView: View {
                     }
                 }
             }
-            .sheet(isPresented: $firstLaunch) {
-                OnboardingView(firstLaunch: $firstLaunch)
+            .sheet(isPresented: $onboarding) {
+                OnboardingView(onboarding: $onboarding)
                     .interactiveDismissDisabled()
             }
-            /*
-            .sheet(isPresented: $update) {
-                DisclaimerView(update: $update)
-            }
-            */
         }
     }
 }

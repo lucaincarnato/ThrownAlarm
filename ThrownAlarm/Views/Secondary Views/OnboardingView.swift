@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    @Binding var firstLaunch: Bool
+    @Binding var onboarding: Bool
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
@@ -53,7 +53,7 @@ struct OnboardingView: View {
                 .padding(.vertical)
                 Button() {
                     requestNotificationPermission()
-                    firstLaunch.toggle()
+                    onboarding.toggle()
                     modelContext.insert(Alarm(false))
                     try? modelContext.save()
                 } label: {
