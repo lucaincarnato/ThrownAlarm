@@ -10,6 +10,7 @@ import SwiftUI
 import Foundation
 import UserNotifications
 import AlarmKit
+import ActivityKit
 
 @Model
 class TAlarm{
@@ -36,19 +37,21 @@ class TAlarm{
         return abs(wakeMinutes - sleepMinutes)
     }
     
-    // Delete all previous notification (to not confuse user) and schedule a notification to remind of bedtime
+    // Schedule a notification to remind of bedtime and ten alarms
     func setAlarm() async {
-        clearAllNotifications()
+        clearAllNotifications() // Does not confuse user with many bedtime
         scheduleNotification(sleepTime)
+        // Schedule ten alarms distanced by one minute
         for i in 0...9 {
-            print(i)
-            await scheduleAlarm(hour: wakeTime.hour, minute: wakeTime.minute + i, "\(i)")
+            await scheduleAlarm(hour: wakeTime.hour, minute: wakeTime.minute + i)
         }
     }
     
+    // Cancel all the alarms associated with the current alarm
     func cancelAlarm() {
         do{
             for alarm in try AlarmManager.shared.alarms {
+                // If the AlarmManager's alarm is in the current id array, cancel the alarm
                 if !alarmIDs.contains(alarm.id) { continue }
                 try AlarmManager.shared.cancel(id: alarm.id)
             }
@@ -79,53 +82,54 @@ class TAlarm{
         notificationCenter.removeAllPendingNotificationRequests()
     }
     
-    private func scheduleAlarm(hour: Int, minute: Int, _ text: String) async {
+    // Schedule an alarm at the next hour:minute
+    private func scheduleAlarm(hour: Int, minute: Int) async {
         let alarmID = UUID()
         let weekdays: [Locale.Weekday] = []
         let time = Alarm.Schedule.Relative.Time(hour: hour, minute: minute)
         let relative = Alarm.Schedule.Relative(time: time, repeats: weekdays.isEmpty ? .never : .weekly(Array(weekdays)))
         let schedule = Alarm.Schedule.relative(relative)
-        
+        // Snooze button
         let stopButton = AlarmButton(
-            text: "Dismiss",
+            text: "Snooze",
             textColor: Color.white,
-            systemImageName: "stop.circle"
+            systemImageName: "battery.25percent"
         )
-        
+        // Wake up button that opens the app and starts the game
         let secondaryButton = AlarmButton(
-            text: "Open",
+            text: "Wake Up",
             textColor: Color.white,
-            systemImageName: "arrow.right.circle.fill"
+            systemImageName: "basketball.fill"
         )
-        
+        // Set up the presentation for alarm
         let alertPresentation = AlarmPresentation.Alert(
-            title: "Time to wake up bitch \(text)",
+            title: "Time to wake up!",
             stopButton: stopButton,
             secondaryButton: secondaryButton,
             secondaryButtonBehavior: .custom
         )
-        
+        // Get attributes for ActivityKit tools
         let attributes = AlarmAttributes<CookingData>(
             presentation: AlarmPresentation(alert: alertPresentation),
-            tintColor: Color.green,
+            tintColor: Color.accent,
         )
-        
+        // Secondary button custom action's intent
         let secondaryIntent = OpenInApp(alarmID: alarmID.uuidString)
-        
-        // let sound = AlertConfiguration.AlertSound.named("Chime")
-        
+        // Alarm custom sound
+        let alarmSound = AlertConfiguration.AlertSound.named(sound)
+        // Configure alarm for scheduling
         let alarmConfiguration = AlarmManager.AlarmConfiguration<CookingData>(
             schedule: schedule,
             attributes: attributes,
-            secondaryIntent: secondaryIntent
-            // sound: sound
+            secondaryIntent: secondaryIntent,
+            sound: alarmSound
         )
-        
+        // Schedule alarm
         do {
             let _ = try await AlarmManager.shared.schedule(id: alarmID, configuration: alarmConfiguration)
             alarmIDs.append(alarmID)
         } catch {
-            print("Mammt")
+            print("Cannot schedule alarm")
         }
     }
 }
