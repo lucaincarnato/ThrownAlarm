@@ -6,19 +6,17 @@
 //
 
 import SwiftUI
-import FreemiumKit
 import AVFoundation
 
 struct SetAlarmView: View {
     @Environment(\.modelContext) private var modelContext
 
-    @Binding var alarm: Alarm
+    @Binding var alarm: TAlarm
     @Binding var setAlarm: Bool
     @Binding var isFirst: Bool
     @Binding var showAlert: Bool
 
     @State private var audioPlayer: AVAudioPlayer?
-    @State var placeholder: Alarm
 
     var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"]
     
@@ -27,11 +25,11 @@ struct SetAlarmView: View {
             VStack{
                 Form{
                     Section {
-                        PickerView(alarm: $placeholder)
+                        PickerView(alarm: $alarm)
                     }
                     Section (header: Text("Alarm options")){
-                        Stepper(value: $placeholder.rounds, in: 1...10) {
-                            Text("\(placeholder.rounds) rounds to wake up")
+                        Stepper(value: $alarm.rounds, in: 1...10) {
+                            Text("\(alarm.rounds) rounds to wake up")
                         }
                         Picker("Alarm sound", selection: makeBinding()) {
                             ForEach(sounds, id:\.self) {
@@ -62,10 +60,8 @@ struct SetAlarmView: View {
                 }
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save"){
-                        alarm.copy(alarm: placeholder)
                         stopAudio()
-                        alarm.setAlarm()
-                        alarm.isActive = true
+                        alarm.active = true
                         try? modelContext.save()
                         alarm.sendNotification()
                         setAlarm.toggle()
@@ -73,13 +69,10 @@ struct SetAlarmView: View {
                     }
                 }
             }
-            .onAppear(){
-                alarm.export(alarm: placeholder)
-            }
         }
     }
     
-    func playAudio(for track: String?) {
+    private func playAudio(for track: String?) {
         guard let track = track else { return }
         stopAudio()
         let trackURL = Bundle.main.url(forResource: track, withExtension: "wav")
@@ -93,15 +86,15 @@ struct SetAlarmView: View {
         }
     }
     
-    func stopAudio(){
+    private func stopAudio(){
         audioPlayer?.stop()
     }
     
     private func makeBinding() -> Binding<String> {
         Binding(
-            get: { placeholder.sound },
+            get: { alarm.sound },
             set: { newValue in
-                placeholder.sound = newValue
+                alarm.sound = newValue
                 playAudio(for: newValue)
             }
         )
@@ -109,7 +102,7 @@ struct SetAlarmView: View {
 }
 
 private struct PickerView: View {
-    @Binding var alarm: Alarm
+    @Binding var alarm: TAlarm
 
     @State var startAngle: Angle = Angle(degrees: 0) 
     @State var endAngle: Angle = Angle(degrees: 180)
@@ -130,7 +123,7 @@ private struct PickerView: View {
                             .font(.subheadline)
                             .bold()
                     }
-                    Text(alarm.sleepTime.formatted(date: .omitted, time: .shortened))
+                    Text("\(alarm.sleepTime.hour):\(alarm.sleepTime.minute)")
                         .font(.largeTitle)
                         .bold()
                         .foregroundStyle(Color.white)
@@ -148,7 +141,7 @@ private struct PickerView: View {
                             .font(.subheadline)
                             .bold()
                     }
-                    Text(alarm.wakeTime.formatted(date: .omitted, time: .shortened))
+                    Text("\(alarm.wakeTime.hour):\(alarm.wakeTime.minute)")
                         .font(.largeTitle)
                         .bold()
                         .foregroundStyle(Color.white)
