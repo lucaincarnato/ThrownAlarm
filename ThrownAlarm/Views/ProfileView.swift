@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 import Foundation
-import FreemiumKit
 
 struct ProfileView: View {
     var body: some View {
@@ -155,7 +154,7 @@ private struct MonthlyCalendarView: View {
 }
 
 private struct DayView: View {
-    @Query private var backtrack: [Night]
+    @Query private var backtrack: [TNight]
     
     var day: Date
     var isExtendedView: Bool = false

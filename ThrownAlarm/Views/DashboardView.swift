@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import Foundation
+import AlarmKit
 
 struct DashboardView: View {
     @AppStorage("Onboarding") var onboarding: Bool = false
@@ -46,16 +47,42 @@ struct DashboardView: View {
                     }
                 }
             }
-            .sheet(isPresented: $onboarding) {
-                OnboardingView(onboarding: $onboarding)
-                    .interactiveDismissDisabled()
+            .task {
+                requestNotificationPermission()
+                requestAlarmPermission()
             }
+        }
+    }
+    
+    private func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("Error while asking permission: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func requestAlarmPermission() async -> Bool {
+        switch AlarmManager.shared.authorizationState {
+        case .notDetermined:
+            do {
+                return try await AlarmManager.shared.requestAuthorization() == .authorized
+            } catch {
+                return false
+            }
+        case .authorized:
+            return true
+        case .denied:
+            return true
+            
+        @unknown default:
+            return false
         }
     }
 }
 
 private struct AlarmView: View{
-    @Query private var backtrack: [Night]
+    @Query private var backtrack: [TNight]
     @EnvironmentObject var deepLinkManager: DeepLinkManager
     @Environment(\.modelContext) private var modelContext
     @AppStorage("streak") private var streak: Int = 0
