@@ -13,8 +13,6 @@ struct SetAlarmView: View {
 
     @Binding var alarm: TAlarm
     @Binding var setAlarm: Bool
-    @Binding var isFirst: Bool
-    @Binding var showAlert: Bool
 
     @State private var audioPlayer: AVAudioPlayer?
 

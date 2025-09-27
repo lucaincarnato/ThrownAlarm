@@ -28,7 +28,7 @@ struct DashboardView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         ScrollView{
                             ForEach(alarms, id: \.self) { alarm in
-                                AlarmView(alarm: alarm, isFirst: false)
+                                AlarmView(alarm: alarm)
                             }
                         }
                     }
@@ -38,7 +38,10 @@ struct DashboardView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button() {
-                        let newAlarm = TAlarm()
+                        let newAlarm = TAlarm(
+                            sleepTime: Alarm.Schedule.Relative.Time(hour: 0, minute: 0),
+                            wakeTime: Alarm.Schedule.Relative.Time(hour: 8, minute: 0)
+                        )
                         modelContext.insert(newAlarm)
                         try? modelContext.save()
                     } label: {
@@ -48,8 +51,8 @@ struct DashboardView: View {
                 }
             }
             .task {
+                let _ = await requestAlarmPermission()
                 requestNotificationPermission()
-                requestAlarmPermission()
             }
         }
     }
@@ -83,20 +86,16 @@ struct DashboardView: View {
 
 private struct AlarmView: View{
     @Query private var backtrack: [TNight]
-    @EnvironmentObject var deepLinkManager: DeepLinkManager
     @Environment(\.modelContext) private var modelContext
-    @AppStorage("streak") private var streak: Int = 0
-    @AppStorage("snoozedDays") private var snoozedDays: Int = 0
     
-    @State var alarm: Alarm
-    @State var isFirst: Bool
+    @AppStorage("userStreak") private var streak: Int = 0
+    @AppStorage("userSnoozedDays") private var snoozedDays: Int = 0
+    @AppStorage("AlarmGame") private var alarmGame: Bool = false
+    
+    @State var alarm: TAlarm
     @State var setAlarm: Bool = false
-    @State var sleepDuration: TimeInterval = 0
-    @State var ringsIn: String = ""
-    @State private var hours: Int = 0
-    @State private var minutes: Int = 0
-    @State var showAlert: Bool = false
-    
+    @State var timeRemaining: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 0, minute: 0)
+        
     var body: some View{
         ZStack{
             RoundedRectangle(cornerRadius: 15)
@@ -111,18 +110,13 @@ private struct AlarmView: View{
                             .font(.title2)
                             .bold()
                             .foregroundStyle(Color.white)
-                            .accessibilityAddTraits(.isHeader)
                     }
-                    .accessibilityAddTraits(.isButton)
-                    Toggle("", isOn: $alarm.isActive).toggleStyle(SwitchToggleStyle())
-                        .accessibilityAddTraits(.isToggle)
-                        .accessibilityLabel("Activate alarm")
-                        .onChange(of: alarm.isActive){ oldValue, newValue in
-                            if !newValue{
-                                alarm.clearAllNotifications()
+                    Toggle("", isOn: $alarm.active).toggleStyle(SwitchToggleStyle())
+                        .onChange(of: alarm.active){ oldValue, newValue in
+                            if !newValue {
+                                alarm.cancelAlarm()
                             } else {
-                                alarm.setAlarm()
-                                alarm.sendNotification()
+                                Task{ await alarm.setAlarm() }
                             }
                         }
                 }
@@ -141,7 +135,7 @@ private struct AlarmView: View{
                                         .font(.subheadline)
                                         .bold()
                                 }
-                                Text(alarm.sleepTime.formatted(date: .omitted, time: .shortened))
+                                Text(TAlarm.toString(alarm.sleepTime))
                                     .font(.largeTitle)
                                     .bold()
                                     .foregroundStyle(Color.white)
@@ -158,15 +152,14 @@ private struct AlarmView: View{
                                         .font(.subheadline)
                                         .bold()
                                 }
-                                Text(alarm.wakeTime.formatted(date: .omitted, time: .shortened))
+                                Text(TAlarm.toString(alarm.wakeTime))
                                     .font(.largeTitle)
                                     .bold()
                                     .foregroundStyle(Color.white)
                             }
                         }
-                        Text(!alarm.isActive ? "Alarm disabled" : "Rings in \(ringsIn)")
+                        Text(!alarm.active ? "Alarm disabled" : "Rings in \(TAlarm.toString(timeRemaining))")
                             .foregroundStyle(Color.accentColor)
-                            .accessibilityLabel(!alarm.isActive ? "Alarm disabled" : "Rings in \(hours) hours and \(minutes) minutes")
                             .onAppear {
                                 updateRemainingTime()
                                 startTimer()
@@ -175,45 +168,32 @@ private struct AlarmView: View{
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 40)
                 }
-                .accessibilityAddTraits(.isButton)
             }
             .sheet(isPresented: $setAlarm){
-                SetAlarmView(alarm: $alarm, setAlarm: $setAlarm, isFirst: $isFirst, showAlert: $showAlert, placeholder: Alarm())
+                SetAlarmView(alarm: $alarm, setAlarm: $setAlarm)
             }
-            .fullScreenCover(
-                isPresented: Binding(get: { deepLinkManager.id == alarm.id }, set: { newValue in print("Value changed")}),
-                onDismiss: { updateProfile()
-                }) {
-                if deepLinkManager.targetView == .alarmView {
-                    AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
-                        .onAppear(){
-                            if alreadyTracked(){
-                                backtrack.last!.setNight(Date.now, backtrack.last!.snoozed)
-                            } else {
-                                modelContext.insert(Night(date: Date.now, snoozed: true))
-                            }
-                            try? modelContext.save()
+            .fullScreenCover(isPresented: $alarmGame) {
+                AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
+                    .onAppear(){
+                        if alreadyTracked(){
+                            backtrack.last!.setNight(Date.now, backtrack.last!.snoozed)
+                        } else {
+                            modelContext.insert(TNight(date: Date.now, snoozed: true))
                         }
-                }
+                        try? modelContext.save()
+                    }
             }
-            .alert("DISABLE SILENT MODE AND FOCUS MODE BEFORE GOING TO SLEEP", isPresented: $showAlert, actions: {}, message: {Text("The alarm can't work with those modes active")})
         }
         .frame(height: 200)
         .contextMenu {
             Button (role: .destructive) {
                 modelContext.delete(alarm)
             } label: {
-                Label(isFirst ? "Cannot delete alarm" : "Delete", systemImage: isFirst ? "exclamationmark.triangle.fill" : "trash")
+                Label("Delete", systemImage: "trash")
             }
-            .disabled(isFirst)
         }
         .onAppear(){
             updateProfile()
-            if alarm.justCreated {
-                setAlarm = true
-                alarm.justCreated = false
-                try? modelContext.save()
-            }
         }
     }
     
@@ -233,11 +213,13 @@ private struct AlarmView: View{
     }
     
     private func updateRemainingTime() {
-        alarm.setAlarm()
-        let timeInterval = alarm.wakeTime.timeIntervalSince(Date.now)
-        hours = Int(timeInterval) / 3600
-        minutes = ((Int(timeInterval) % 3600) / 60)
-        ringsIn = String(format: "%02dh:%02dmin", hours, minutes)
+        Task {
+            await alarm.setAlarm()
+        }
+        let hour = Calendar.current.component(.hour, from: Date.now)
+        let minute = Calendar.current.component(.minute, from: Date.now)
+        timeRemaining.hour = alarm.sleepTime.hour - hour
+        timeRemaining.minute = alarm.sleepTime.minute - minute
     }
     
     private func startTimer() {
