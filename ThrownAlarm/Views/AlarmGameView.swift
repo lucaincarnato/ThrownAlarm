@@ -15,10 +15,9 @@ struct CircleModel: Identifiable {
 }
 
 struct AlarmGameView: View {
-    @Binding var alarm: Alarm
+    @Binding var alarm: TAlarm
     
-    @Query private var backtrack: [Night]
-    @EnvironmentObject var deepLinkManager: DeepLinkManager
+    @Query private var backtrack: [TNight]
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
@@ -38,9 +37,6 @@ struct AlarmGameView: View {
     let launchSpeedReductionFactor: CGFloat = 20.0
     let colliderSize = CGSize(width: 30, height: 30)
     var circleRadius: CGFloat = 30.0
-    
-    let screenHeight = UIScreen.main.bounds.height
-    let screenWidth = UIScreen.main.bounds.width
     
     var body: some View {
         GeometryReader { geometry in
@@ -189,12 +185,12 @@ struct AlarmGameView: View {
     }
     
     private func startGame(){
-        alarm.isActive = false
+        alarm.active = false
         player.playSound(alarm.sound, loop: true)
     }
     
     private func recordNight() {
-        alarm.clearAllNotifications()
+        alarm.cancelAlarm()
         backtrack.last!.snoozed = false
         if isTracked && lastTrackedSnooze {backtrack.last!.snoozed = true}
         try? modelContext.save()
@@ -206,7 +202,6 @@ struct AlarmGameView: View {
         if (rounds == 0) {
             player.stopSound()
             recordNight()
-            deepLinkManager.id = ""
             dismiss()
         } else {
             remainingCirclesCount = initialCircleCount

@@ -15,22 +15,20 @@ struct SetAlarmView: View {
     @Binding var setAlarm: Bool
 
     @State private var audioPlayer: AVAudioPlayer?
-
-    var sounds: [String] = ["Celestial", "Enchanted", "Joy", "Mindful", "Penguin", "Plucks", "Princess", "Stardust", "Sunday", "Valley"]
     
     var body: some View {
         NavigationStack{
             VStack{
                 Form{
                     Section {
-                        PickerView(alarm: $alarm)
+                        //PickerView(alarm: $alarm)
                     }
                     Section (header: Text("Alarm options")){
                         Stepper(value: $alarm.rounds, in: 1...10) {
                             Text("\(alarm.rounds) rounds to wake up")
                         }
                         Picker("Alarm sound", selection: makeBinding()) {
-                            ForEach(sounds, id:\.self) {
+                            ForEach(TAlarm.sounds, id:\.self) {
                                 Text($0.description)
                                     .tag($0)
                             }
@@ -40,10 +38,9 @@ struct SetAlarmView: View {
                         modelContext.delete(alarm)
                         setAlarm.toggle()
                     } label: {
-                        Text(isFirst ? "Cannot delete alarm" : "Delete")
+                        Text("Delete")
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
-                    .disabled(isFirst)
                     .frame(maxWidth: .infinity)
                 }
             }
@@ -61,9 +58,8 @@ struct SetAlarmView: View {
                         stopAudio()
                         alarm.active = true
                         try? modelContext.save()
-                        alarm.sendNotification()
+                        Task { await alarm.setAlarm() }
                         setAlarm.toggle()
-                        showAlert = true
                     }
                 }
             }

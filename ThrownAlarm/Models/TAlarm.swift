@@ -23,6 +23,20 @@ class TAlarm{
     var rounds: Int = 3
     var active: Bool = false
     
+    // MARK: STATIC ATTRIBUTES
+    static var sounds: [String] = [
+        "Celestial",
+        "Enchanted",
+        "Joy",
+        "Mindful",
+        "Penguin",
+        "Plucks",
+        "Princess",
+        "Stardust",
+        "Sunday",
+        "Valley"
+    ]
+    
     // MARK: INITIALIZERS
     init(sleepTime: Alarm.Schedule.Relative.Time, wakeTime: Alarm.Schedule.Relative.Time) {
         self.sleepTime = sleepTime
