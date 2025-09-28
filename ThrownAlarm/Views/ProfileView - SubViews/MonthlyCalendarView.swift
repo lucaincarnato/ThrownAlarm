@@ -10,15 +10,19 @@ import SwiftData
 import Foundation
 
 struct MonthlyCalendarView: View {
-    let calendar = Calendar.current
+    // MARK: ATTRIBUTES
+    @Query private var backtrack: [TNight]
     @State private var selectedMonth: Date = Date()
+    let calendar = Calendar.current
     
+    // MARK: VIEW BODY
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 15)
                 .padding()
                 .foregroundStyle(Color.gray.opacity(0.3))
             VStack {
+                // MARK: Month Selector
                 HStack {
                     Button{
                         selectedMonth = calendar.date(byAdding: .month, value: -1, to: selectedMonth) ?? selectedMonth
@@ -40,6 +44,7 @@ struct MonthlyCalendarView: View {
                     }
                 }
                 .padding()
+                // MARK: Weekdays display
                 HStack {
                     ForEach(calendar.shortWeekdaySymbols, id: \.self) { weekday in
                         Text(weekday)
@@ -48,11 +53,12 @@ struct MonthlyCalendarView: View {
                             .accessibilityHidden(true)
                     }
                 }
+                // MARK: Day display
                 let days = daysInMonth(for: selectedMonth)
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
                     ForEach(days, id: \.self) { day in
                         if let day = day {
-                            DayView(day: day, isExtendedView: true, text: String(calendar.component(.day, from: day)))
+                            DayView(tracked: checkTracking(day), snoozed: checkSnoozed(day), text: String(calendar.component(.day, from: day)))
                         } else {
                             Text("")
                         }
@@ -64,6 +70,8 @@ struct MonthlyCalendarView: View {
         }
     }
     
+    // MARK: PRIVATE FUNCTIONS
+    // Return an array of all the selected month's Date
     private func daysInMonth(for date: Date) -> [Date?] {
         var days: [Date?] = []
         let range = calendar.range(of: .day, in: .month, for: date)!
@@ -77,5 +85,25 @@ struct MonthlyCalendarView: View {
             }
         }
         return days
+    }
+    
+    // Check if the parameter Date has been tracked
+    private func checkTracking(_ day: Date) -> Bool{
+        if backtrack.isEmpty{return false}
+        let current = Calendar.current
+        for night in backtrack {
+            if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day))){return true}
+        }
+        return false
+    }
+    
+    // Check if the user snoozed in parameter Date
+    private func checkSnoozed(_ day: Date) -> Bool{
+        if backtrack.isEmpty{return false}
+        let current = Calendar.current
+        for night in backtrack{
+            if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day)) && night.snoozed){return true}
+        }
+        return false
     }
 }

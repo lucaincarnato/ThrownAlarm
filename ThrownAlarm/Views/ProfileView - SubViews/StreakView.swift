@@ -10,11 +10,14 @@ import SwiftData
 import Foundation
 
 struct StreakView: View {
+    // MARK: ATTRIBUTES
     @AppStorage("streak") private var streak: Int = 0
     @AppStorage("snoozedDays") private var snoozedDays: Int = 0
         
+    // MARK: VIEW BODY
     var body: some View {
         VStack (alignment: .leading){
+            // MARK: Wake Up streak
             VStack (alignment: .leading){
                 HStack{
                     Image(systemName: "flame.fill")
@@ -39,7 +42,7 @@ struct StreakView: View {
             }
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityLabel("You successfully woke up for \(streak > 1 ? "\(streak) day" : "\(streak) days")")
+            // MARK: Number of Snoozed Days
             VStack (alignment: .leading){
                 HStack{
                     Image(systemName: "battery.25percent")
@@ -64,7 +67,6 @@ struct StreakView: View {
             }
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityLabel("You snoozed for a total of \(snoozedDays == 1 ? "\(snoozedDays) day" : "\(snoozedDays) days")")
         }
         .padding(20)
     }

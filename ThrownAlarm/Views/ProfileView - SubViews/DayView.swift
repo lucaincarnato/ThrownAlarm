@@ -10,57 +10,33 @@ import SwiftData
 import Foundation
 
 struct DayView: View {
-    @Query private var backtrack: [TNight]
-    
-    var day: Date
-    var isExtendedView: Bool = false
+    // MARK: ATTRIBUTES
+    var tracked: Bool = true
+    var snoozed: Bool = true
     var text = ""
-    var formatter: DateFormatter {
-        let buffer = DateFormatter()
-        buffer.dateFormat = "EEEE"
-        return buffer
-    }
     
+    // MARK: VIEW BODY 
     var body: some View {
-        let weekdayString = formatter.string(from: day)
         ZStack{
             RoundedRectangle(cornerRadius: 100)
                 .frame(width: 30, height: 30)
                 .foregroundStyle(determineBackground())
-            Text(isExtendedView ? text : String(weekdayString.prefix(1)))
+            Text(text)
                 .bold()
-                .foregroundStyle(checkTracking() ? Color.black : Color.white.opacity(0.3))
-                .accessibilityHidden(!checkTracking())
-                .accessibilityLabel(checkTracking() ? "\(isExtendedView ? text : weekdayString) \(checkTracking() ? (checkSnoozed() ? "Snoozed the alarm" : "Woke up") : "Didn't use the alarm")" : "")
+                .foregroundStyle(tracked ? Color.black : Color.white.opacity(0.3))
         }
         .padding(.trailing, 8)
     }
     
-    func determineBackground() -> Color{
-        if (!checkTracking()){
+    // MARK: PRIVATE METHODS
+    // Return a different color for the possible states of the day
+    private func determineBackground() -> Color{
+        if (!tracked){
             return Color.clear
-        } else if (checkSnoozed()){
+        } else if (snoozed){
             return Color.red
         } else {
             return Color.green
         }
-    }
-    
-    func checkTracking() -> Bool{
-        if backtrack.isEmpty{return false}
-        let current = Calendar.current
-        for night in backtrack {
-            if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day))){return true}
-        }
-        return false
-    }
-    
-    func checkSnoozed() -> Bool{
-        if backtrack.isEmpty{return false} 
-        let current = Calendar.current
-        for night in backtrack{
-            if (current.date(from: current.dateComponents([.year, .month, .day], from: night.date)) == current.date(from: current.dateComponents([.year, .month, .day], from: day)) && night.snoozed){return true}
-        }
-        return false
     }
 }
