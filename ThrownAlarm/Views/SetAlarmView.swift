@@ -21,7 +21,7 @@ struct SetAlarmView: View {
             VStack{
                 Form{
                     Section {
-                        //PickerView(alarm: $alarm)
+                        PickerView(alarm: alarm)
                     }
                     Section (header: Text("Alarm options")){
                         Stepper(value: $alarm.rounds, in: 1...10) {

@@ -17,8 +17,8 @@ class TAlarm{
     // MARK: ATTRIBUTES
     var TID: UUID = UUID()
     var alarmIDs: [Alarm.ID] = []
-    var sleepTime: Alarm.Schedule.Relative.Time
-    var wakeTime: Alarm.Schedule.Relative.Time
+    var sleepTime: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 23, minute: 30)
+    var wakeTime: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 8, minute: 30)
     var sound: String = ""
     var rounds: Int = 3
     var active: Bool = false
@@ -43,11 +43,15 @@ class TAlarm{
         self.wakeTime = wakeTime
     }
     
+    init() {}
+    
     // MARK: PUBLIC METHODS
     // Get the difference in minutes between the sleep and wake time (in hour and minutes)
     func getDuration() -> Int {
         let sleepMinutes = sleepTime.hour * 60 + sleepTime.minute
         let wakeMinutes = wakeTime.hour * 60 + wakeTime.minute
+        // Return inverse duration (day - time determined) if the user goes to sleep before midnight
+        if wakeMinutes < sleepMinutes { return 1440 - abs(wakeMinutes - sleepMinutes)}
         return abs(wakeMinutes - sleepMinutes)
     }
     
