@@ -31,5 +31,6 @@ struct WeeklyRepetitionView: View {
             }
         }
         .buttonStyle(.plain)
+        .sensoryFeedback(.selection, trigger: selected)
     }
 }
