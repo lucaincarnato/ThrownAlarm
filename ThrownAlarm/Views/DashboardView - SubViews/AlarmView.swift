@@ -21,7 +21,7 @@ struct AlarmView: View{
     @State var alarm: TAlarm
     @State var setAlarm: Bool = false
     @State var timeRemaining: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 0, minute: 0)
-        
+    
     var body: some View{
         ZStack{
             RoundedRectangle(cornerRadius: 15)
@@ -139,9 +139,6 @@ struct AlarmView: View{
     }
     
     private func updateRemainingTime() {
-        Task {
-            await alarm.setAlarm()
-        }
         let hour = Calendar.current.component(.hour, from: Date.now)
         let minute = Calendar.current.component(.minute, from: Date.now)
         timeRemaining.hour = alarm.sleepTime.hour - hour

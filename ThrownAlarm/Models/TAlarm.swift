@@ -166,6 +166,15 @@ class TAlarm{
     }
 }
 
+extension TAlarm {
+    @MainActor
+    static var preview: ModelContainer {
+        let container = try! ModelContainer(for: TAlarm.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        container.mainContext.insert(TAlarm())
+        return container
+    }
+}
+
 nonisolated
 struct CookingData: AlarmMetadata{
     // Empty implementation

@@ -28,3 +28,12 @@ class TNight: Identifiable{
         self.snoozed = snoozed
     }
 }
+
+extension TNight {
+    @MainActor
+    static var preview: ModelContainer {
+        let container = try! ModelContainer(for: TNight.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        container.mainContext.insert(TNight(date: Date.now, snoozed: false))
+        return container
+    }
+}
