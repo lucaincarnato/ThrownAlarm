@@ -18,7 +18,13 @@ struct WeeklyRepetitionView: View {
     var body: some View {
         Button(){
             selected.toggle()
-            alarm.weekdays.append(weekday)
+            // If selected and the weekday is not in the alarm, add it, if not selected and it is contained, remove it 
+            if (selected && !alarm.weekdays.contains(weekday)) {
+                alarm.weekdays.append(weekday)
+            } else if (!selected && alarm.weekdays.contains(weekday)) {
+                let index = alarm.weekdays.firstIndex(of: weekday)
+                alarm.weekdays.remove(at: index!)
+            }
         } label: {
             ZStack{
                 Circle()
@@ -32,5 +38,6 @@ struct WeeklyRepetitionView: View {
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.selection, trigger: selected)
+        .onAppear { selected = alarm.weekdays.contains(weekday) }
     }
 }

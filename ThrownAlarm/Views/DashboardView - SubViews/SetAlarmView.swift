@@ -16,6 +16,7 @@ struct SetAlarmView: View {
     @State private var audioPlayer: AVAudioPlayer?
     @State private var success: Bool = false
     let weekdays: [String] = ["M", "T", "W", "T", "F", "S", "S"]
+    let weekvalues: [Locale.Weekday] = [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
     
     // MARK: VIEW BODY
     var body: some View {
@@ -31,7 +32,7 @@ struct SetAlarmView: View {
                         HStack{
                             Spacer()
                             ForEach(weekdays.indices, id: \.self) {i in
-                                WeeklyRepetitionView(alarm: $alarm, day: weekdays[i])
+                                WeeklyRepetitionView(alarm: $alarm, day: weekdays[i], weekday: weekvalues[i])
                             }
                             Spacer()
                         }
@@ -73,6 +74,7 @@ struct SetAlarmView: View {
                 }
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save"){
+                        print(alarm.weekdays)
                         success = true
                         stopAudio()
                         alarm.active = true
