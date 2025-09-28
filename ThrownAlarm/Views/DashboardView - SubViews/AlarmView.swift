@@ -11,22 +11,20 @@ import Foundation
 import AlarmKit
 
 struct AlarmView: View{
-    @Query private var backtrack: [TNight]
+    // MARK: ATTRIBUTES
     @Environment(\.modelContext) private var modelContext
-    
-    @AppStorage("userStreak") private var streak: Int = 0
-    @AppStorage("userSnoozedDays") private var snoozedDays: Int = 0
     @AppStorage("AlarmGame") private var alarmGame: Bool = false
-    
     @State var alarm: TAlarm
     @State var setAlarm: Bool = false
     @State var timeRemaining: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 0, minute: 0)
     
+    // MARK: VIEW BODY
     var body: some View{
         ZStack{
-            RoundedRectangle(cornerRadius: 15)
+            RoundedRectangle(cornerRadius: 200 * 10 / 57)
                 .padding()
                 .foregroundStyle(Color.gray.opacity(0.3))
+            // MARK: Top section
             VStack{
                 HStack{
                     Button{
@@ -47,6 +45,7 @@ struct AlarmView: View{
                         }
                 }
                 .padding(.horizontal, 40)
+                // MARK: Hour display
                 Button{
                     setAlarm.toggle()
                 } label: {
@@ -84,30 +83,22 @@ struct AlarmView: View{
                                     .foregroundStyle(Color.white)
                             }
                         }
-                        Text(!alarm.active ? "Alarm disabled" : "Rings in \(TAlarm.toString(timeRemaining))")
+                        .padding(.vertical, 1)
+                        // MARK: Rings in display
+                        Text(!alarm.active ? "Alarm disabled" : "Rings in \(timeRemaining.hour)h \(timeRemaining.minute)min")
                             .foregroundStyle(Color.accentColor)
-                            .onAppear {
-                                updateRemainingTime()
-                                startTimer()
-                            }
+                            .onAppear { startTimer() }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 40)
                 }
             }
+            .padding(.horizontal, 4)
             .sheet(isPresented: $setAlarm){
                 SetAlarmView(alarm: $alarm, setAlarm: $setAlarm)
             }
             .fullScreenCover(isPresented: $alarmGame) {
                 AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
-                    .onAppear(){
-                        if alreadyTracked(){
-                            backtrack.last!.setNight(Date.now, backtrack.last!.snoozed)
-                        } else {
-                            modelContext.insert(TNight(date: Date.now, snoozed: true))
-                        }
-                        try? modelContext.save()
-                    }
             }
         }
         .frame(height: 200)
@@ -118,42 +109,33 @@ struct AlarmView: View{
                 Label("Delete", systemImage: "trash")
             }
         }
-        .onAppear(){
-            updateProfile()
-        }
     }
     
-    func updateProfile() -> Void {
-        snoozedDays = 0
-        for night in backtrack{
-            if (night.snoozed) {snoozedDays += 1}
-        }
-        for (index, element) in backtrack.reversed().enumerated(){
-            if element.snoozed {
-                streak = index
-                return
-            }
-        }
-        streak = backtrack.count
-        return
-    }
-    
-    private func updateRemainingTime() {
-        let hour = Calendar.current.component(.hour, from: Date.now)
-        let minute = Calendar.current.component(.minute, from: Date.now)
-        timeRemaining.hour = alarm.sleepTime.hour - hour
-        timeRemaining.minute = alarm.sleepTime.minute - minute
-    }
-    
+    // MARK: PRIVATE ATTRIBUTES
+    // Start a timer to update the remaining time text
     private func startTimer() {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            updateRemainingTime()
+            let hour = Calendar.current.component(.hour, from: Date.now)
+            let minute = Calendar.current.component(.minute, from: Date.now)
+            // Normalize hour based on if wakeTime's hour is on tomorrow or within the day
+            if (alarm.wakeTime.hour < hour) {
+                timeRemaining.hour = 24 - hour + alarm.wakeTime.hour
+            } else {
+                timeRemaining.hour = alarm.wakeTime.hour - hour
+            }
+            // Normalize minute based on if wakeTime'minute is on or after the current minute
+            if (alarm.wakeTime.minute < minute) {
+                timeRemaining.minute = 60 - minute + alarm.wakeTime.minute
+            } else {
+                timeRemaining.minute = alarm.wakeTime.minute - minute
+            }
+            // If wakeTime's hour and time's are the same, the hour remaining are max 24 (-1 for minutes)
+            if (timeRemaining.hour == 0) {timeRemaining.hour = 23}
+            if (timeRemaining.minute == 60) { timeRemaining.minute = 59 }
         }
     }
-    
-    private func alreadyTracked() -> Bool {
-        if backtrack.isEmpty {return false}
-        if Calendar.current.isDate(Date.now, inSameDayAs: backtrack.last!.date) {return true}
-        return false
-    }
+}
+
+#Preview {
+    AlarmView(alarm: TAlarm())
 }

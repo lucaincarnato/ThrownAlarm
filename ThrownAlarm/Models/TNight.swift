@@ -27,8 +27,16 @@ class TNight: Identifiable{
         self.date = date
         self.snoozed = snoozed
     }
+    
+    // Check if the night that's going to be recorded is last night (cannot be before for temporal reasons)
+    static func alreadyTracked(in backtrack: [TNight]) -> Bool {
+        if backtrack.isEmpty {return false}
+        if Calendar.current.isDate(Date.now, inSameDayAs: backtrack.last!.date) {return true}
+        return false
+    }
 }
 
+// Container for mock data
 extension TNight {
     @MainActor
     static var preview: ModelContainer {

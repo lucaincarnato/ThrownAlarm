@@ -122,6 +122,14 @@ struct AlarmGameView: View {
                 updateCircles(in: geometry.size)
             }
         }
+        .onAppear(){
+            if TNight.alreadyTracked(in: backtrack){
+                backtrack.last!.setNight(Date.now, backtrack.last!.snoozed)
+            } else {
+                modelContext.insert(TNight(date: Date.now, snoozed: true))
+            }
+            try? modelContext.save()
+        }
     }
     
     private func generateInitialCircles(in size: CGSize) {
