@@ -96,6 +96,7 @@ struct AlarmView: View{
             .padding(.horizontal, 4)
             .sheet(isPresented: $setAlarm){
                 SetAlarmView(alarm: $alarm, setAlarm: $setAlarm)
+                    .onDisappear { try? modelContext.save() } // Save modelContext for eventual unsaved changes
             }
             .fullScreenCover(isPresented: $alarmGame) {
                 AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
@@ -108,6 +109,7 @@ struct AlarmView: View{
         .contextMenu {
             Button (role: .destructive) {
                 modelContext.delete(alarm)
+                try? modelContext.save()
             } label: {
                 Label("Delete", systemImage: "trash")
             }

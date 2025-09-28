@@ -23,6 +23,6 @@ struct ThrownAlarmApp: App {
             }
             .preferredColorScheme(.dark)
         }
-        .modelContainer(for: [TAlarm.self, TNight.self])
+        .modelContainer(for: [TAlarm.self, TNight.self], isAutosaveEnabled: false)
     }
 }

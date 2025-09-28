@@ -39,6 +39,7 @@ struct SetAlarmView: View {
                     // MARK: Delete Button
                     Button(role: .destructive){
                         modelContext.delete(alarm)
+                        try? modelContext.save()
                         setAlarm.toggle()
                     } label: {
                         Text("Delete")
@@ -53,6 +54,10 @@ struct SetAlarmView: View {
                 ToolbarItem(placement: .cancellationAction){
                     Button("Cancel"){
                         stopAudio()
+                        modelContext.rollback()
+                        // Changes the modelContext to allow view refresh 
+                        modelContext.insert(alarm)
+                        modelContext.delete(alarm)
                         setAlarm.toggle()
                     }
                 }
