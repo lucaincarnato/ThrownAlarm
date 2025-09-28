@@ -14,7 +14,6 @@ struct PickerView: View {
     @Binding var alarm: TAlarm
     @State private var sleepAngle: CGFloat = 0
     @State private var wakeAngle: CGFloat = .pi
-    
     @State var radius: CGFloat = .zero
     
     // MARK: VIEW BODY 

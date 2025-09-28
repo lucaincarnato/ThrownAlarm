@@ -135,7 +135,3 @@ struct AlarmView: View{
         }
     }
 }
-
-#Preview {
-    AlarmView(alarm: TAlarm())
-}
