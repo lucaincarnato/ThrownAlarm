@@ -118,7 +118,6 @@ struct PickerView: View {
                         DragGesture()
                             .onChanged({ value in
                                 onDrag(value, "wake")
-                                print(wakeNorm)
                             })
                     )
             }
