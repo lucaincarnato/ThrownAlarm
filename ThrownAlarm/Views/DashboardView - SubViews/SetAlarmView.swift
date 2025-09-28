@@ -9,20 +9,22 @@ import SwiftUI
 import AVFoundation
 
 struct SetAlarmView: View {
+    // MARK: ATTRIBUTES
     @Environment(\.modelContext) private var modelContext
-
     @Binding var alarm: TAlarm
     @Binding var setAlarm: Bool
-
     @State private var audioPlayer: AVAudioPlayer?
     
+    // MARK: VIEW BODY
     var body: some View {
         NavigationStack{
             VStack{
                 Form{
+                    // MARK: Time Picker
                     Section {
                         PickerView(alarm: $alarm)
                     }
+                    // MARK: Alarm Options
                     Section (header: Text("Alarm options")){
                         Stepper(value: $alarm.rounds, in: 1...10) {
                             Text("\(alarm.rounds) rounds to wake up")
@@ -34,6 +36,7 @@ struct SetAlarmView: View {
                             }
                         }
                     }
+                    // MARK: Delete Button
                     Button(role: .destructive){
                         modelContext.delete(alarm)
                         setAlarm.toggle()
@@ -66,6 +69,8 @@ struct SetAlarmView: View {
         }
     }
     
+    // MARK: PRIVATE FUNCTIONS
+    // Stop any sound and plays the one selected
     private func playAudio(for track: String?) {
         guard let track = track else { return }
         stopAudio()
@@ -80,10 +85,12 @@ struct SetAlarmView: View {
         }
     }
     
+    // Stop audio playing
     private func stopAudio(){
         audioPlayer?.stop()
     }
     
+    // Bind the audio's name to play sound as soon as it is selected
     private func makeBinding() -> Binding<String> {
         Binding(
             get: { alarm.sound },
