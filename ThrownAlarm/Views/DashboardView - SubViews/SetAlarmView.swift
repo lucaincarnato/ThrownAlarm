@@ -29,12 +29,10 @@ struct SetAlarmView: View {
                     }
                     // MARK: Alarm Options
                     Section (header: Text("Alarm options")){
-                        HStack{
-                            Spacer()
+                        HStack (alignment: .center){
                             ForEach(weekdays.indices, id: \.self) {i in
-                                WeeklyRepetitionView(alarm: $alarm, day: weekdays[i], weekday: weekvalues[i])
+                                WeeklyRepetitionView(alarm: $alarm, day: weekdays[i], weekvalue: weekvalues[i])
                             }
-                            Spacer()
                         }
                         Stepper(value: $alarm.rounds, in: 1...10) {
                             Text("\(alarm.rounds) rounds to wake up")

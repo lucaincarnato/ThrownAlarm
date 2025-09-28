@@ -10,34 +10,35 @@ import SwiftUI
 struct WeeklyRepetitionView: View {
     // MARK: ATTRIBUTES
     @Binding var alarm: TAlarm
-    @State private var selected: Bool = false
-    @State var day: String = "M"
-    @State var weekday: Locale.Weekday = .monday
+    var day: String = "M"
+    var weekvalue: Locale.Weekday = .monday
+    var isSelected: Bool {
+        alarm.weekdays.contains(weekvalue)
+    }
     
     // MARK: VIEW BODY
     var body: some View {
         Button(){
-            selected.toggle()
-            // If selected and the weekday is not in the alarm, add it, if not selected and it is contained, remove it 
-            if (selected && !alarm.weekdays.contains(weekday)) {
-                alarm.weekdays.append(weekday)
-            } else if (!selected && alarm.weekdays.contains(weekday)) {
-                let index = alarm.weekdays.firstIndex(of: weekday)
-                alarm.weekdays.remove(at: index!)
+            // If selected and the weekday is not in the alarm, add it, if not selected and it is contained, remove it
+            if isSelected {
+                alarm.weekdays.removeAll(where: { $0 == weekvalue })
+            } else {
+                alarm.weekdays.append(weekvalue)
             }
         } label: {
             ZStack{
                 Circle()
-                    .foregroundStyle(selected ? Color.accentColor : Color.gray.opacity(0.3))
+                    .foregroundStyle(isSelected ? Color.accentColor : Color.clear)
                     .frame(width: 40)
                 Text(day)
-                    .foregroundStyle(selected ? Color.black : Color.white)
+                    .foregroundStyle(isSelected ? Color.black : Color.white)
                     .font(.title3)
-                    .bold(selected)
+                    .bold(isSelected)
             }
         }
         .buttonStyle(.plain)
-        .sensoryFeedback(.selection, trigger: selected)
-        .onAppear { selected = alarm.weekdays.contains(weekday) }
+        .glassEffect(.clear.interactive(), in: Circle())
+        .sensoryFeedback(.selection, trigger: isSelected)
+        .id(weekvalue)
     }
 }

@@ -29,8 +29,9 @@ struct MonthlyCalendarView: View {
                     } label: {
                         Image(systemName: "chevron.left")
                             .font(.title2)
-                            .accessibilityLabel("Previous month")
+                            .foregroundStyle(Color.black)
                     }
+                    .buttonStyle(.glassProminent)
                     Text(selectedMonth, format: .dateTime.year().month(.wide))
                         .font(.title2)
                         .bold()
@@ -40,8 +41,9 @@ struct MonthlyCalendarView: View {
                     } label:{
                         Image(systemName: "chevron.right")
                             .font(.title2)
-                            .accessibilityLabel("Next month")
+                            .foregroundStyle(Color.black)
                     }
+                    .buttonStyle(.glassProminent)
                 }
                 .padding()
                 // MARK: Weekdays display

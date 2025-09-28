@@ -22,8 +22,9 @@ struct AlarmView: View{
     var body: some View{
         ZStack{
             RoundedRectangle(cornerRadius: 200 * 10 / 57)
-                .padding()
                 .foregroundStyle(Color.gray.opacity(0.3))
+                .glassEffect(.clear.interactive(), in: RoundedRectangle(cornerRadius: 200 * 10 / 57))
+                .padding()
             // MARK: Top section
             VStack{
                 HStack{

@@ -100,6 +100,7 @@ struct PickerView: View {
                     .frame(width: 35, height: 35)
                     .rotationEffect(Angle(degrees: 90))
                     .background(Color.accentColor, in: Circle())
+                    .glassEffect(.clear.interactive(), in: Circle())
                     .offset(x: radius * cos(sleepAngle), y: radius * sin(sleepAngle))
                     .gesture(
                         DragGesture()
@@ -114,6 +115,7 @@ struct PickerView: View {
                     .frame(width: 35, height: 35)
                     .rotationEffect(Angle(degrees: 90))
                     .background(Color.accentColor, in: Circle())
+                    .glassEffect(.clear.interactive(), in: Circle())
                     .offset(x: radius * cos(wakeAngle), y: radius * sin(wakeAngle))
                     .gesture(
                         DragGesture()
