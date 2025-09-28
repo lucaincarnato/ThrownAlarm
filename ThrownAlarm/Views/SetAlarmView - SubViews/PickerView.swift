@@ -24,7 +24,7 @@ struct PickerView: View {
         let wakeNorm = (wakeAngle < 0 ? wakeAngle + 2 * .pi : wakeAngle) / (2 * .pi)
         
         VStack{
-            // Sleep and Wake time visualization
+            // MARK: Sleep and Wake time visualization
             VStack{
                 HStack{
                     VStack{
@@ -63,7 +63,7 @@ struct PickerView: View {
                 }
             }
             .padding(.top, 15)
-            // Picker body
+            // MARK: Picker body
             ZStack{
                 ClockView(radius: radius * 1.3) // Show 24 hour clock to orient user
                 // Background crown
@@ -129,7 +129,7 @@ struct PickerView: View {
                 wakeAngle = toAngle(from: alarm.wakeTime)
             }
             .rotationEffect(Angle(degrees: -90))
-            // Displays sleep duration
+            // MARK: Displays sleep duration
             Text("\(alarm.getDuration()/60) hours : \(alarm.getDuration()%60) minutes")
                 .foregroundStyle(Color.white.opacity(0.7))
                 .padding(.vertical, 10)
