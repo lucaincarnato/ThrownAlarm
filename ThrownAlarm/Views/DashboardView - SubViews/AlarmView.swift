@@ -100,6 +100,9 @@ struct AlarmView: View{
             .fullScreenCover(isPresented: $alarmGame) {
                 AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
             }
+            .onAppear() {
+                setAlarm = alarm.created.timeIntervalSinceNow > -5
+            }
         }
         .frame(height: 200)
         .contextMenu {

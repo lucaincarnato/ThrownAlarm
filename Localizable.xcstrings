@@ -34,6 +34,7 @@
       }
     },
     "%@ %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -348,6 +349,7 @@
       }
     },
     "Ball" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1082,6 +1084,7 @@
       }
     },
     "You snoozed for a total of %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -1098,6 +1101,7 @@
       }
     },
     "You successfully woke up for %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {

@@ -22,6 +22,7 @@ class TAlarm{
     var sound: String = ""
     var rounds: Int = 3
     var active: Bool = false
+    var created: Date = Date()
     
     // MARK: STATIC ATTRIBUTES
     static var sounds: [String] = [
