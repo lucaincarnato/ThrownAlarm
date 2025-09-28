@@ -14,6 +14,8 @@ struct SetAlarmView: View {
     @Binding var alarm: TAlarm
     @Binding var setAlarm: Bool
     @State private var audioPlayer: AVAudioPlayer?
+    @State private var success: Bool = false
+    let weekdays: [String] = ["M", "T", "W", "T", "F", "S", "S"]
     
     // MARK: VIEW BODY
     var body: some View {
@@ -26,6 +28,13 @@ struct SetAlarmView: View {
                     }
                     // MARK: Alarm Options
                     Section (header: Text("Alarm options")){
+                        HStack{
+                            Spacer()
+                            ForEach(weekdays.indices, id: \.self) {i in
+                                WeeklyRepetitionView(alarm: $alarm, day: weekdays[i])
+                            }
+                            Spacer()
+                        }
                         Stepper(value: $alarm.rounds, in: 1...10) {
                             Text("\(alarm.rounds) rounds to wake up")
                         }
@@ -50,6 +59,7 @@ struct SetAlarmView: View {
             }
             .navigationTitle("Set Alarm")
             .navigationBarTitleDisplayMode(.inline)
+            .sensoryFeedback(.success, trigger: success == true)
             .toolbar{
                 ToolbarItem(placement: .cancellationAction){
                     Button("Cancel"){
@@ -63,6 +73,7 @@ struct SetAlarmView: View {
                 }
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save"){
+                        success = true
                         stopAudio()
                         alarm.active = true
                         try? modelContext.save()

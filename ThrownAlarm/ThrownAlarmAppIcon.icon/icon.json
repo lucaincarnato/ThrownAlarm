@@ -1,6 +1,35 @@
 {
-  "fill" : "system-dark",
+  "fill" : {
+    "solid" : "srgb:0.81569,0.43529,0.14510,1.00000"
+  },
   "groups" : [
+    {
+      "layers" : [
+        {
+          "image-name" : "Icon_Dark_Mode 2.png",
+          "name" : "Icon_Dark_Mode 2",
+          "opacity" : 1
+        }
+      ],
+      "opacity-specializations" : [
+        {
+          "appearance" : "dark",
+          "value" : 0
+        },
+        {
+          "appearance" : "tinted",
+          "value" : 0
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
     {
       "blend-mode-specializations" : [
         {
@@ -20,7 +49,16 @@
           "glass" : true,
           "hidden" : false,
           "image-name" : "Icon_Dark_Mode.png",
-          "name" : "Icon_Dark_Mode"
+          "name" : "Icon_Dark_Mode",
+          "opacity-specializations" : [
+            {
+              "value" : 1
+            },
+            {
+              "appearance" : "dark",
+              "value" : 1
+            }
+          ]
         }
       ],
       "lighting" : "individual",

@@ -19,6 +19,7 @@ class TAlarm{
     var alarmIDs: [Alarm.ID] = []
     var sleepTime: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 23, minute: 30)
     var wakeTime: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 8, minute: 30)
+    var weekdays: [Locale.Weekday] = []
     var sound: String = ""
     var rounds: Int = 3
     var active: Bool = false
@@ -118,7 +119,6 @@ class TAlarm{
     // Schedule an alarm at the next hour:minute
     private func scheduleAlarm(hour: Int, minute: Int) async {
         let alarmID = UUID()
-        let weekdays: [Locale.Weekday] = []
         let time = Alarm.Schedule.Relative.Time(hour: hour, minute: minute)
         let relative = Alarm.Schedule.Relative(time: time, repeats: weekdays.isEmpty ? .never : .weekly(Array(weekdays)))
         let schedule = Alarm.Schedule.relative(relative)

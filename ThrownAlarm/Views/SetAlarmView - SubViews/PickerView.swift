@@ -107,6 +107,7 @@ struct PickerView: View {
                                 onDrag(value, "sleep")
                             })
                     )
+                    .sensoryFeedback(.levelChange, trigger: toTime(from: sleepAngle))
                 // Waketime handle
                 Image(systemName: "alarm.fill")
                     .foregroundStyle(Color.black)
@@ -120,6 +121,7 @@ struct PickerView: View {
                                 onDrag(value, "wake")
                             })
                     )
+                    .sensoryFeedback(.levelChange, trigger: toTime(from: wakeAngle))
             }
             // Set initial values from data once view is loaded
             .onAppear() {
