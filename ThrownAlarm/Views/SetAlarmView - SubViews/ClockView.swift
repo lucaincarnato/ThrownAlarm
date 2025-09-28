@@ -8,9 +8,12 @@
 import SwiftUI
 import AVFoundation
 
+// Display a 24 hour clock with icons related to day and night
 struct ClockView: View {
+    // MARK: ATTRIBUTES
     var radius: CGFloat
     
+    // MARK: VIEW BODY
     var body: some View {
         ZStack{
             ForEach(1...24, id:\.self) { i in
