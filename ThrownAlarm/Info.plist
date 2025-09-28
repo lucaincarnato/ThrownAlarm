@@ -15,5 +15,7 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>We'll schedule alerts for alarms you create within our app.</string>
 </dict>
 </plist>

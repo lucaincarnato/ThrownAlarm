@@ -11,11 +11,12 @@ import Foundation
 import AlarmKit
 
 struct DashboardView: View {
-    @AppStorage("Onboarding") var onboarding: Bool = false
-    
+    // MARK: ATTRIBUTES
     @Query private var alarms: [TAlarm]
     @Environment(\.modelContext) private var modelContext
+    @AppStorage("Onboarding") var onboarding: Bool = false
     
+    // MARK: VIEW BODY
     var body: some View {
         NavigationStack{
             ZStack{
@@ -51,12 +52,21 @@ struct DashboardView: View {
                 }
             }
             .task {
+                // Asks for permission before even starting the app
                 let _ = await requestAlarmPermission()
                 requestNotificationPermission()
             }
+            // TODO: Onboarding
+            /*
+            .fullScreenCover(isPresented: $onboarding) {
+                Text("Onboarding")
+            }
+            */
         }
     }
     
+    // MARK: PRIVATE METHODS
+    // Asks for notification permission
     private func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
@@ -65,6 +75,7 @@ struct DashboardView: View {
         }
     }
     
+    // Asks for alarm permission
     private func requestAlarmPermission() async -> Bool {
         switch AlarmManager.shared.authorizationState {
         case .notDetermined:

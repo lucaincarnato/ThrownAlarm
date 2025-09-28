@@ -72,7 +72,6 @@ struct AlarmGameView: View {
                     .scaledToFit()
                     .position(x: geometry.size.width / 2, y: geometry.size.height / 8.5)
                     .ignoresSafeArea()
-                    .accessibilityHidden(true)
                 ForEach(circles) { circle in
                     Circle()
                         .fill(Color.black)
@@ -99,20 +98,13 @@ struct AlarmGameView: View {
                                     releaseCircle(withID: circle.id, withVelocity: velocity)
                                 }
                         )
-                        .accessibilityLabel("Ball")
-                        .accessibilityRemoveTraits(.isImage)
-                        .accessibilityAddTraits(.isButton)
-                        .accessibilityAdjustableAction { direction in
-                            if (direction == .increment) {accessibleRemove(circle, geometry.size)}
-                        }
-
                 }
                 .sensoryFeedback(.impact(weight: .medium, intensity: 0.6), trigger: holdingCircle)
                 .sensoryFeedback(.success, trigger: remainingCirclesCount)
             }
             .sensoryFeedback(.warning, trigger: bouncing)
             .background(Color.black.ignoresSafeArea())
-            .onAppear {
+            .task {
                 DispatchQueue.main.async {
                     startGame()
                     generateInitialCircles(in: geometry.size)
