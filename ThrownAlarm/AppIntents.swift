@@ -7,9 +7,15 @@
 
 import AlarmKit
 import AppIntents
+import SwiftUI
 
 public struct OpenInApp: LiveActivityIntent {
-    public func perform() async throws -> some IntentResult { .result() }
+    @AppStorage("AlarmGame") private var alarmGame: Bool = false
+
+    public func perform() async throws -> some IntentResult {
+        alarmGame = true
+        return .result()
+    }
     
     public static var title: LocalizedStringResource = "Open App"
     public static var description = IntentDescription("Opens the Sample app")
