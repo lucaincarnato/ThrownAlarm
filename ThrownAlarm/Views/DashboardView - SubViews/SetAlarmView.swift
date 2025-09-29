@@ -46,6 +46,7 @@ struct SetAlarmView: View {
                     }
                     // MARK: Delete Button
                     Button(role: .destructive){
+                        alarm.cancelAlarm()
                         modelContext.delete(alarm)
                         try? modelContext.save()
                         setAlarm.toggle()
@@ -72,7 +73,6 @@ struct SetAlarmView: View {
                 }
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save"){
-                        print(alarm.weekdays)
                         success = true
                         stopAudio()
                         alarm.active = true

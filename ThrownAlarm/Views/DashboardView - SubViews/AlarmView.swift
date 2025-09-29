@@ -109,6 +109,7 @@ struct AlarmView: View{
         .frame(height: 200)
         .contextMenu {
             Button (role: .destructive) {
+                alarm.cancelAlarm()
                 modelContext.delete(alarm)
                 try? modelContext.save()
             } label: {
