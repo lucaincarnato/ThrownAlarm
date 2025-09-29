@@ -86,11 +86,10 @@ class TAlarm{
     func wokeWithin(seconds: Int) -> Bool {
         let now = Date.now
         let calendar = Calendar.current
-        
-        // Costruisci la data con la stessa data di oggi ma con hour e minute specificati
+        // Build today Date with alarm's wake hour and wake minute
         if let targetDate = calendar.date(bySettingHour: wakeTime.hour, minute: wakeTime.minute, second: 0, of: now) {
             let difference = abs(now.timeIntervalSince(targetDate))
-            return difference <= 60 // entro 60 secondi = entro un minuto
+            return difference <= 60
         }
         return false
     }
