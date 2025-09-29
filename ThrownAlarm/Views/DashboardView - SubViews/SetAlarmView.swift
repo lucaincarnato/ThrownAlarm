@@ -75,7 +75,6 @@ struct SetAlarmView: View {
                     Button("Save"){
                         success = true
                         stopAudio()
-                        alarm.active = true
                         try? modelContext.save()
                         Task { await alarm.setAlarm() }
                         setAlarm.toggle()

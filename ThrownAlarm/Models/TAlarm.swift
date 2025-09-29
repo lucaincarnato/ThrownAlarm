@@ -59,6 +59,7 @@ class TAlarm{
     
     // Schedule a notification to remind of bedtime and ten alarms
     func setAlarm() async {
+        active = true
         clearAllNotifications() // Does not confuse user with many bedtime
         scheduleNotification(sleepTime)
         // Schedule ten alarms distanced by one minute
@@ -69,6 +70,7 @@ class TAlarm{
     
     // Cancel all the alarms associated with the current alarm
     func cancelAlarm() {
+        active = false
         do{
             for alarm in try AlarmManager.shared.alarms {
                 // If the AlarmManager's alarm is in the current id array, cancel the alarm
