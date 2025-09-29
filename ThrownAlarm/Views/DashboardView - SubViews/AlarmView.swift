@@ -130,14 +130,15 @@ struct AlarmView: View{
             } else {
                 timeRemaining.hour = alarm.wakeTime.hour - hour
             }
+            // If wakeTime's hour and time's are the same, the hour remaining are max 24 (-1 for minutes)
+            if (timeRemaining.hour == 0 && alarm.wakeTime.minute < minute) {timeRemaining.hour = 23}
+
             // Normalize minute based on if wakeTime'minute is on or after the current minute
             if (alarm.wakeTime.minute < minute) {
                 timeRemaining.minute = 60 - minute + alarm.wakeTime.minute
             } else {
                 timeRemaining.minute = alarm.wakeTime.minute - minute
             }
-            // If wakeTime's hour and time's are the same, the hour remaining are max 24 (-1 for minutes)
-            if (timeRemaining.hour == 0) {timeRemaining.hour = 23}
             if (timeRemaining.minute == 60) { timeRemaining.minute = 59 }
         }
     }

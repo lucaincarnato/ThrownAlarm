@@ -68,7 +68,6 @@ struct SetAlarmView: View {
                         // Changes the modelContext to allow view refresh 
                         modelContext.insert(alarm)
                         modelContext.delete(alarm)
-                        setAlarm.toggle()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction){

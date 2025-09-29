@@ -20,20 +20,20 @@ class TAlarm{
     var sleepTime: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 23, minute: 30)
     var wakeTime: Alarm.Schedule.Relative.Time = Alarm.Schedule.Relative.Time(hour: 8, minute: 30)
     var weekdays: [Locale.Weekday] = []
-    var sound: String = ""
+    var sound: String = "Princess"
     var rounds: Int = 3
     var active: Bool = false
     var created: Date = Date()
     
     // MARK: STATIC ATTRIBUTES
     static var sounds: [String] = [
+        "Princess",
         "Celestial",
         "Enchanted",
         "Joy",
         "Mindful",
         "Penguin",
         "Plucks",
-        "Princess",
         "Stardust",
         "Sunday",
         "Valley"
@@ -148,14 +148,12 @@ class TAlarm{
         )
         // Secondary button custom action's intent
         let secondaryIntent = OpenInApp(alarmID: alarmID.uuidString)
-        // Alarm custom sound
-        let alarmSound = AlertConfiguration.AlertSound.named(sound)
         // Configure alarm for scheduling
         let alarmConfiguration = AlarmManager.AlarmConfiguration<CookingData>(
             schedule: schedule,
             attributes: attributes,
             secondaryIntent: secondaryIntent,
-            sound: alarmSound
+            sound: .named(sound)
         )
         // Schedule alarm
         do {
