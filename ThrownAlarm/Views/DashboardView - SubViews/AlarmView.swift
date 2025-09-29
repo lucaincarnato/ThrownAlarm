@@ -43,6 +43,7 @@ struct AlarmView: View{
                             } else {
                                 Task{ await alarm.setAlarm() }
                             }
+                            try? modelContext.save()
                         }
                 }
                 .padding(.horizontal, 40)

@@ -72,8 +72,9 @@ class TAlarm{
         do{
             for alarm in try AlarmManager.shared.alarms {
                 // If the AlarmManager's alarm is in the current id array, cancel the alarm
-                if !alarmIDs.contains(alarm.id) { continue }
-                try AlarmManager.shared.cancel(id: alarm.id)
+                if alarmIDs.contains(alarm.id) {
+                    try AlarmManager.shared.cancel(id: alarm.id)
+                }
             }
         } catch {
             print("Cannot cancel alarms")
@@ -153,7 +154,7 @@ class TAlarm{
             schedule: schedule,
             attributes: attributes,
             secondaryIntent: secondaryIntent,
-            sound: .named(sound)
+            sound: .named(sound + ".wav")
         )
         // Schedule alarm
         do {
