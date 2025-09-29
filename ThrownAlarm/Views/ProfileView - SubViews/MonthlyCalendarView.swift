@@ -72,7 +72,7 @@ struct MonthlyCalendarView: View {
         }
     }
     
-    // MARK: PRIVATE FUNCTIONS
+    // MARK: PRIVATE METHODS
     // Return an array of all the selected month's Date
     private func daysInMonth(for date: Date) -> [Date?] {
         var days: [Date?] = []

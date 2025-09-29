@@ -84,7 +84,7 @@ struct SetAlarmView: View {
         }
     }
     
-    // MARK: PRIVATE FUNCTIONS
+    // MARK: PRIVATE METHODS
     // Stop any sound and plays the one selected
     private func playAudio(for track: String?) {
         guard let track = track else { return }
