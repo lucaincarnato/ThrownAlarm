@@ -83,6 +83,18 @@ class TAlarm{
         }
     }
     
+    func wokeWithin(seconds: Int) -> Bool {
+        let now = Date.now
+        let calendar = Calendar.current
+        
+        // Costruisci la data con la stessa data di oggi ma con hour e minute specificati
+        if let targetDate = calendar.date(bySettingHour: wakeTime.hour, minute: wakeTime.minute, second: 0, of: now) {
+            let difference = abs(now.timeIntervalSince(targetDate))
+            return difference <= 60 // entro 60 secondi = entro un minuto
+        }
+        return false
+    }
+    
     // Get Time component and compose right string
     static func toString(_ text: Alarm.Schedule.Relative.Time) -> String{
         let hourString: String
