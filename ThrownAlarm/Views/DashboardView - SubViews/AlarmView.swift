@@ -103,7 +103,7 @@ struct AlarmView: View{
                 AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
             }
             .onAppear() {
-                setAlarm = alarm.created.timeIntervalSinceNow > -5
+                setAlarm = alarm.created.timeIntervalSinceNow > -1
             }
         }
         .frame(height: 200)
@@ -124,22 +124,23 @@ struct AlarmView: View{
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             let hour = Calendar.current.component(.hour, from: Date.now)
             let minute = Calendar.current.component(.minute, from: Date.now)
-            // Normalize hour based on if wakeTime's hour is on tomorrow or within the day
-            if (alarm.wakeTime.hour < hour) {
-                timeRemaining.hour = 24 - hour + alarm.wakeTime.hour
-            } else {
-                timeRemaining.hour = alarm.wakeTime.hour - hour
-            }
-            // If wakeTime's hour and time's are the same, the hour remaining are max 24 (-1 for minutes)
-            if (timeRemaining.hour == 0 && alarm.wakeTime.minute < minute) {timeRemaining.hour = 23}
-
-            // Normalize minute based on if wakeTime'minute is on or after the current minute
-            if (alarm.wakeTime.minute < minute) {
-                timeRemaining.minute = 60 - minute + alarm.wakeTime.minute
-            } else {
-                timeRemaining.minute = alarm.wakeTime.minute - minute
-            }
-            if (timeRemaining.minute == 60) { timeRemaining.minute = 59 }
+            
+            
+            // Converti tutto in minuti dall'inizio della giornata
+            let futureTotalMinutes = alarm.wakeTime.hour * 60 + alarm.wakeTime.minute
+            let currentTotalMinutes = hour * 60 + minute
+            
+            // Se l'orario futuro è prima o uguale all'orario corrente, assumiamo che sia il giorno successivo
+            let minutesDifference = (futureTotalMinutes >= currentTotalMinutes)
+            ? (futureTotalMinutes - currentTotalMinutes)
+            : (24 * 60 - currentTotalMinutes + futureTotalMinutes)
+            
+            // Calcola ore e minuti da differenza in minuti
+            let hours = minutesDifference / 60
+            let minutes = minutesDifference % 60
+            
+            timeRemaining.hour = hours
+            timeRemaining.minute = minutes
         }
     }
 }
