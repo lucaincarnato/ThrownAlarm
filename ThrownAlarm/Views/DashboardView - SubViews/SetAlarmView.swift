@@ -64,6 +64,7 @@ struct SetAlarmView: View {
                 ToolbarItem(placement: .cancellationAction){
                     Button("Cancel"){
                         stopAudio()
+                        setAlarm.toggle()
                         modelContext.rollback()
                         // Changes the modelContext to allow view refresh 
                         modelContext.insert(alarm)
