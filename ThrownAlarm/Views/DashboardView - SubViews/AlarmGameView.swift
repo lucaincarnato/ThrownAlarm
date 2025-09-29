@@ -40,6 +40,7 @@ struct AlarmGameView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack{
+                // MARK: Heads Up Display Informations
                 VStack{
                     Text("\(rounds) rounds remaining")
                         .font(.title)
@@ -66,11 +67,13 @@ struct AlarmGameView: View {
                     }
                 }
                 .padding(.bottom, remainingCirclesCount == 0 ? 0 : 68)
+                // MARK: Target
                 Image("Basket")
                     .resizable()
                     .scaledToFit()
                     .position(x: geometry.size.width / 2, y: geometry.size.height / 8.5)
                     .ignoresSafeArea()
+                // MARK: Tools
                 ForEach(circles) { circle in
                     Circle()
                         .fill(Color.black)
@@ -104,10 +107,8 @@ struct AlarmGameView: View {
             .sensoryFeedback(.warning, trigger: bouncing)
             .background(Color.black.ignoresSafeArea())
             .task {
-                DispatchQueue.main.async {
-                    startGame()
-                    generateInitialCircles(in: geometry.size)
-                }
+                startGame()
+                generateInitialCircles(in: geometry.size)
             }
             .onReceive(timer) { _ in
                 updateCircles(in: geometry.size)
