@@ -15,12 +15,15 @@ struct CircleModel: Identifiable {
 }
 
 struct AlarmGameView: View {
-    @Binding var alarm: TAlarm
-    
+    // MARK: ATTRIBUTES
     @Query private var backtrack: [TNight]
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    
+    @Binding var alarm: TAlarm
+    // Tracking variables
+    @State private var lastTrackedSnooze: Bool = false
+    @State private var isTracked: Bool = false
+    // Internal state variables
     @State var bouncing: Bool = false
     @State var circles: [CircleModel] = []
     @State var timer = Timer.publish(every: 0.016, on: .main, in: .common).autoconnect()
@@ -28,16 +31,12 @@ struct AlarmGameView: View {
     @State var initialCircleCount = 1
     @State var rounds : Int
     @State private var holdingCircle: Bool = false
-    
-    @State private var lastTrackedSnooze: Bool = false
-    @State private var isTracked: Bool = false
-    
     var player: AudioPlayer = AudioPlayer()
-    
     let launchSpeedReductionFactor: CGFloat = 20.0
     let colliderSize = CGSize(width: 30, height: 30)
     var circleRadius: CGFloat = 30.0
     
+    // MARK: VIEW BODY
     var body: some View {
         GeometryReader { geometry in
             ZStack{
@@ -124,6 +123,8 @@ struct AlarmGameView: View {
         }
     }
     
+    // MARK: PRIVATE METHODS
+    // Generate circles at the start of the game with random position at the bottom of the screen
     private func generateInitialCircles(in size: CGSize) {
         for _ in 0..<initialCircleCount {
             let randomPosition = CGPoint(
@@ -136,6 +137,7 @@ struct AlarmGameView: View {
         remainingCirclesCount = circles.count
     }
     
+    // Move selected circle and sets its velocity to zero (user is holding the circle, it has no speed)
     private func moveCircle(withID id: UUID, to position: CGPoint) {
         if let index = circles.firstIndex(where: { $0.id == id }) {
             circles[index].position = position
@@ -143,12 +145,14 @@ struct AlarmGameView: View {
         }
     }
     
+    // Apply velocity when user release circle
     private func releaseCircle(withID id: UUID, withVelocity velocity: CGSize) {
         if let index = circles.firstIndex(where: { $0.id == id }) {
             circles[index].velocity = velocity
         }
     }
     
+    // Apply physics
     private func updateCircles(in size: CGSize) {
         circles = circles.compactMap { circle in
             var newCircle = circle
@@ -184,11 +188,13 @@ struct AlarmGameView: View {
         }
     }
     
+    // Sets up the game with alarm options and hour lookup for streak state
     private func startGame(){
         alarm.active = false
         player.playSound(alarm.sound, loop: true)
     }
     
+    // Called once the user clears all the rounds of the game and checks tracking to update streak
     private func recordNight() {
         alarm.cancelAlarm()
         backtrack.last!.snoozed = false
@@ -196,6 +202,7 @@ struct AlarmGameView: View {
         try? modelContext.save()
     }
     
+    // Called every time user clears the number of circles in the scene
     private func changeRound(in size: CGSize){
         rounds -= 1
         initialCircleCount += 1
@@ -207,9 +214,5 @@ struct AlarmGameView: View {
             remainingCirclesCount = initialCircleCount
             generateInitialCircles(in: size)
         }
-    }
-    
-    private func accessibleRemove(_ circle: CircleModel, _ size: CGSize){
-        moveCircle(withID: circle.id, to: CGPoint(x: (size.width - colliderSize.width) / 2, y: (size.height - colliderSize.height) / 10))
     }
 }
