@@ -36,6 +36,7 @@ struct OnboardingView: View {
             VStack(spacing: 40) {
                 VideoPlayer(url: Bundle.main.url(forResource: "\(steps[currentStep].videoName)", withExtension: "mp4")!, play: .constant(true))
                     .autoReplay(true)
+                    .mute(true)
                     .frame(width: 200, height: 400)
                     .cornerRadius(16)
                 Text(steps[currentStep].title)
