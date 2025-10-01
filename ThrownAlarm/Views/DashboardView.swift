@@ -14,7 +14,7 @@ struct DashboardView: View {
     // MARK: ATTRIBUTES
     @Query private var alarms: [TAlarm]
     @Environment(\.modelContext) private var modelContext
-    @AppStorage("Onboarding") var onboarding: Bool = false
+    @AppStorage("Onboarding") var onboarding: Bool = true
     
     // MARK: VIEW BODY
     var body: some View {
@@ -56,12 +56,9 @@ struct DashboardView: View {
                 let _ = await requestAlarmPermission()
                 requestNotificationPermission()
             }
-            // TODO: Onboarding
-            /*
             .fullScreenCover(isPresented: $onboarding) {
-                Text("Onboarding")
+                OnboardingView()
             }
-            */
         }
     }
     

@@ -18,11 +18,11 @@ struct AlarmGameView: View {
     // MARK: ATTRIBUTES
     @Query private var backtrack: [TNight]
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) private var dismiss
     @Binding var alarm: TAlarm
+    @AppStorage("AlarmGame") private var alarmGame: Bool = false
     // Tracking variables
-    @State private var lastTrackedSnooze: Bool = false
-    @State private var isTracked: Bool = false
+    @State private var tracked: Track = .notTracked
+    @State private var valueTrack: Bool = false
     // Internal state variables
     @State var bouncing: Bool = false
     @State var circles: [CircleModel] = []
@@ -108,6 +108,7 @@ struct AlarmGameView: View {
             .background(Color.black.ignoresSafeArea())
             .task {
                 startGame()
+                player.playSound(alarm.sound, loop: true)
                 generateInitialCircles(in: geometry.size)
             }
             .onReceive(timer) { _ in
@@ -115,12 +116,7 @@ struct AlarmGameView: View {
             }
         }
         .onAppear(){
-            if TNight.alreadyTracked(in: backtrack){
-                backtrack.last!.setNight(Date.now, backtrack.last!.snoozed)
-            } else {
-                modelContext.insert(TNight(date: Date.now, snoozed: true))
-            }
-            try? modelContext.save()
+
         }
     }
     
@@ -191,15 +187,22 @@ struct AlarmGameView: View {
     
     // Sets up the game with alarm options and hour lookup for streak state
     private func startGame(){
-        alarm.active = false
-        player.playSound(alarm.sound, loop: true)
+        valueTrack = alarm.wokeWithin(seconds: 60)
+        if TNight.alreadyTracked(in: backtrack) {
+            if backtrack.last!.snoozed { tracked = .trackedSnoozed }
+            else { tracked = .trackedNotSnoozed}
+        } else {
+            tracked = .notTracked
+            modelContext.insert(TNight(date: Date.now, snoozed: true))
+        }
+        try? modelContext.save()
     }
     
     // Called once the user clears all the rounds of the game and checks tracking to update streak
     private func recordNight() {
-        alarm.cancelAlarm()
-        backtrack.last!.snoozed = false
-        if isTracked && lastTrackedSnooze {backtrack.last!.snoozed = true}
+        if tracked == .notTracked || tracked == .trackedSnoozed {
+            backtrack.last!.snoozed = valueTrack
+        }
         try? modelContext.save()
     }
     
@@ -210,10 +213,16 @@ struct AlarmGameView: View {
         if (rounds == 0) {
             player.stopSound()
             recordNight()
-            dismiss()
+            alarmGame = false
         } else {
             remainingCirclesCount = initialCircleCount
             generateInitialCircles(in: size)
         }
     }
+}
+
+private enum Track {
+    case notTracked
+    case trackedSnoozed
+    case trackedNotSnoozed
 }

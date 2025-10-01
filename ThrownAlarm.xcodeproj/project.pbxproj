@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		420F35F82D98A0580045CA30 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 420F35F72D98A0580045CA30 /* Localizable.xcstrings */; };
 		426D71872DA191590026D92C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426D71862DA191590026D92C /* StoreKit.framework */; };
+		42BD78A62E8D7C95009B2FAB /* VideoPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD78A52E8D7C95009B2FAB /* VideoPlayer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				426D71872DA191590026D92C /* StoreKit.framework in Frameworks */,
+				42BD78A62E8D7C95009B2FAB /* VideoPlayer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +98,7 @@
 			);
 			name = ThrownAlarm;
 			packageProductDependencies = (
+				42BD78A52E8D7C95009B2FAB /* VideoPlayer */,
 			);
 			productName = AmericanoChallenge;
 			productReference = 423571B92D039F6B00979A4F /* ThrownAlarm.app */;
@@ -128,6 +131,7 @@
 			mainGroup = 423571B02D039F6B00979A4F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				42BD78A42E8D7C95009B2FAB /* XCRemoteSwiftPackageReference "VideoPlayer" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 423571BA2D039F6B00979A4F /* Products */;
@@ -386,6 +390,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		42BD78A42E8D7C95009B2FAB /* XCRemoteSwiftPackageReference "VideoPlayer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/wxxsw/VideoPlayer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		42BD78A52E8D7C95009B2FAB /* VideoPlayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42BD78A42E8D7C95009B2FAB /* XCRemoteSwiftPackageReference "VideoPlayer" */;
+			productName = VideoPlayer;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 423571B12D039F6B00979A4F /* Project object */;
 }
