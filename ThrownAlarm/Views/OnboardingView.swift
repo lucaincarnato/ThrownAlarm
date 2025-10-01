@@ -59,7 +59,7 @@ struct OnboardingView: View {
                         completeOnboarding()
                     }
                 } label: {
-                    Text(currentStep < steps.count - 1 ? "Next (\(currentStep + 1)/\(steps.count))" : "Inizia")
+                    Text(currentStep < steps.count - 1 ? "Next (\(currentStep + 1)/\(steps.count))" : "Inizia (\(steps.count)/\(steps.count))")
                         .font(.title)
                         .bold()
                         .frame(maxWidth: .infinity)
