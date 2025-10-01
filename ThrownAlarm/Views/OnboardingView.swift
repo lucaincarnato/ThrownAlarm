@@ -39,19 +39,16 @@ struct OnboardingView: View {
                     .mute(true)
                     .frame(width: 1170/5, height: 2532/5)
                     .cornerRadius(16)
-                Text(steps[currentStep].title)
-                    .font(.largeTitle)
-                    .bold()
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.primary)
-                    .padding(.horizontal, 40)
-                    .animation(.smooth(duration: 0.5), value: currentStep)
                 Text(steps[currentStep].description)
                     .font(.body)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 40)
                     .animation(.smooth(duration: 0.5), value: currentStep)
+            }
+            .padding(.bottom, 40)
+            VStack{
+                Spacer()
                 Button() {
                     if currentStep < steps.count - 1 {
                         currentStep += 1
@@ -62,7 +59,8 @@ struct OnboardingView: View {
                     Text(currentStep < steps.count - 1 ? "Next (\(currentStep + 1)/\(steps.count))" : "Inizia (\(steps.count)/\(steps.count))")
                         .font(.title3)
                         .bold()
-                        .padding(.horizontal)
+                        .padding(.vertical)
+                        .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal, 40)
                 .buttonStyle(.borderedProminent)
