@@ -29,7 +29,6 @@ struct MonthlyCalendarView: View {
                     } label: {
                         Image(systemName: "chevron.left")
                             .font(.title2)
-                            .foregroundStyle(Color.black)
                     }
                     .buttonStyle(.glassProminent)
                     Text(selectedMonth, format: .dateTime.year().month(.wide))
@@ -41,7 +40,6 @@ struct MonthlyCalendarView: View {
                     } label:{
                         Image(systemName: "chevron.right")
                             .font(.title2)
-                            .foregroundStyle(Color.black)
                     }
                     .buttonStyle(.glassProminent)
                 }
