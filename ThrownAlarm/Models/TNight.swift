@@ -41,7 +41,19 @@ extension TNight {
     @MainActor
     static var preview: ModelContainer {
         let container = try! ModelContainer(for: TNight.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
-        container.mainContext.insert(TNight(date: Date.now, snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(0*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(1*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(2*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(3*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(4*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(5*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(6*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(7*(-86400)), snoozed: true))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(8*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(9*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(10*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(11*(-86400)), snoozed: false))
+        container.mainContext.insert(TNight(date: Date.now.addingTimeInterval(12*(-86400)), snoozed: false))
         return container
     }
 }
