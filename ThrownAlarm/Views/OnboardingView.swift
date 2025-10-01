@@ -16,18 +16,18 @@ struct OnboardingView: View {
     let steps = [
         OnboardingStep(
             videoName: "Quack",
-            title: "Benvenuto in ThrownAlarm",
-            description: "Imposta una sveglia e ThrownAlarm ti avviserà con una notifica quando sarà tempo di andare a dormire."
+            title: "Welcome to ThrownAlarm",
+            description: "Set an alarm and ThrownAlarm will notify when it's betime."
         ),
         OnboardingStep(
             videoName: "Quack",
-            title: "Svegliati con un plus",
-            description: "Quando sarà il momento, ThrownAlarm ti sveglierà con una piccola sfida per iniziare al meglio la giornata"
+            title: "Wake up with a plus",
+            description: "On time, ThrownAlarm will wake you up with a little challenge to start the day on the right foot"
         ),
         OnboardingStep(
             videoName: "Quack",
-            title: "Tieni traccia del tuo sonno",
-            description: "Non perdere il focus, traccia le tue mattine e svegliati ogni giorno sempre più carico."
+            title: "Keep track of your mornings",
+            description: "Don't lose focus, track your mornings and wake up every day feeling more energized."
         )
     ]
 
