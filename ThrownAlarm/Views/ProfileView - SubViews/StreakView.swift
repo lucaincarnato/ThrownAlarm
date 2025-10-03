@@ -78,7 +78,6 @@ struct StreakView: View {
     // MARK: PRIVATE METHODS
     // Update the global variable based on how many consecutive days user woke up on first alarm and how many didn't
     private func updateProfile() {
-
         snoozedDays = 0
         // Counts all the snoozed in the backtrack
         for night in backtrack{
