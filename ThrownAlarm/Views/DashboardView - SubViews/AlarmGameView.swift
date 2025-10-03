@@ -187,19 +187,21 @@ struct AlarmGameView: View {
     
     // Sets up the game with alarm options and hour lookup for streak state
     private func startGame(){
-        valueTrack = alarm.wokeWithin(seconds: 60)
+        valueTrack = !alarm.wokeWithin(seconds: 55) // User has 55 seconds to start the game otherwise it will count as snooze (value of the night)
+        // Tracks previous tracking of current day
         if TNight.alreadyTracked(in: backtrack) {
             if backtrack.last!.snoozed { tracked = .trackedSnoozed }
             else { tracked = .trackedNotSnoozed}
         } else {
             tracked = .notTracked
-            modelContext.insert(TNight(date: Date.now, snoozed: true))
+            modelContext.insert(TNight(date: Date.now, snoozed: true)) // Insert new record if current day was not tracked
         }
         try? modelContext.save()
     }
     
     // Called once the user clears all the rounds of the game and checks tracking to update streak
     private func recordNight() {
+        // If night was never tracked or if it was but user didn't snooze, the value of the night is passed
         if tracked == .notTracked || tracked == .trackedNotSnoozed {
             backtrack.last!.snoozed = valueTrack
         }

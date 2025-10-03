@@ -11,6 +11,7 @@ import Foundation
 
 struct StreakView: View {
     // MARK: ATTRIBUTES
+    @Query private var backtrack: [TNight]
     @AppStorage("streak") private var streak: Int = 0
     @AppStorage("snoozedDays") private var snoozedDays: Int = 0
         
@@ -69,5 +70,29 @@ struct StreakView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(20)
+        .onAppear() {
+            updateProfile()
+        }
+    }
+    
+    // MARK: PRIVATE METHODS
+    // Update the global variable based on how many consecutive days user woke up on first alarm and how many didn't
+    private func updateProfile() {
+
+        snoozedDays = 0
+        // Counts all the snoozed in the backtrack
+        for night in backtrack{
+            if (night.snoozed) {snoozedDays += 1}
+        }
+        // Reverse the backtrack array and counts from zero to last not snoozed day
+        for (index, element) in backtrack.reversed().enumerated(){
+            if element.snoozed {
+                streak = index
+                return
+            }
+        }
+        // Executed only if all days are not snoozed
+        streak = backtrack.count
+        return
     }
 }
