@@ -200,7 +200,7 @@ struct AlarmGameView: View {
     
     // Called once the user clears all the rounds of the game and checks tracking to update streak
     private func recordNight() {
-        if tracked == .notTracked || tracked == .trackedSnoozed {
+        if tracked == .notTracked || tracked == .trackedNotSnoozed {
             backtrack.last!.snoozed = valueTrack
         }
         try? modelContext.save()
@@ -213,6 +213,7 @@ struct AlarmGameView: View {
         if (rounds == 0) {
             player.stopSound()
             recordNight()
+            alarm.cancelAlarm()
             alarmGame = false
         } else {
             remainingCirclesCount = initialCircleCount
