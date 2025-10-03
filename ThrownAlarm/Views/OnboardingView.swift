@@ -46,7 +46,7 @@ struct OnboardingView: View {
                     .padding(.horizontal, 40)
                     .animation(.smooth(duration: 0.5), value: currentStep)
             }
-            .padding(.bottom, 40)
+            .padding(.bottom, 60)
             VStack{
                 Spacer()
                 Button() {
@@ -63,7 +63,7 @@ struct OnboardingView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal, 40)
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.glass)
             }
         }
     }
