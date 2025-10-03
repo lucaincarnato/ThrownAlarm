@@ -70,7 +70,9 @@ struct OnboardingView: View {
 
     private func completeOnboarding() {
         onboarding = false
-        modelContext.insert(TAlarm())
+        let alarm = TAlarm()
+        alarm.created = Date.now.addingTimeInterval(-500)
+        modelContext.insert(alarm)
     }
 }
 
