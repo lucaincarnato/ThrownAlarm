@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		420F35F82D98A0580045CA30 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 420F35F72D98A0580045CA30 /* Localizable.xcstrings */; };
 		426D71872DA191590026D92C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 426D71862DA191590026D92C /* StoreKit.framework */; };
 		42BD78A62E8D7C95009B2FAB /* VideoPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD78A52E8D7C95009B2FAB /* VideoPlayer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		420F35F72D98A0580045CA30 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		423571B92D039F6B00979A4F /* ThrownAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThrownAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		426D71862DA191590026D92C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -55,7 +53,6 @@
 		423571B02D039F6B00979A4F = {
 			isa = PBXGroup;
 			children = (
-				420F35F72D98A0580045CA30 /* Localizable.xcstrings */,
 				423571BB2D039F6B00979A4F /* ThrownAlarm */,
 				426D71832DA191500026D92C /* Frameworks */,
 				423571BA2D039F6B00979A4F /* Products */,
@@ -124,8 +121,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				it,
-				es,
 				Base,
 			);
 			mainGroup = 423571B02D039F6B00979A4F;
@@ -148,7 +143,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				420F35F82D98A0580045CA30 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
