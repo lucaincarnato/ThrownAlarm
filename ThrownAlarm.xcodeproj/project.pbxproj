@@ -12,7 +12,6 @@
 
 /* Begin PBXFileReference section */
 		423571B92D039F6B00979A4F /* ThrownAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThrownAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		426D71862DA191590026D92C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -52,7 +51,6 @@
 			isa = PBXGroup;
 			children = (
 				423571BB2D039F6B00979A4F /* ThrownAlarm */,
-				426D71832DA191500026D92C /* Frameworks */,
 				423571BA2D039F6B00979A4F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,14 +61,6 @@
 				423571B92D039F6B00979A4F /* ThrownAlarm.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		426D71832DA191500026D92C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				426D71862DA191590026D92C /* StoreKit.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
