@@ -11,7 +11,8 @@ import Foundation
 
 struct StreakView: View {
     // MARK: ATTRIBUTES
-    @Query private var backtrack: [TNight]
+    @Query(sort: \TNight.date, order: .reverse) private var backtrack: [TNight]
+    @Environment(\.modelContext) private var modelContext // ONLY FOR TESTING
     @AppStorage("streak") private var streak: Int = 0
     @AppStorage("snoozedDays") private var snoozedDays: Int = 0
         
@@ -79,12 +80,13 @@ struct StreakView: View {
     // Update the global variable based on how many consecutive days user woke up on first alarm and how many didn't
     private func updateProfile() {
         snoozedDays = 0
+        streak = 0
         // Counts all the snoozed in the backtrack
         for night in backtrack{
             if (night.snoozed) {snoozedDays += 1}
         }
-        // Reverse the backtrack array and counts from zero to last not snoozed day
-        for (index, element) in backtrack.reversed().enumerated(){
+        // Reversed the backtrack array and counts from zero to last not snoozed day
+        for (index, element) in backtrack.enumerated(){
             if element.snoozed {
                 streak = index
                 return
@@ -93,5 +95,14 @@ struct StreakView: View {
         // Executed only if all days are not snoozed
         streak = backtrack.count
         return
+    }
+    
+    // MARK: TESTING METHODS
+    // Adds mock data to the backtrack
+    private func addMockData(howMany number: Int){
+        for i in 0...number-1 {
+            modelContext.insert(TNight(date: Date.now.addingTimeInterval(TimeInterval(i*(-86400))), snoozed: false))
+        }
+        try? modelContext.save()
     }
 }

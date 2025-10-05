@@ -11,7 +11,7 @@ import Foundation
 
 struct MonthlyCalendarView: View {
     // MARK: ATTRIBUTES
-    @Query private var backtrack: [TNight]
+    @Query(sort: \TNight.date, order: .forward) private var backtrack: [TNight]
     @State private var selectedMonth: Date = Date()
     let calendar = Calendar.current
     

@@ -16,7 +16,7 @@ struct CircleModel: Identifiable {
 
 struct AlarmGameView: View {
     // MARK: ATTRIBUTES
-    @Query private var backtrack: [TNight]
+    @Query(sort: \TNight.date, order: .forward) private var backtrack: [TNight]
     @Environment(\.modelContext) private var modelContext
     @Binding var alarm: TAlarm
     @AppStorage("AlarmGame") private var alarmGame: Bool = false

@@ -12,7 +12,7 @@ import AlarmKit
 
 struct DashboardView: View {
     // MARK: ATTRIBUTES
-    @Query private var alarms: [TAlarm]
+    @Query(sort: \TAlarm.wakeTime.hour, order: .forward) private var alarms: [TAlarm]
     @Environment(\.modelContext) private var modelContext
     @AppStorage("Onboarding") var onboarding: Bool = true
     
