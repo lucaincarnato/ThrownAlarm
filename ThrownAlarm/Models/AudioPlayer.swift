@@ -24,7 +24,7 @@ class AudioPlayer: ObservableObject {
             if loop {
                 player?.numberOfLoops = -1
             }
-            player?.volume = 0.1
+            player?.volume = 1.0
             player?.play()
         } catch {
             print("Error while playing audio file: \(error.localizedDescription)")
