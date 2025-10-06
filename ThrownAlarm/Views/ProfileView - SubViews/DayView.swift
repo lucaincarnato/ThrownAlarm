@@ -24,6 +24,8 @@ struct DayView: View {
             Text(text)
                 .bold()
                 .foregroundStyle(tracked ? Color.black : Color.white.opacity(0.3))
+                .accessibilityHidden(!tracked)
+                .accessibilityLabel(snoozed ? "Snoozed the alarm" : "Woke up")
         }
         .padding(.trailing, 8)
     }

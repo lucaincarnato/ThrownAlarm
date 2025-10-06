@@ -44,6 +44,7 @@ struct StreakView: View {
             }
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityLabel("You successfully woke up for \(streak > 1 ? "\(streak) day" : "\(streak) days")")
             // MARK: Number of Snoozed Days
             VStack (alignment: .leading){
                 HStack{
@@ -69,6 +70,7 @@ struct StreakView: View {
             }
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityLabel("You snoozed for a total of \(snoozedDays == 1 ? "\(snoozedDays) day" : "\(snoozedDays) days")")
         }
         .padding(20)
         .onAppear() {
