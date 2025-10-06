@@ -63,8 +63,8 @@ struct SetAlarmView: View {
             .navigationBarTitleDisplayMode(.inline)
             .sensoryFeedback(.success, trigger: success == true)
             .toolbar{
-                ToolbarItem(placement: .cancellationAction){
-                    Button("Cancel"){
+                ToolbarItem(placement: .cancellationAction, ){
+                    Button(role: .cancel){
                         stopAudio()
                         setAlarm.toggle()
                         modelContext.rollback()
@@ -74,7 +74,7 @@ struct SetAlarmView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction){
-                    Button("Save"){
+                    Button(role: .confirm){
                         success = true
                         stopAudio()
                         try? modelContext.save()
