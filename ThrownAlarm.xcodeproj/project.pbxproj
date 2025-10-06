@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42A461A82E945E4100E25BB2 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 42A461A72E945E4100E25BB2 /* Localizable.xcstrings */; };
 		42BD78A62E8D7C95009B2FAB /* VideoPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = 42BD78A52E8D7C95009B2FAB /* VideoPlayer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		423571B92D039F6B00979A4F /* ThrownAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThrownAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42A461A72E945E4100E25BB2 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -50,6 +52,7 @@
 		423571B02D039F6B00979A4F = {
 			isa = PBXGroup;
 			children = (
+				42A461A72E945E4100E25BB2 /* Localizable.xcstrings */,
 				423571BB2D039F6B00979A4F /* ThrownAlarm */,
 				423571BA2D039F6B00979A4F /* Products */,
 			);
@@ -110,6 +113,10 @@
 			knownRegions = (
 				en,
 				Base,
+				it,
+				fr,
+				"es-419",
+				es,
 			);
 			mainGroup = 423571B02D039F6B00979A4F;
 			minimizedProjectReferenceProxies = 1;
@@ -131,6 +138,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42A461A82E945E4100E25BB2 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
