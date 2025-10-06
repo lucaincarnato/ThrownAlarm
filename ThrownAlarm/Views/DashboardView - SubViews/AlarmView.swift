@@ -104,7 +104,7 @@ struct AlarmView: View{
                 AlarmGameView(alarm: $alarm, rounds: alarm.rounds)
             }
             .onAppear() {
-                setAlarm = alarm.created.timeIntervalSinceNow > -1
+                setAlarm = Date.now.timeIntervalSince(alarm.created) < 0.5
             }
         }
         .frame(height: 200)
