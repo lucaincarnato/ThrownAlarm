@@ -35,7 +35,9 @@ struct AlarmView: View{
                             .font(.title2)
                             .bold()
                             .foregroundStyle(Color.white)
+                            .accessibilityAddTraits(.isHeader)
                     }
+                    .accessibilityAddTraits(.isButton)
                     Toggle("", isOn: $alarm.active).toggleStyle(SwitchToggleStyle())
                         .onChange(of: alarm.active){ oldValue, newValue in
                             if !newValue {
@@ -45,6 +47,8 @@ struct AlarmView: View{
                             }
                             try? modelContext.save()
                         }
+                        .accessibilityAddTraits(.isToggle)
+                        .accessibilityLabel("Activate alarm")
                 }
                 .padding(.horizontal, 40)
                 // MARK: Hour display
@@ -90,10 +94,12 @@ struct AlarmView: View{
                         Text(!alarm.active ? "Alarm disabled" : "Rings in \(timeRemaining.hour)h \(timeRemaining.minute)min")
                             .foregroundStyle(Color.accentColor)
                             .onAppear { startTimer() }
+                            .accessibilityLabel(!alarm.active ? "Alarm disabled" : "Rings in \(timeRemaining.hour) hours and \(timeRemaining.minute) minutes")
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 40)
                 }
+                .accessibilityAddTraits(.isButton)
             }
             .padding(.horizontal, 4)
             .sheet(isPresented: $setAlarm){
