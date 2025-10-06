@@ -21,6 +21,7 @@ struct PickerView: View {
         // Angle normalization to [0.0, 1.0] from radians
         let sleepNorm = (sleepAngle < 0 ? sleepAngle + 2 * .pi : sleepAngle) / (2 * .pi)
         let wakeNorm = (wakeAngle < 0 ? wakeAngle + 2 * .pi : wakeAngle) / (2 * .pi)
+        let fiveMinutes = Double.pi / 144
         
         VStack{
             // MARK: Sleep and Wake time visualization
@@ -62,6 +63,7 @@ struct PickerView: View {
                 }
             }
             .padding(.top, 15)
+            .accessibilityElement(children: .combine)
             // MARK: Picker body
             ZStack{
                 ClockView(radius: radius * 1.3) // Show 24 hour clock to orient user
@@ -74,6 +76,7 @@ struct PickerView: View {
                             Color.clear.onAppear { radius = (g.size.width / 2) - 40 }
                         }
                     )
+                    .accessibilityHidden(true)
                 // Normalization doesn't account for the possibility of waketime to be numerically inferior than sleeptime
                 // It is needed, for that configuration, the union of a bottom crown (sleepTime to 1) and a top crown (0 to wakeTime)
                 // Normal crown
@@ -82,6 +85,7 @@ struct PickerView: View {
                         .trim(from: sleepNorm, to: wakeNorm)
                         .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 40, lineCap: .round, lineJoin: .round))
                         .padding(40)
+                        .accessibilityHidden(true)
                 }
                 // Union of bottom and top crown
                 else {
@@ -89,10 +93,12 @@ struct PickerView: View {
                         .trim(from: sleepNorm, to: 1)
                         .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 40, lineCap: .butt, lineJoin: .round))
                         .padding(40)
+                        .accessibilityHidden(true)
                     Circle()
                         .trim(from: 0, to: wakeNorm)
                         .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 40, lineCap: .butt, lineJoin: .round))
                         .padding(40)
+                        .accessibilityHidden(true)
                 }
                 // Sleeptime handle
                 Image(systemName: "bed.double.fill")
@@ -109,6 +115,24 @@ struct PickerView: View {
                             })
                     )
                     .sensoryFeedback(.increase, trigger: alarm.sleepTime.minute)
+                    .accessibilityLabel("Bedtime")
+                    .accessibilityValue("\(TAlarm.toString(toTime(from: sleepAngle)))")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityRemoveTraits(.isImage)
+                    .accessibilityAdjustableAction { direction in
+                        switch direction {
+                        case .increment:
+                            sleepAngle += fiveMinutes
+                            alarm.sleepTime = toTime(from: sleepAngle)
+                            break
+                        case .decrement:
+                            sleepAngle -= fiveMinutes
+                            alarm.sleepTime = toTime(from: sleepAngle)
+                            break
+                        @unknown default:
+                            break
+                        }
+                    }
                 // Waketime handle
                 Image(systemName: "alarm.fill")
                     .foregroundStyle(Color.black)
@@ -124,6 +148,24 @@ struct PickerView: View {
                             })
                     )
                     .sensoryFeedback(.increase, trigger: alarm.wakeTime.minute)
+                    .accessibilityLabel("Wake up")
+                    .accessibilityValue("\(TAlarm.toString(toTime(from: wakeAngle)))")
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityRemoveTraits(.isImage)
+                    .accessibilityAdjustableAction { direction in
+                        switch direction {
+                        case .increment:
+                            wakeAngle += fiveMinutes
+                            alarm.wakeTime = toTime(from: wakeAngle)
+                            break
+                        case .decrement:
+                            wakeAngle -= fiveMinutes
+                            alarm.wakeTime = toTime(from: wakeAngle)
+                            break
+                        @unknown default:
+                            break
+                        }
+                    }
             }
             // Set initial values from data once view is loaded
             .onAppear() {
@@ -135,6 +177,7 @@ struct PickerView: View {
             Text("\(alarm.getDuration()/60) hours : \(alarm.getDuration()%60) minutes")
                 .foregroundStyle(Color.white.opacity(0.7))
                 .padding(.vertical, 10)
+                .accessibilityLabel("Duration: \(alarm.getDuration()/60) hours and \(alarm.getDuration()%60) minutes")
         }
     }
     

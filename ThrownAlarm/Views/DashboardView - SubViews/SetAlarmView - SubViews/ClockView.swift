@@ -42,6 +42,7 @@ struct ClockView: View {
                 .foregroundStyle(Color.yellow)
                 .offset(y: (radius - 130))
         }
-        .rotationEffect(Angle(degrees: 90)) 
+        .rotationEffect(Angle(degrees: 90))
+        .accessibilityHidden(true)
     }
 }
