@@ -1077,7 +1077,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ha posticipato la sveglia"
+            "value" : "Hai posticipato la sveglia"
           }
         }
       }
@@ -1255,7 +1255,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Si è svegliato"
+            "value" : "Ti sei svegliato"
           }
         }
       }
