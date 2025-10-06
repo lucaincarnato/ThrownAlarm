@@ -73,6 +73,7 @@ struct AlarmGameView: View {
                     .scaledToFit()
                     .position(x: geometry.size.width / 2, y: geometry.size.height / 8.5)
                     .ignoresSafeArea()
+                    .accessibilityHidden(true)
                 // MARK: Tools
                 ForEach(circles) { circle in
                     Circle()
@@ -100,6 +101,12 @@ struct AlarmGameView: View {
                                     releaseCircle(withID: circle.id, withVelocity: velocity)
                                 }
                         )
+                        .accessibilityLabel("Ball")
+                        .accessibilityRemoveTraits(.isImage)
+                        .accessibilityAddTraits(.isButton)
+                        .accessibilityAdjustableAction { direction in
+                            if (direction == .increment) {accessibleRemove(circle, geometry.size)}
+                        }
                 }
                 .sensoryFeedback(.impact(weight: .medium, intensity: 0.6), trigger: holdingCircle)
                 .sensoryFeedback(.success, trigger: remainingCirclesCount)
@@ -221,6 +228,11 @@ struct AlarmGameView: View {
             remainingCirclesCount = initialCircleCount
             generateInitialCircles(in: size)
         }
+    }
+    
+    // Ball removal function for VoiceOver
+    private func accessibleRemove(_ circle: CircleModel, _ size: CGSize){
+        moveCircle(withID: circle.id, to: CGPoint(x: (size.width - colliderSize.width) / 2, y: (size.height - colliderSize.height) / 10))
     }
 }
 
