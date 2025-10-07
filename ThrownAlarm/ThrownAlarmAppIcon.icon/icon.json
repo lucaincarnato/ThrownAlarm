@@ -6,9 +6,8 @@
     {
       "layers" : [
         {
-          "image-name" : "Icon_Dark_Mode 2.png",
-          "name" : "Icon_Dark_Mode 2",
-          "opacity" : 1
+          "image-name" : "ThrownAlarmAppIcon.png",
+          "name" : "ThrownAlarmAppIcon"
         }
       ],
       "opacity-specializations" : [
@@ -40,28 +39,24 @@
       "hidden" : false,
       "layers" : [
         {
-          "fill-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : "automatic"
-            }
-          ],
-          "glass" : true,
-          "hidden" : false,
-          "image-name" : "Icon_Dark_Mode.png",
-          "name" : "Icon_Dark_Mode",
-          "opacity-specializations" : [
-            {
-              "value" : 1
-            },
-            {
-              "appearance" : "dark",
-              "value" : 1
-            }
-          ]
+          "image-name" : "ThrownAlarmAppIcon2.png",
+          "name" : "ThrownAlarmAppIcon2"
         }
       ],
       "lighting" : "individual",
+      "opacity-specializations" : [
+        {
+          "value" : 0
+        },
+        {
+          "appearance" : "dark",
+          "value" : 1
+        },
+        {
+          "appearance" : "tinted",
+          "value" : 1
+        }
+      ],
       "shadow" : {
         "kind" : "layer-color",
         "opacity" : 0.5
