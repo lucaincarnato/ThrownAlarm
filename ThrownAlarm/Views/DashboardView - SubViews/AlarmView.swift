@@ -119,6 +119,7 @@ struct AlarmView: View{
                 alarm.cancelAlarm()
                 modelContext.delete(alarm)
                 try? modelContext.save()
+                alarm = TAlarm() // Allows view to still render even if alarm in modelContext is not present
             } label: {
                 Label("Delete", systemImage: "trash")
             }
