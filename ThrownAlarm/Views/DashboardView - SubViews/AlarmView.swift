@@ -24,7 +24,7 @@ struct AlarmView: View{
             RoundedRectangle(cornerRadius: 200 * 10 / 57)
                 .foregroundStyle(Color.gray.opacity(0.3))
                 .glassEffect(.clear.interactive(), in: RoundedRectangle(cornerRadius: 200 * 10 / 57))
-                .padding()
+                .padding(.horizontal)
             // MARK: Top section
             VStack{
                 HStack{
@@ -113,7 +113,7 @@ struct AlarmView: View{
                 setAlarm = Date.now.timeIntervalSince(alarm.created) < 0.5
             }
         }
-        .frame(height: 200)
+        .frame(height: 170)
         .contextMenu {
             Button (role: .destructive) {
                 alarm.cancelAlarm()

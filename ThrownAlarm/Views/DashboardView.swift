@@ -30,6 +30,7 @@ struct DashboardView: View {
                         ScrollView{
                             ForEach(alarms, id: \.self) { alarm in
                                 AlarmView(alarm: alarm)
+                                    .padding(.vertical, 5)
                             }
                         }
                     }
