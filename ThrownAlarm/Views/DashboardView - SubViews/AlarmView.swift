@@ -38,7 +38,8 @@ struct AlarmView: View{
                             .accessibilityAddTraits(.isHeader)
                     }
                     .accessibilityAddTraits(.isButton)
-                    Toggle("", isOn: $alarm.active).toggleStyle(SwitchToggleStyle())
+                    Toggle("", isOn: $alarm.active)
+                        .toggleStyle(SwitchToggleStyle())
                         .onChange(of: alarm.active){ oldValue, newValue in
                             if !newValue {
                                 alarm.cancelAlarm()
