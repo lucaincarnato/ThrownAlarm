@@ -6,8 +6,8 @@
     {
       "layers" : [
         {
-          "image-name" : "ThrownAlarmAppIcon.png",
-          "name" : "ThrownAlarmAppIcon"
+          "image-name" : "ThrownAlarmAppIconDark.png",
+          "name" : "ThrownAlarmAppIconDark"
         }
       ],
       "opacity-specializations" : [
@@ -39,8 +39,8 @@
       "hidden" : false,
       "layers" : [
         {
-          "image-name" : "ThrownAlarmAppIcon2.png",
-          "name" : "ThrownAlarmAppIcon2"
+          "image-name" : "ThrownAlarmAppIcon 2.png",
+          "name" : "ThrownAlarmAppIcon 2"
         }
       ],
       "lighting" : "individual",

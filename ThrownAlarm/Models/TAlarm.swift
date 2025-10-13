@@ -162,12 +162,14 @@ class TAlarm{
         )
         // Secondary button custom action's intent
         let secondaryIntent = OpenInApp(alarmID: alarmID.uuidString)
+        // Custom sound alert
+        let sound = AlertConfiguration.AlertSound.named(sound + ".wav")
         // Configure alarm for scheduling
         let alarmConfiguration = AlarmManager.AlarmConfiguration<CookingData>(
             schedule: schedule,
             attributes: attributes,
             secondaryIntent: secondaryIntent,
-            sound: .named(sound + ".wav")
+            sound: sound
         )
         // Schedule alarm
         do {
