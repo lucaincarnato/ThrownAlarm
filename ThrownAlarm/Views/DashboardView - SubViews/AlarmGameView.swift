@@ -20,6 +20,7 @@ struct AlarmGameView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var alarm: TAlarm
     @AppStorage("AlarmGame") private var alarmGame: Bool = false
+    @AppStorage("ThrowType") var throwType: String = "Basket"
     // Tracking variables
     @State private var tracked: Track = .notTracked
     @State private var valueTrack: Bool = false
@@ -68,7 +69,7 @@ struct AlarmGameView: View {
                 }
                 .padding(.bottom, remainingCirclesCount == 0 ? 0 : 68)
                 // MARK: Target
-                Image("Basket")
+                Image(throwType)
                     .resizable()
                     .scaledToFit()
                     .position(x: geometry.size.width / 2, y: geometry.size.height / 8.5)
@@ -80,7 +81,7 @@ struct AlarmGameView: View {
                         .fill(Color.black)
                         .frame(width: circleRadius * 2, height: circleRadius * 2)
                         .overlay(
-                            Image("BasketUser")
+                            Image("\(throwType)User")
                                 .resizable()
                                 .scaledToFill()
                                 .clipShape(Circle())
