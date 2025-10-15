@@ -51,7 +51,7 @@ struct ThrowTypesView: View {
                     Spacer()
                     Button() {
                         throwType = typesAvailable[currentIndex]
-                        UIApplication.shared.setAlternateIconName("ThrownAlarmAppIcon", completionHandler: {error in})
+                        UIApplication.shared.setAlternateIconName(throwType, completionHandler: {error in})
                     } label: {
                         Text(typesAvailable[currentIndex] == throwType ? "Selected" : "Select")
                             .font(.title3)

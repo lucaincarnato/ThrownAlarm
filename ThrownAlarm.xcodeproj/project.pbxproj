@@ -285,8 +285,8 @@
 		423571C82D039F6C00979A4F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = Basket;
-				ASSETCATALOG_COMPILER_APPICON_NAME = ThrownAlarmAppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Basket Halloween Christmas Trash Cards Cake Note Golf Rock Biscuits Pool Paper Target";
+				ASSETCATALOG_COMPILER_APPICON_NAME = Basket;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -310,7 +310,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.LucaIncarnato.ThrownAlarm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -326,8 +326,8 @@
 		423571C92D039F6C00979A4F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = Basket;
-				ASSETCATALOG_COMPILER_APPICON_NAME = ThrownAlarmAppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Basket Halloween Christmas Trash Cards Cake Note Golf Rock Biscuits Pool Paper Target";
+				ASSETCATALOG_COMPILER_APPICON_NAME = Basket;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -351,7 +351,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.LucaIncarnato.ThrownAlarm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
