@@ -33,20 +33,23 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            VStack(spacing: 40) {
-                VideoPlayer(url: Bundle.main.url(forResource: "\(steps[currentStep].videoName)", withExtension: "mov")!, play: .constant(true))
-                    .autoReplay(true)
-                    .mute(true)
-                    .frame(width: 1170/5, height: 2532/5)
-                    .cornerRadius(16)
-                Text(steps[currentStep].description)
-                    .font(.body)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 40)
-                    .animation(.smooth(duration: 0.5), value: currentStep)
+            ScrollView{
+                VStack(spacing: 40) {
+                    VideoPlayer(url: Bundle.main.url(forResource: "\(steps[currentStep].videoName)", withExtension: "mov")!, play: .constant(true))
+                        .autoReplay(true)
+                        .mute(true)
+                        .frame(width: 1170/5, height: 2532/5)
+                        .cornerRadius(16)
+                    Text(steps[currentStep].description)
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal, 40)
+                        .animation(.smooth(duration: 0.5), value: currentStep)
+                }
+                .padding(.bottom, 60)
+                Spacer()
             }
-            .padding(.bottom, 60)
             VStack{
                 Spacer()
                 Button() {
@@ -59,7 +62,7 @@ struct OnboardingView: View {
                     Text(currentStep < steps.count - 1 ? "Next (\(currentStep + 1)/\(steps.count))" : "Inizia (\(steps.count)/\(steps.count))")
                         .font(.title3)
                         .bold()
-                        .padding(.vertical)
+                        .padding(.vertical, 10)
                         .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal, 40)
