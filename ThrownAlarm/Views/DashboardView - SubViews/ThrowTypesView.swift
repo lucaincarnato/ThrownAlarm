@@ -13,21 +13,15 @@ struct ThrowTypesView: View {
     @Binding var setType: Bool
     let typesAvailable: [String] = [
         "Basket",
-        "Target",
-        "Paper",
-        "Pool",
-        "Biscuits",
-        "Rock",
         "Golf",
-        "Note",
+        "Target",
+        "Pool",
+        "Paper",
         "Cake",
-        "Frisbee",
-        "Pasta",
-        "Cards"
-        // "Pen",
-        // "Trash",
-        // "Popcorn",
-        // "Airplane",
+        "Biscuits",
+        "Note",
+        "Rock",
+        "Trash",
         // "Christmas",
         // "Halloween"
     ]
