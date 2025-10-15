@@ -15,6 +15,7 @@ struct DashboardView: View {
     @Query(sort: \TAlarm.wakeTime.hour, order: .forward) private var alarms: [TAlarm]
     @Environment(\.modelContext) private var modelContext
     @AppStorage("Onboarding") var onboarding: Bool = true
+    @State var setType: Bool = false
     
     // MARK: VIEW BODY
     var body: some View {
@@ -51,6 +52,14 @@ struct DashboardView: View {
                             .foregroundStyle(.accent)
                     }
                 }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button() {
+                        setType = true
+                    } label: {
+                        Label("", systemImage: "basketball")
+                            .foregroundStyle(.accent)
+                    }
+                }
             }
             .task {
                 // Asks for permission before even starting the app
@@ -59,6 +68,9 @@ struct DashboardView: View {
             }
             .fullScreenCover(isPresented: $onboarding) {
                 OnboardingView()
+            }
+            .sheet(isPresented: $setType) {
+                ThrowTypesView(setType: $setType)
             }
         }
     }
