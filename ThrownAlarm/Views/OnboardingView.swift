@@ -34,7 +34,7 @@ struct OnboardingView: View {
     var body: some View {
         ZStack {
             ScrollView{
-                VStack(spacing: 40) {
+                VStack(spacing: 100) {
                     VideoPlayer(url: Bundle.main.url(forResource: "\(steps[currentStep].videoName)", withExtension: "mov")!, play: .constant(true))
                         .autoReplay(true)
                         .mute(true)
@@ -47,8 +47,7 @@ struct OnboardingView: View {
                         .padding(.horizontal, 40)
                         .animation(.smooth(duration: 0.5), value: currentStep)
                 }
-                .padding(.bottom, 60)
-                Spacer()
+                .padding(.bottom, 60)   
             }
             VStack{
                 Spacer()
