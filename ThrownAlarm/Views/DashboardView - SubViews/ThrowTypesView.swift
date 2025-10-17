@@ -14,14 +14,14 @@ struct ThrowTypesView: View {
     let typesAvailable: [String] = [
         "Basket",
         "Golf",
-        "Target",
+        "Dart",
         "Pool",
-        "Paper",
-        "Cake",
-        "Biscuits",
-        "Note",
-        "Rock",
-        "Trash",
+        // "Paper",
+        // "Cake",
+        // "Biscuits",
+        // "Note",
+        // "Rock",
+        // "Trash",
         // "Christmas",
         // "Halloween"
     ]
