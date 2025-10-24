@@ -26,3 +26,10 @@ struct ThrownAlarmApp: App {
         .modelContainer(for: [TAlarm.self, TNight.self], isAutosaveEnabled: false)
     }
 }
+
+/* AlarmGameView debugging
+AlarmGameView(alarm: .constant(TAlarm()), rounds: 3)
+    .tabItem {
+        Label("Game", systemImage: "basketball.fill")
+    }
+ */
