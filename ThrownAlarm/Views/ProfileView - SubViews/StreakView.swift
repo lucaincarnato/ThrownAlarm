@@ -96,13 +96,4 @@ struct StreakView: View {
         streak = backtrack.count
         return
     }
-    
-    // MARK: TESTING METHODS
-    // Adds mock data to the backtrack
-    private func addMockData(howMany number: Int){
-        for i in 0...number-1 {
-            modelContext.insert(TNight(date: Date.now.addingTimeInterval(TimeInterval(i*(-86400))), snoozed: false))
-        }
-        try? modelContext.save()
-    }
 }
